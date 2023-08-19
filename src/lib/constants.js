@@ -1,0 +1,1 @@
+export const PHX_ENDPOINT = import.meta.env.VITE_PHX_ENDPOINT
