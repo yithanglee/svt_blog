@@ -15,7 +15,7 @@ COPY . .
 
 # Build the Svelte app
 RUN npm run build
-
+ENV VITE_PHX_ENDPOINT=localhost:8512
 # Expose the port that the app will run on
 EXPOSE 4173
 # Command to start the app
