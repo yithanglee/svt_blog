@@ -3,7 +3,6 @@
 	export let data;
 	import { session } from '$lib/stores/session';
 
-
 	// import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
@@ -16,6 +15,7 @@
 	import { goto } from '$app/navigation';
 
 	let menus = [
+		{ path: '/plate', title: 'Car Plate', icon: 'camera-foto-solid' },
 		{ path: '/camera', title: 'Camera', icon: 'camera-foto-solid' },
 		{ path: '/users', title: 'Users', icon: null },
 		{ path: '/customers', title: 'Customers', icon: null },
@@ -38,11 +38,8 @@
 	}
 
 	let user = { username: 'Guest' };
-	
 
 	onMount(() => {
-
-
 		let cookieUser = jsCookie.get('user');
 
 		if (cookieUser) {
@@ -54,9 +51,7 @@
 			relogin();
 		}
 	});
-	onDestroy(() => {
-
-	});
+	onDestroy(() => {});
 </script>
 
 <div class="mx-auto flex flex-wrap justify-between items-center container">

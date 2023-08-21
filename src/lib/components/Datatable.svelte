@@ -1,7 +1,7 @@
 <script>
 	import DataForm from '$lib/components/DataForm.svelte';
 	import DataCell from '$lib/components/DataCell.svelte';
-
+	import { PHX_ENDPOINT } from '$lib/constants';
 	import { postData, buildQueryString } from '$lib/index.js';
 	import { onDestroy } from 'svelte';
 	import { page } from '$app/stores';
@@ -32,7 +32,7 @@
 		columns = data.columns,
 		pages = [],
 		selectedData = {},
-		cac_url = 'http://localhost:5009',
+		cac_url = 'http://' + PHX_ENDPOINT,
 		model = data.model;
 
 	const itemsPerPage = 10;
@@ -101,7 +101,10 @@
 	}
 	function confirmDelete(id) {
 		confirmModal = false;
-		postData({}, { method: 'DELETE', endpoint: 'http://localhost:5009/api/' + model + '/' + id });
+		postData(
+			{},
+			{ method: 'DELETE', endpoint: 'http://' + PHX_ENDPOINT + '/api/' + model + '/' + id }
+		);
 		checkPage();
 		selectedId = null;
 	}
@@ -130,22 +133,17 @@
 				}}>Search</Button
 			>
 			<DataForm
-			{customCols}
-			data={selectedData}
-			{inputs}
-			url={cac_url}
-			module={data.model}
-			postFn={checkPage}
-		/>
-	
+				{customCols}
+				data={selectedData}
+				{inputs}
+				url={cac_url}
+				module={data.model}
+				postFn={checkPage}
+			/>
 		</div>
-		
 	</div>
-
 </div>
-<div class="flex flex-col items-center justify-center gap-2 mb-4">
-
-</div>
+<div class="flex flex-col items-center justify-center gap-2 mb-4" />
 <Table shadow hoverable={true}>
 	<TableHead>
 		{#each columns as col}
@@ -182,7 +180,7 @@
 	</TableBody>
 </Table>
 <div class="flex flex-col items-center justify-center gap-2 mt-4">
-	<Pagination  {pages} on:click={checkPage} on:previous={previous} on:next={next} />
+	<Pagination {pages} on:click={checkPage} on:previous={previous} on:next={next} />
 </div>
 
 <Modal title="Confirm?" bind:open={confirmModal} autoclose outsideclose>

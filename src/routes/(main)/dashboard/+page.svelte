@@ -8,7 +8,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
-
+	let imageUrl = "http://"+ PHX_ENDPOINT+"/mjpeg_stream_6.mp4"; 
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { buildQueryString } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
@@ -51,7 +51,7 @@
 		
 	}
 </script>
-
+<img src={imageUrl} />
 <div class="grid grid-cols-12">
 	<div class="col-span-8 mx-4">
 		

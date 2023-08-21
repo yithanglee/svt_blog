@@ -1,9 +1,9 @@
-
+import { PHX_ENDPOINT } from '$lib/constants';
 export async function postData(data, options) {
 
     var default_options = {
         method: 'POST',
-        endpoint: 'http://localhost:5009'
+        endpoint: 'http://' + PHX_ENDPOINT
     }
 
     const requestOptions = {
@@ -16,7 +16,7 @@ export async function postData(data, options) {
 
     try {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
-       console.log(response)
+        console.log(response)
         if (response.ok) {
             await response.json();
         } else {
@@ -72,7 +72,7 @@ export async function genInputs(url, module) {
         console.log(items);
         return items;
     } else {
-        title = 'Not available'
+
         console.error('API request failed');
         return [];
     }

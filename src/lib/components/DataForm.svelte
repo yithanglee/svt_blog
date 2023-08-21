@@ -3,7 +3,7 @@
 	import { isModalOpen } from '../stores/modal';
 	import { onMount, onDestroy, afterUpdate, beforeUpdate } from 'svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
-
+	import { PHX_ENDPOINT } from '$lib/constants';
 	import { Tabs, TabItem } from 'flowbite-svelte';
 	import { Icon } from 'flowbite-svelte-icons';
 	import { postData } from '$lib/index.js';
@@ -31,7 +31,7 @@
 		map[module] = { ...data, id: primary_key };
 
 		console.log(map);
-		await postData(map, { endpoint: 'http://localhost:5009/api/' + module });
+		await postData(map, { endpoint: 'http://'+ PHX_ENDPOINT +'/api/' + module });
 		refreshData();
 		formModal = false
 		isModalOpen.set(false);

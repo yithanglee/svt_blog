@@ -17,6 +17,8 @@
 		peerConnection,
 		remoteStream = new MediaStream();
 	let endpoint = 'localhost:8512';
+
+  
 	function log() {
 		console.log(...arguments);
 	}
