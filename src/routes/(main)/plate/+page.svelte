@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Socket } from 'phoenix';
 	import { Button, TabItem, Tabs, Fileupload, Label } from 'flowbite-svelte';
-
+	import { PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let channel,
@@ -37,9 +37,7 @@
 		localVideo = document.getElementById('local-stream');
 		var localStream = await navigator.mediaDevices.getUserMedia({
 			audio: true,
-			video: true,
-			width: { ideal: 1920 }, // Set your desired width here
-			height: { ideal: 1080 }
+			video: true
 		});
 
 		setVideoStream(localVideo, localStream);
@@ -91,7 +89,8 @@
 	onMount(() => {
 		localVideo = document.getElementById('local-stream');
 		endpoint = data.endpoint;
-		const socket = new Socket('ws://' + endpoint + '/socket');
+		// how to know if its a production env?
+		const socket = new Socket(PHX_WS_PROTOCOL + endpoint + '/socket');
 		socket.connect();
 		var topic = 'support:' + 'lobby';
 		// Join the topic

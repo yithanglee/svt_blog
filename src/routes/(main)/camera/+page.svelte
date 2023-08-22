@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Socket } from 'phoenix';
 	import { Button, TabItem, Tabs, Fileupload, Label } from 'flowbite-svelte';
-
+	import { PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let channel,
@@ -202,7 +202,8 @@
 		setVideoStream(remoteVideo, remoteStream);
 		console.log(data);
 		endpoint = data.endpoint;
-		const socket = new Socket('ws://' + endpoint + '/socket');
+		   
+		const socket = new Socket(PHX_WS_PROTOCOL + endpoint + '/socket');
 		socket.connect();
 		var topic = 'support:' + 'lobby';
 		// Join the topic
