@@ -52,8 +52,8 @@
 			// });
 
 			let canvas = document.createElement('canvas');
-			canvas.width = 800; // Set the desired width
-			canvas.height = 600; // Set the desired height
+			canvas.width = 1000; // Set the desired width
+			canvas.height = 1000; // Set the desired height
 
 			const context = canvas.getContext('2d');
 
