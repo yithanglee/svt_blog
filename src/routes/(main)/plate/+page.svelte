@@ -37,7 +37,8 @@
 		localVideo = document.getElementById('local-stream');
 		var localStream = await navigator.mediaDevices.getUserMedia({
 			audio: true,
-			video: true
+
+			video: { facingMode: 'user' }
 		});
 
 		setVideoStream(localVideo, localStream);

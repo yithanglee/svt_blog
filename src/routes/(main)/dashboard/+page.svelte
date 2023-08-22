@@ -8,7 +8,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
-	let imageUrl = "http://"+ PHX_ENDPOINT+"/mjpeg_stream_6.mp4"; 
+	let imageUrl = "http://"+ PHX_ENDPOINT+"/images/uploads/test1.jpg"; 
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { buildQueryString } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
@@ -50,8 +50,15 @@
 		}
 		
 	}
+	function refreshImage() {
+    // Generate a unique identifier (timestamp) to force image reload
+    const uniqueId = Date.now();
+    imageUrl = `path/to/your/image.png`;
+	imageUrl = "http://"+ PHX_ENDPOINT+`/images/uploads/test1.jpg?${uniqueId}`; 
+  }
 </script>
 <img src={imageUrl} />
+<Button on:click={refreshImage}>Refresh Image</Button>
 <div class="grid grid-cols-12">
 	<div class="col-span-8 mx-4">
 		
