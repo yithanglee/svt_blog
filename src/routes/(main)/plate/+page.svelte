@@ -1,7 +1,17 @@
 <script>
 	import { onDestroy, onMount } from 'svelte';
 	import { Socket } from 'phoenix';
-	import { Button, TabItem, Select, Tabs, Fileupload, Label } from 'flowbite-svelte';
+	import {
+		Button,
+		Listgroup,
+		ListgroupItem,
+		Avatar,
+		TabItem,
+		Select,
+		Tabs,
+		Fileupload,
+		Label
+	} from 'flowbite-svelte';
 	import { PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -11,6 +21,7 @@
 		screenChannel,
 		channelData = {},
 		cameras = [],
+		candidates = [],
 		selected,
 		localVideo,
 		remoteVideo,
@@ -19,6 +30,12 @@
 		count = 0,
 		isStopped = true,
 		animationId;
+
+	function updateChannelData(payload) {
+		console.log(payload)
+		candidates = payload.candidates;
+		channelData = { channelData, ...payload };
+	}
 	function log() {
 		console.log(...arguments);
 	}
@@ -52,6 +69,8 @@
 	}
 
 	async function connect() {
+		console.log('issue to start plate')
+		channel.push('start-plate', {  });
 		isStopped = false;
 		localVideo = document.getElementById('local-stream');
 		let facingMode = 'environment';
@@ -115,11 +134,15 @@
 		}
 	}
 	const stopStream = () => {
+		console.log('issue to stop plate')
+		channel.push('stop-plate', {  });
 		cancelAnimationFrame(animationId);
 		isStopped = true;
 		// websocket.close();
 		// Optionally, stop the video stream as well
+		localVideo = document.getElementById('local-stream');
 		const stream = localVideo.srcObject;
+
 		if (stream) {
 			stream.getTracks().forEach((track) => track.stop());
 			localVideo.srcObject = null;
@@ -147,6 +170,13 @@
 			.receive('error', (resp) => {
 				console.log('Unable to join topic', topic);
 			});
+
+		channel.on('plate_results', (payload) => {
+			console.log(payload);
+			// var results = JSON.parse(payload.body);
+			updateChannelData(payload);
+			// console.log(results)
+		});
 	});
 
 	onDestroy(() => {
@@ -185,3 +215,11 @@
 		}}>Stop</Button
 	>
 </section>
+<Listgroup active class="w-48">
+	<h3 class="p-1 text-center text-xl font-medium text-gray-900 dark:text-white">Plate list</h3>
+	{#each candidates as candidate}
+		<ListgroupItem class="text-base font-semibold gap-2">
+			{candidate.plate} <small>({candidate.confidence})</small>
+		</ListgroupItem>
+	{/each}
+</Listgroup>
