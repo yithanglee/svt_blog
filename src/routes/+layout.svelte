@@ -1,5 +1,5 @@
 <script>
-	import { Breadcrumb, BreadcrumbItem } from 'flowbite-svelte';
+	import { Breadcrumb, BreadcrumbItem, GroupItem } from 'flowbite-svelte';
 	import { DarkMode } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import '../app.postcss';
@@ -20,6 +20,7 @@
 	}
 
 	onMount(() => {
+		
 		session.subscribe((value) => {
 			console.log(value);
 			if (value && value.loggedIn) {
@@ -44,8 +45,6 @@
 		<NavLi class={nav_class} href="/dashboard">Dashboard</NavLi>
 		<NavLi class={nav_class} href="/users">Users</NavLi>
 		<NavLi class={nav_class} on:click={logOut} href="javascript:void(0);">Logout</NavLi>
-		
-		
 	</NavUl>
 	<DarkMode />
 </Navbar>

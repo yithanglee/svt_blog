@@ -7,18 +7,17 @@
 	export let data;
 	let channel,
 		value,
-		videoInput = document.getElementById('videoInput'),
-		localMusicVideo = document.getElementById('localMusicVideo'),
 		mediaStream = null,
 		screenChannel,
 		channelData = {},
 		localVideo,
 		remoteVideo,
 		peerConnection,
-		remoteStream = new MediaStream();
-	let endpoint = 'localhost:8512';
+		videoInput,
+		localMusicVideo,
+		remoteStream,
+		endpoint = 'localhost:8512';
 
-  
 	function log() {
 		console.log(...arguments);
 	}
@@ -198,11 +197,14 @@
 	onMount(() => {
 		localVideo = document.getElementById('local-stream');
 		remoteVideo = document.getElementById('remote-stream');
+		videoInput = document.getElementById('videoInput');
+		localMusicVideo = document.getElementById('localMusicVideo');
 		remoteStream = new MediaStream();
+
 		setVideoStream(remoteVideo, remoteStream);
 		console.log(data);
 		endpoint = data.endpoint;
-		   
+
 		const socket = new Socket(PHX_WS_PROTOCOL + endpoint + '/socket');
 		socket.connect();
 		var topic = 'support:' + 'lobby';

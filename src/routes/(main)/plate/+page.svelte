@@ -1,21 +1,20 @@
 <script>
 	import { onDestroy, onMount } from 'svelte';
 	import { Socket } from 'phoenix';
-	import { Button, TabItem, Tabs, Fileupload, Label } from 'flowbite-svelte';
+	import { Button, TabItem, Select, Tabs, Fileupload, Label } from 'flowbite-svelte';
 	import { PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let channel,
 		value,
-		videoInput = document.getElementById('videoInput'),
-		localMusicVideo = document.getElementById('localMusicVideo'),
 		mediaStream = null,
 		screenChannel,
 		channelData = {},
+		cameras = [],
+		selected,
 		localVideo,
 		remoteVideo,
 		peerConnection,
-		remoteStream = new MediaStream(),
 		endpoint,
 		count = 0,
 		isStopped = true,
@@ -32,13 +31,49 @@
 		videoElement.srcObject = stream;
 	}
 
+	function addCamera(val) {
+		cameras = [...cameras, val];
+	}
+
+	function gotDevices(mediaDevices) {
+		console.log(mediaDevices);
+		let count = 1;
+		mediaDevices.forEach((mediaDevice) => {
+			if (mediaDevice.kind === 'videoinput') {
+				// const option = document.createElement('option');
+				// option.value = mediaDevice.deviceId;
+				addCamera({ value: mediaDevice.deviceId, name: mediaDevice.label || `Camera ${count++}` });
+				// const label = ;
+				// const textNode = document.createTextNode(label);
+				// option.appendChild(textNode);
+				// select.appendChild(option);
+			}
+		});
+	}
+
 	async function connect() {
 		isStopped = false;
 		localVideo = document.getElementById('local-stream');
+		let facingMode = 'environment';
+		let selectedCam = cameras.filter((v, i) => {
+			return v.value == selected;
+		});
+
+		if (selectedCam) {
+			selectedCam[0].name.includes('back') ? (facingMode = 'environment') : (facingMode = 'user');
+		}
+
+		console.log(facingMode);
+
 		var localStream = await navigator.mediaDevices.getUserMedia({
 			audio: true,
 
-			video: { facingMode: 'user' }
+			video: {
+				facingMode: facingMode,
+				deviceId: selected,
+				width: { ideal: 1920 },
+				height: { ideal: 1080 }
+			}
 		});
 
 		setVideoStream(localVideo, localStream);
@@ -51,10 +86,13 @@
 			// 	channel.push('frame', { data: jpegData });
 			// });
 
-			let canvas = document.createElement('canvas');
-			canvas.width = 1000; // Set the desired width
-			canvas.height = 1000; // Set the desired height
+			let stream_settings = localStream.getVideoTracks()[0].getSettings();
+			let stream_width = stream_settings.width;
+			let stream_height = stream_settings.height;
 
+			let canvas = document.createElement('canvas');
+			canvas.width = stream_width; // Set the desired width
+			canvas.height = stream_height;
 			const context = canvas.getContext('2d');
 
 			const sendFrame = () => {
@@ -87,9 +125,11 @@
 		}
 	};
 
-	onMount(() => {
-		localVideo = document.getElementById('local-stream');
+	onMount(async () => {
+		navigator.mediaDevices.enumerateDevices().then(gotDevices);
+		// localVideo = document.getElementById('local-stream');
 		endpoint = data.endpoint;
+		console.log('mounting');
 		// how to know if its a production env?
 		const socket = new Socket(PHX_WS_PROTOCOL + endpoint + '/socket');
 		socket.connect();
@@ -122,6 +162,10 @@
 	});
 </script>
 
+<Label>
+	Select an option
+	<Select class="mt-2" items={cameras} bind:value={selected} />
+</Label>
 <Tabs>
 	<TabItem open title="Local">
 		<video style="width: 100%;" id="local-stream" autoplay muted />

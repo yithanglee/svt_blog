@@ -39,9 +39,9 @@
 
 	let user = { username: 'Guest' };
 
-	onMount(() => {
+	onMount(async () => {
 		let cookieUser = jsCookie.get('user');
-
+		console.log(cookieUser);
 		if (cookieUser) {
 			let cUser = JSON.parse(cookieUser);
 			user = cUser;
