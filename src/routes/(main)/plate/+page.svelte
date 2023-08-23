@@ -6,7 +6,7 @@
 		Listgroup,
 		ListgroupItem,
 		Avatar,
-		TabItem,
+		TabItem, Input,
 		Select,
 		Tabs,
 		Fileupload,
@@ -17,6 +17,8 @@
 	export let data;
 	let channel,
 		value,
+		width = 720,
+		height = 900,
 		mediaStream = null,
 		screenChannel,
 		channelData = {},
@@ -32,7 +34,7 @@
 		animationId;
 
 	function updateChannelData(payload) {
-		console.log(payload)
+		console.log(payload);
 		candidates = payload.candidates;
 		channelData = { channelData, ...payload };
 	}
@@ -69,8 +71,8 @@
 	}
 
 	async function connect() {
-		console.log('issue to start plate')
-		channel.push('start-plate', {  });
+		console.log('issue to start plate');
+		channel.push('start-plate', {});
 		isStopped = false;
 		localVideo = document.getElementById('local-stream');
 		let facingMode = 'environment';
@@ -106,8 +108,8 @@
 			// });
 
 			let stream_settings = localStream.getVideoTracks()[0].getSettings();
-			let stream_width = stream_settings.width;
-			let stream_height = stream_settings.height;
+			let stream_width = width;
+			let stream_height = height;
 			localVideo.width = stream_width;
 			localVideo.height = stream_height;
 			let canvas = document.createElement('canvas');
@@ -134,8 +136,8 @@
 		}
 	}
 	const stopStream = () => {
-		console.log('issue to stop plate')
-		channel.push('stop-plate', {  });
+		console.log('issue to stop plate');
+		channel.push('stop-plate', {});
 		cancelAnimationFrame(animationId);
 		isStopped = true;
 		// websocket.close();
@@ -193,10 +195,21 @@
 	});
 </script>
 
-<Label>
-	Select an option
-	<Select class="mt-2" items={cameras} bind:value={selected} />
-</Label>
+<div class="flex justify-between">
+	<Label>
+		Select an option
+		<Select class="mt-2" items={cameras} bind:value={selected} />
+	</Label>
+	<Label>
+		Height
+		<Input class="mt-2" bind:value={height} />
+	</Label>
+	<Label>
+		Width
+		<Input class="mt-2" bind:value={width} />
+	</Label>
+</div>
+
 <Tabs>
 	<TabItem open title="Local">
 		<video style="width: 100%;" id="local-stream" autoplay muted />
