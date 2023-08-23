@@ -89,7 +89,8 @@
 			let stream_settings = localStream.getVideoTracks()[0].getSettings();
 			let stream_width = stream_settings.width;
 			let stream_height = stream_settings.height;
-
+			localVideo.width = stream_width;
+			localVideo.height = stream_height;
 			let canvas = document.createElement('canvas');
 			canvas.width = stream_width; // Set the desired width
 			canvas.height = stream_height;
