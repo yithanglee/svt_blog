@@ -90,8 +90,8 @@
 			video: {
 				facingMode: facingMode,
 				deviceId: selected,
-				width: { ideal: 1280 },
-				height: { ideal: 800 }
+				width: { ideal: 720 },
+				height: { ideal: 1000 }
 			}
 		});
 
