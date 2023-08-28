@@ -109,7 +109,7 @@
 				//  'stun:stun.stunprotocol.org'
 				// Information about ICE servers - Use your own!
 				{
-					urls: ['stun:localhost:3487']
+					urls: ['stun:webrtc.damienslab.com', 'stun:localhost:3487']
 				}
 			]
 		});
