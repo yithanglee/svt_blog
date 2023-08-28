@@ -21,7 +21,7 @@
 	function log() {
 		console.log(...arguments);
 	}
-	let mediaSource, videoTrack, selectedVideo;
+	let mediaSource, videoTrack, selectedVideo, CODEC;
 
 	async function playMedia() {
 		videoInput = document.getElementById('videoInput');
@@ -37,8 +37,14 @@
 
 		const selectedVideo = videoInput.files[0];
 		const videoBlob = new Blob([selectedVideo], { type: selectedVideo.type });
+		console.log(selectedVideo.type);
 		let NUM_CHUNKS = 1;
-
+		if (selectedVideo.type == 'video/webm') {
+			CODEC = 'video/webm; codecs="vorbis,vp8"';
+		}
+		if (selectedVideo.type == 'video/mp4') {
+			CODEC = 'video/mp4; codecs="avc1.64000d,mp4a.40.2"';
+		}
 		try {
 			mediaSource = new MediaSource();
 
@@ -47,7 +53,7 @@
 			mediaSource.addEventListener(
 				'sourceopen',
 				function () {
-					var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vorbis,vp8"');
+					var sourceBuffer = mediaSource.addSourceBuffer(CODEC);
 
 					var chunkSize = Math.ceil(videoBlob.size / NUM_CHUNKS);
 					var i = 0;
@@ -87,7 +93,11 @@
 		} catch (error) {
 			console.error('Error playing video:', error);
 		}
-		await guestConnect();
+
+		setTimeout(() => {
+			guestConnect();
+			localVideo.muted = false;
+		}, 1000);
 	}
 
 	function setVideoStream(videoElement, stream) {
@@ -101,9 +111,7 @@
 		videoElement.removeAttribute('src');
 		videoElement.removeAttribute('srcObject');
 	}
-	function createPeerConnection(stream, isGuest) {
-		console.log('this is guest? ' + isGuest);
-		console.log('creating peer connection');
+	function createPeerConnection(stream) {
 		let pc = new RTCPeerConnection({
 			iceServers: [
 				//  'stun:stun.stunprotocol.org'
@@ -114,7 +122,6 @@
 			]
 		});
 		pc.ontrack = handleOnTrack;
-	
 		pc.onicecandidate = handleIceCandidate;
 		stream.getTracks().forEach((track) => pc.addTrack(track));
 
@@ -130,18 +137,15 @@
 		}
 	}
 	async function guestConnect() {
-		localVideo = document.getElementById('local-stream');
 		var videoElement = document.getElementById('localMusicVideo');
-
 		var localStream = videoElement.mozCaptureStream(); // check for browser
 
 		setVideoStream(localVideo, localStream);
-		console.log('guest connect create peer connection');
-		peerConnection = await createPeerConnection(localStream, true); // send stream data to receiver?
+		peerConnection = createPeerConnection(localStream); // send stream data to receiver?
 	}
 	async function connect() {
 		localVideo = document.getElementById('local-stream');
-
+		remoteVideo = document.getElementById('remote-stream');
 		var localStream = await navigator.mediaDevices.getUserMedia({
 			audio: true,
 			video: true
@@ -157,7 +161,7 @@
 			setVideoStream(remoteVideo, remoteStream);
 			peerConnection.close();
 			peerConnection = null;
-
+			localVideo.muted = true;
 			pushPeerMessage('disconnect', {});
 		}
 	}
@@ -185,13 +189,12 @@
 	function receiveRemote(offer) {
 		console.log('receive remote');
 		if (offer != null) {
-			console.log('receive remote when offer is not null  ');
 			if (peerConnection != null) {
 				console.log('receive remote when offer and peer con is not null');
 				let remoteDescription = new RTCSessionDescription(offer);
-				
+
 				peerConnection.setRemoteDescription(remoteDescription).then(() => {
-				// by this line, the ontrack should fire liao...
+					// by this line, the ontrack should fire liao...
 					console.log('set remote desci !');
 				});
 			}
@@ -201,7 +204,7 @@
 	async function answerCall(offer) {
 		if (offer != null) {
 			await receiveRemote(offer);
-// in between the remote stream nned to add track o... 
+			// in between the remote stream nned to add track o...
 			var answer = await peerConnection.createAnswer();
 			console.log('asnwer created!');
 			console.log(answer);
@@ -212,10 +215,9 @@
 	}
 	onMount(() => {
 		localVideo = document.getElementById('local-stream');
-
+		remoteVideo = document.getElementById('remote-stream');
 		videoInput = document.getElementById('videoInput');
 		localMusicVideo = document.getElementById('localMusicVideo');
-		remoteVideo = document.getElementById('remote-stream');
 		remoteStream = new MediaStream();
 
 		setVideoStream(remoteVideo, remoteStream);
@@ -298,16 +300,16 @@
 	});
 </script>
 
-<div class="flex flex-col sm:grid grid-cols-12">
-	<div class="col-span-12 sm:col-span-8">
-		<video style="width: 100%;" id="remote-stream" controls autoplay />
+<div class="" style="position: relative;height: 55vh;">
+	<div class="" style="position: absolute;width: 100%;">
+		<video style="width: 100%; height: 55vh" id="remote-stream"  autoplay />
 	</div>
-	<div class="col-span-4">
+	<div class="" style="position: absolute;width: 10vw;right: 0;bottom: 0;">
 		<video style="width: 100%;" id="local-stream" autoplay muted />
-
-		<video style="width: 100%;" id="localMusicVideo" controls autoplay />
+		<video class="hidden" style="width: 100%;" id="localMusicVideo" controls autoplay />
 	</div>
 </div>
+
 
 <section class="">
 	<div>
