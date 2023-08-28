@@ -87,6 +87,7 @@
 		} catch (error) {
 			console.error('Error playing video:', error);
 		}
+		await guestConnect();
 	}
 
 	function setVideoStream(videoElement, stream) {
@@ -100,7 +101,9 @@
 		videoElement.removeAttribute('src');
 		videoElement.removeAttribute('srcObject');
 	}
-	function createPeerConnection(stream) {
+	function createPeerConnection(stream, isGuest) {
+		console.log('this is guest? ' + isGuest);
+		console.log('creating peer connection');
 		let pc = new RTCPeerConnection({
 			iceServers: [
 				//  'stun:stun.stunprotocol.org'
@@ -111,6 +114,7 @@
 			]
 		});
 		pc.ontrack = handleOnTrack;
+	
 		pc.onicecandidate = handleIceCandidate;
 		stream.getTracks().forEach((track) => pc.addTrack(track));
 
@@ -126,15 +130,18 @@
 		}
 	}
 	async function guestConnect() {
+		localVideo = document.getElementById('local-stream');
 		var videoElement = document.getElementById('localMusicVideo');
+
 		var localStream = videoElement.mozCaptureStream(); // check for browser
 
 		setVideoStream(localVideo, localStream);
-		peerConnection = createPeerConnection(localStream);
+		console.log('guest connect create peer connection');
+		peerConnection = await createPeerConnection(localStream, true); // send stream data to receiver?
 	}
 	async function connect() {
 		localVideo = document.getElementById('local-stream');
-		remoteVideo = document.getElementById('remote-stream');
+
 		var localStream = await navigator.mediaDevices.getUserMedia({
 			audio: true,
 			video: true
@@ -156,10 +163,11 @@
 	}
 	async function call() {
 		if (peerConnection != null) {
-			let offer = await peerConnection.createOffer().then((o) => {
-				console.log('offered!');
-				peerConnection.setLocalDescription(o);
-				pushPeerMessage('video-offer', o);
+			// this will display receiveer's stream... on the remote-stream
+			await peerConnection.createOffer().then((offer) => {
+				console.log('call offered!');
+				peerConnection.setLocalDescription(offer);
+				pushPeerMessage('video-offer', offer);
 			});
 		} else {
 			console.log('Camera not setup yet!');
@@ -177,18 +185,26 @@
 	function receiveRemote(offer) {
 		console.log('receive remote');
 		if (offer != null) {
+			console.log('receive remote when offer is not null  ');
 			if (peerConnection != null) {
+				console.log('receive remote when offer and peer con is not null');
 				let remoteDescription = new RTCSessionDescription(offer);
-				console.log('set remote desci');
-				peerConnection.setRemoteDescription(remoteDescription);
+				
+				peerConnection.setRemoteDescription(remoteDescription).then(() => {
+				// by this line, the ontrack should fire liao...
+					console.log('set remote desci !');
+				});
 			}
 		}
 	}
 
 	async function answerCall(offer) {
 		if (offer != null) {
-			receiveRemote(offer);
-			let answer = await peerConnection.createAnswer();
+			await receiveRemote(offer);
+// in between the remote stream nned to add track o... 
+			var answer = await peerConnection.createAnswer();
+			console.log('asnwer created!');
+			console.log(answer);
 			peerConnection
 				.setLocalDescription(answer)
 				.then(() => pushPeerMessage('video-answer', peerConnection.localDescription));
@@ -196,9 +212,10 @@
 	}
 	onMount(() => {
 		localVideo = document.getElementById('local-stream');
-		remoteVideo = document.getElementById('remote-stream');
+
 		videoInput = document.getElementById('videoInput');
 		localMusicVideo = document.getElementById('localMusicVideo');
+		remoteVideo = document.getElementById('remote-stream');
 		remoteStream = new MediaStream();
 
 		setVideoStream(remoteVideo, remoteStream);
@@ -231,7 +248,7 @@
 					receiveRemote(message.content);
 					break;
 				case 'ice-candidate':
-					log('candidate: ', message.content);
+					// log('candidate: ', message.content);
 					let candidate = new RTCIceCandidate(message.content);
 					if (peerConnection != null) {
 						peerConnection.addIceCandidate(candidate).catch(reportError);
@@ -241,7 +258,8 @@
 					disconnect();
 					break;
 				default:
-					reportError('unhandled message type')(message.type);
+					console.log('has errors');
+				// reportError('unhandled message type')(message.type);
 			}
 		});
 
@@ -280,46 +298,45 @@
 	});
 </script>
 
-<Tabs>
-	<TabItem open title="Remote">
+<div class="flex flex-col sm:grid grid-cols-12">
+	<div class="col-span-12 sm:col-span-8">
 		<video style="width: 100%;" id="remote-stream" controls autoplay />
-
+	</div>
+	<div class="col-span-4">
 		<video style="width: 100%;" id="local-stream" autoplay muted />
 
 		<video style="width: 100%;" id="localMusicVideo" controls autoplay />
+	</div>
+</div>
+
+<section class="">
+	<div>
 		<Label class="space-y-2 mb-2">
 			<span>Upload file</span>
 			<Fileupload bind:value id="videoInput" />
 		</Label>
-		<Label>File: {value}</Label>
+	</div>
+
+	<div class="flex gap-4">
 		<Button
 			on:click={() => {
 				playMedia();
 			}}>Play</Button
 		>
-	</TabItem>
-</Tabs>
-
-<section>
-	<Button
-		on:click={() => {
-			guestConnect();
-		}}>Guest Connect</Button
-	>
-
-	<Button
-		on:click={() => {
-			call();
-		}}>Call</Button
-	>
-	<Button
-		on:click={() => {
-			connect();
-		}}>Connect</Button
-	>
-	<Button
-		on:click={() => {
-			disconnect();
-		}}>Disconnect</Button
-	>
+		<Button
+			on:click={() => {
+				call();
+			}}>Call</Button
+		>
+		<Button
+			on:click={() => {
+				connect();
+			}}>Connect</Button
+		>
+		<Button
+			on:click={() => {
+				disconnect();
+			}}>Disconnect</Button
+		>
+	</div>
 </section>

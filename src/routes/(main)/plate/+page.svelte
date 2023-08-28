@@ -6,7 +6,8 @@
 		Listgroup,
 		ListgroupItem,
 		Avatar,
-		TabItem, Input,
+		TabItem,
+		Input,
 		Select,
 		Tabs,
 		Fileupload,
@@ -17,7 +18,7 @@
 	export let data;
 	let channel,
 		value,
-		width = 720,
+		width = 1020,
 		height = 900,
 		mediaStream = null,
 		screenChannel,
@@ -30,9 +31,10 @@
 		peerConnection,
 		endpoint,
 		count = 0,
-		isStopped = true,
-		animationId;
+		isStopped = true
+		;
 
+		let animationId = 0;
 	function updateChannelData(payload) {
 		console.log(payload);
 		candidates = payload.candidates;
@@ -92,7 +94,7 @@
 			video: {
 				facingMode: facingMode,
 				deviceId: selected,
-				width: { ideal: 720 },
+				width: { ideal: 1000 },
 				height: { ideal: 1000 }
 			}
 		});
@@ -118,7 +120,8 @@
 			const context = canvas.getContext('2d');
 
 			const sendFrame = () => {
-				setTimeout(() => {
+				if (!isStopped) {
+					setTimeout(() => {
 					count = count + 1;
 					console.log(count);
 					context.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
@@ -126,9 +129,16 @@
 					if (isStopped == false) {
 						channel.push('frame', { data: imageData });
 					}
+					console.log('animation id ');
+					if (animationId) {
+						cancelAnimationFrame(animationId);
+					}
 
 					animationId = requestAnimationFrame(sendFrame);
+					console.log(animationId);
 				}, 2000);
+				}
+		
 			};
 			sendFrame();
 		} else {

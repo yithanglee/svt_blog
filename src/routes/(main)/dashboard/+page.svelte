@@ -59,7 +59,7 @@
 </script>
 <img src={imageUrl} />
 <Button on:click={refreshImage}>Refresh Image</Button>
-<div class="grid grid-cols-12">
+<div class="flex sm:grid grid-cols-12 flex-col-reverse">
 	<div class="col-span-8 mx-4">
 		
 		<h1 class="my-4 dark:text-white">Model: {title}</h1>
@@ -82,7 +82,7 @@
 			</TableBody>
 		</Table>
 	</div>
-	<div class="col-span-4 mx-4">
+	<div class="col-span-12 sm:col-span-4 mx-4">
 		<Card class="w-full max-w-md ">
 			<form
 				class="flex flex-col space-y-6"
