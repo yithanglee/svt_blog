@@ -1,6 +1,9 @@
 import { PHX_ENDPOINT } from '$lib/constants';
+import jsCookie from 'js-cookie';
 export async function postData(data, options) {
-
+    let res
+    let cookieToken = jsCookie.get('token');
+    let token = cookieToken != null ? JSON.parse(cookieToken) : 'empty';
     var default_options = {
         method: 'POST',
         endpoint: 'http://' + PHX_ENDPOINT
@@ -9,6 +12,7 @@ export async function postData(data, options) {
     const requestOptions = {
         method: options.method != null ? options.method : "POST",
         headers: {
+            "Authorization": `Basic ${token}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
@@ -18,7 +22,7 @@ export async function postData(data, options) {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
         console.log(response)
         if (response.ok) {
-            await response.json();
+            res = await response.json();
         } else {
             let errorMessage = "Failed to post data.";
         }
@@ -26,6 +30,7 @@ export async function postData(data, options) {
         console.error(error)
         let errorMessage = "An error occurred.";
     }
+    return res;
 }
 
 export function buildQueryString(data, parentKey = null) {

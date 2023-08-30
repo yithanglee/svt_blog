@@ -1,5 +1,13 @@
 <script>
-	import { Breadcrumb, BreadcrumbItem, GroupItem } from 'flowbite-svelte';
+	import {
+		Dropdown,
+
+		DropdownItem,
+		DropdownDivider,
+		Breadcrumb,
+		BreadcrumbItem,
+		GroupItem
+	} from 'flowbite-svelte';
 	import { DarkMode } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import '../app.postcss';
@@ -7,6 +15,7 @@
 	import { Alert, Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import jsCookie from 'js-cookie';
+	import { MENUS } from '$lib/constants';
 	/** @type {import('./$types').LayoutData} */
 	export let data;
 	var nav_class = 'hidden',
@@ -18,9 +27,11 @@
 		jsCookie.remove('user');
 		goto('/');
 	}
+	function appendClass(existing_class) {
+		return 'cursor-pointer ' + existing_class
+	}
 
 	onMount(() => {
-		
 		session.subscribe((value) => {
 			console.log(value);
 			if (value && value.loggedIn) {
@@ -43,8 +54,27 @@
 	<NavHamburger on:click={toggle} />
 	<NavUl {hidden}>
 		<NavLi class={nav_class} href="/dashboard">Dashboard</NavLi>
-		<NavLi class={nav_class} href="/users">Users</NavLi>
+		{#each MENUS as menu}
+			{#if !menu.hidden}
+				{#if menu.children}
+					<NavLi class={appendClass(nav_class)} id={menu.title}
+						>{menu.title}
+
+					
+					</NavLi>
+					<Dropdown triggeredBy="#{menu.title}" class="w-44 z-20">
+						{#each menu.children as child}
+						<DropdownItem href="{child.path}">{child.title}</DropdownItem>
+						{/each}
+					</Dropdown>
+				{:else}
+					<NavLi class={nav_class} id={menu.title} href={menu.path}>{menu.title}</NavLi>
+				{/if}
+			{/if}
+		{/each}
+
 		<NavLi class={nav_class} on:click={logOut} href="javascript:void(0);">Logout</NavLi>
+	
 	</NavUl>
 	<DarkMode />
 </Navbar>

@@ -12,14 +12,14 @@
 		inputs: inputs,
 		search_queries: null,
 		model: 'User',
-		preloads: ['corporate_account'],
+		// preloads: ['corporate_account'],
 		customCols: [{title: 'General', list: ['id', 'full_name']}],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Full', data: 'full_name' },
 			{ label: 'Username', data: 'username' },
-			{ label: 'Code', data: 'member_code', isBadge: true },
-			{ label: 'Account', data: 'name', through: ['corporate_account']  },
+			// { label: 'Code', data: 'member_code', isBadge: true },
+			// { label: 'Account', data: 'name', through: ['corporate_account']  },
 		]
 	}}
 />

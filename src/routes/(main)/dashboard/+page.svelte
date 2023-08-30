@@ -1,5 +1,6 @@
 <script>
 	import { PHX_ENDPOINT } from '$lib/constants';
+	import jsCookie from 'js-cookie';
 	import {
 		Table,
 		TableBody,
@@ -8,19 +9,30 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
-	let imageUrl = "http://"+ PHX_ENDPOINT+"/images/uploads/test1.jpg"; 
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
-	import { buildQueryString } from '$lib/index.js';
+	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let items = [{ key: 'id', value: 'int' }],
-		module = '', title = '';
+		module = '',
+		title = '';
 	var url = 'http://' + PHX_ENDPOINT;
 	function updateApiData(newData) {
 		items = [...items, newData]; // Append new data to the existing array
 	}
+
+	async function postDat(){
+	var res =	await postData({
+			scope: "sign_in",
+			username: "damien"
+		}, {
+			endpoint:  url + '/api/webhook'
+		})
+console.log(res)
+		jsCookie.set('token', JSON.stringify(res.res));
+	}
 	async function fetchData() {
-		title = module
+		title = module;
 		items = [];
 		const apiData = {
 			scope: 'gen_inputs',
@@ -35,33 +47,24 @@
 		if (response.ok) {
 			let dataList = await response.json();
 			let keys = Object.keys(dataList);
-			keys.sort((a,b) => {
-				return a.localeCompare(b)
-			})
+			keys.sort((a, b) => {
+				return a.localeCompare(b);
+			});
 
 			keys.forEach((v, i) => {
 				updateApiData({ key: v, value: dataList[v] });
 			});
 			console.log(items);
-			module = ''
+			module = '';
 		} else {
-			title = 'Not available'
+			title = 'Not available';
 			console.error('API request failed');
 		}
-		
 	}
-	function refreshImage() {
-    // Generate a unique identifier (timestamp) to force image reload
-    const uniqueId = Date.now();
-    imageUrl = `path/to/your/image.png`;
-	imageUrl = "http://"+ PHX_ENDPOINT+`/images/uploads/test1.jpg?${uniqueId}`; 
-  }
 </script>
-<img src={imageUrl} />
-<Button on:click={refreshImage}>Refresh Image</Button>
+
 <div class="flex sm:grid grid-cols-12 flex-col-reverse">
 	<div class="col-span-8 mx-4">
-		
 		<h1 class="my-4 dark:text-white">Model: {title}</h1>
 		<Table>
 			<TableHead>
@@ -98,10 +101,10 @@
 					<span>Model</span>
 					<Input type="text" name="module" placeholder="User" bind:value={module} required />
 				</Label>
-	
+
 				<Button type="submit" class="w-full">Check</Button>
+				<Button color="blue" on:click={postDat} >Test</Button>
 			</form>
 		</Card>
 	</div>
-
 </div>

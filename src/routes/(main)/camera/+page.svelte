@@ -300,18 +300,16 @@
 	});
 </script>
 
-<div class="" style="position: relative;height: 55vh;">
-	<div class="" style="position: absolute;width: 100%;">
-		<video style="width: 100%; height: 55vh" id="remote-stream"  autoplay />
+<section class="container">
+	<div class="" style="position: relative;height: 55vh;">
+		<div class="" style="position: absolute;width: 100%;">
+			<video style="width: 100%; height: 55vh" id="remote-stream" autoplay />
+		</div>
+		<div class="" style="position: absolute;width: 300px;right: 0;bottom: 0;">
+			<video style="width: 100%; height: 180px;" id="local-stream" autoplay muted />
+			<video class="hidden" style="width: 100%;" id="localMusicVideo" controls autoplay />
+		</div>
 	</div>
-	<div class="" style="position: absolute;width: 10vw;right: 0;bottom: 0;">
-		<video style="width: 100%;" id="local-stream" autoplay muted />
-		<video class="hidden" style="width: 100%;" id="localMusicVideo" controls autoplay />
-	</div>
-</div>
-
-
-<section class="">
 	<div>
 		<Label class="space-y-2 mb-2">
 			<span>Upload file</span>
@@ -319,7 +317,7 @@
 		</Label>
 	</div>
 
-	<div class="flex gap-4">
+	<div class="flex gap-4 flex-col md:flex-row">
 		<Button
 			on:click={() => {
 				playMedia();

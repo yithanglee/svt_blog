@@ -31,10 +31,16 @@
 		peerConnection,
 		endpoint,
 		count = 0,
-		isStopped = true
-		;
+		isStopped = true;
+	let animationId = 0;
+	let imageUrl = 'http://' + PHX_ENDPOINT + '/images/uploads/test1.jpg';
 
-		let animationId = 0;
+	function refreshImage() {
+		// Generate a unique identifier (timestamp) to force image reload
+		const uniqueId = Date.now();
+		imageUrl = `path/to/your/image.png`;
+		imageUrl = 'http://' + PHX_ENDPOINT + `/images/uploads/test1.jpg?${uniqueId}`;
+	}
 	function updateChannelData(payload) {
 		console.log(payload);
 		candidates = payload.candidates;
@@ -122,23 +128,22 @@
 			const sendFrame = () => {
 				if (!isStopped) {
 					setTimeout(() => {
-					count = count + 1;
-					console.log(count);
-					context.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
-					const imageData = canvas.toDataURL('image/jpeg');
-					if (isStopped == false) {
-						channel.push('frame', { data: imageData });
-					}
-					console.log('animation id ');
-					if (animationId) {
-						cancelAnimationFrame(animationId);
-					}
+						count = count + 1;
+						console.log(count);
+						context.drawImage(localVideo, 0, 0, canvas.width, canvas.height);
+						const imageData = canvas.toDataURL('image/jpeg');
+						if (isStopped == false) {
+							channel.push('frame', { data: imageData });
+						}
+						console.log('animation id ');
+						if (animationId) {
+							cancelAnimationFrame(animationId);
+						}
 
-					animationId = requestAnimationFrame(sendFrame);
-					console.log(animationId);
-				}, 2000);
+						animationId = requestAnimationFrame(sendFrame);
+						console.log(animationId);
+					}, 2000);
 				}
-		
 			};
 			sendFrame();
 		} else {
@@ -223,6 +228,10 @@
 <Tabs>
 	<TabItem open title="Local">
 		<video style="width: 100%;" id="local-stream" autoplay muted />
+	</TabItem>
+	<TabItem title="History">
+		<img src={imageUrl} />
+		<Button on:click={refreshImage}>Refresh Image</Button>
 	</TabItem>
 </Tabs>
 

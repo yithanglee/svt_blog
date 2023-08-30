@@ -2,11 +2,11 @@
 import { genInputs } from '$lib/index.js';
 import { PHX_ENDPOINT } from '$lib/constants';
 export async function load() {
-    let url = 'http://' + PHX_ENDPOINT;
-    let inputs = await genInputs(url, 'User')
+    let module='Blog', url = 'http://' + PHX_ENDPOINT;
+    let inputs = await genInputs(url, module)
 
     return {
-        module: 'User',
+        module: module,
         inputs: inputs
     };
 };
