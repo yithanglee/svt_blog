@@ -1,6 +1,7 @@
 <script>
 	import { PHX_ENDPOINT } from '$lib/constants';
 	import jsCookie from 'js-cookie';
+	
 	import {
 		Table,
 		TableBody,
@@ -21,14 +22,17 @@
 		items = [...items, newData]; // Append new data to the existing array
 	}
 
-	async function postDat(){
-	var res =	await postData({
-			scope: "sign_in",
-			username: "damien"
-		}, {
-			endpoint:  url + '/api/webhook'
-		})
-console.log(res)
+	async function postDat() {
+		var res = await postData(
+			{
+				scope: 'sign_in',
+				username: 'damien'
+			},
+			{
+				endpoint: url + '/api/webhook'
+			}
+		);
+		console.log(res);
 		jsCookie.set('token', JSON.stringify(res.res));
 	}
 	async function fetchData() {
@@ -103,7 +107,7 @@ console.log(res)
 				</Label>
 
 				<Button type="submit" class="w-full">Check</Button>
-				<Button color="blue" on:click={postDat} >Test</Button>
+				<Button color="blue" on:click={postDat}>Test</Button>
 			</form>
 		</Card>
 	</div>

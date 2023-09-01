@@ -31,6 +31,7 @@
 	"type": "module",
 	"dependencies": {
 		"@floating-ui/dom": "^1.5.1",
+		"@tinymce/tinymce-svelte": "^1.0.1",
 		"cl-editor": "^2.3.0",
 		"datatables.net-dt": "^1.13.6",
 		"dotenv": "^16.3.1",

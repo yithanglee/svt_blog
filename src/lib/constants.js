@@ -8,6 +8,7 @@ export const MENUS = [
         ]
     },
     { path: '/blogs', title: 'Blogs', icon: 'book-solid' },
+    { path: '/categories', title: 'Categories', icon: 'tag-solid' },
     { path: '/users', title: 'Users', icon: null },
     { path: '/customers', title: 'Customers', icon: null, hidden: true },
     { path: '/customer_orders', title: 'Orders', icon: 'receipt-solid', hidden: true }

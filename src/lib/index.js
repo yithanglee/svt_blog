@@ -8,14 +8,18 @@ export async function postData(data, options) {
         method: 'POST',
         endpoint: 'http://' + PHX_ENDPOINT
     }
+    let headers = {
+        "Authorization": `Basic ${token}`,
+        "Content-Type": "application/json",
+    }
+    if (options.isFormData != null) {
+        delete headers["Content-Type"]
+    }
 
     const requestOptions = {
         method: options.method != null ? options.method : "POST",
-        headers: {
-            "Authorization": `Basic ${token}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        headers: headers,
+        body: options.isFormData != null ? data : JSON.stringify(data),
     };
 
     try {

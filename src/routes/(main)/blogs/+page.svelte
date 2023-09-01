@@ -11,11 +11,31 @@
 		inputs: inputs,
 		search_queries: null,
 		model: module,
-		// preloads: ['corporate_account'],
-		customCols: [{ title: 'General', list: ['id', 'title', { label: 'content', editor: true }] }],
+		preloads: ['stored_medias', 'category'],
+		customCols: [
+			{
+				title: 'General',
+				list: [
+					'id',
+					'title',
+					'excerpt',
+					{ label: 'thumbnail_img', upload: true },
+					{ label: 'img_url', upload: true }
+				]
+			},
+			{
+				title: 'Content',
+				list: [
+					{ label: 'category_id', selection: 'Category' , search_queries: ['a.name']},
+					{ label: 'content', editor: true },
+					{ label: 'stored_medias', gallery: true, child: 's3_url' }
+				]
+			}
+		],
 		columns: [
 			{ label: 'ID', data: 'id' },
-			{ label: 'Title', data: 'title' }
+			{ label: 'Title', data: 'title' },
+			{ label: 'Category', data: 'name' ,through: ['category']}
 		]
 	}}
 />
