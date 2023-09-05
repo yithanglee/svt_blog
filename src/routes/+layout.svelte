@@ -25,6 +25,7 @@
 		session.logout();
 		loggedIn = 'false';
 		jsCookie.remove('user');
+		jsCookie.remove('token');
 		goto('/');
 	}
 	function appendClass(existing_class) {

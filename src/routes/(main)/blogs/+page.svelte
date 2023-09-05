@@ -26,7 +26,13 @@
 			{
 				title: 'Content',
 				list: [
-					{ label: 'category_id', selection: 'Category' , search_queries: ['a.name']},
+					{
+						label: 'category_id',
+						selection: 'Category',
+						customCols: null,
+						search_queries: ['a.name'],
+						newData: 'name'
+					},
 					{ label: 'content', editor: true },
 					{ label: 'stored_medias', gallery: true, child: 's3_url' }
 				]
@@ -35,7 +41,7 @@
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Title', data: 'title' },
-			{ label: 'Category', data: 'name' ,through: ['category']}
+			{ label: 'Category', data: 'name', through: ['category'] }
 		]
 	}}
 />

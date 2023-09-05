@@ -6,9 +6,10 @@
 	/** @type {import('./$types').PageData} */
 	import { Icon } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
-	export let data, input, name, module, parent, search_queries;
+	export let data, input, newData, name, module, parent, search_queries;
 	let dropdownOpen = false,
 		group1 = 0,
+		newFormData = {},
 		title = 'Selected',
 		pages = [],
 		items = [],
@@ -17,6 +18,23 @@
 		itemsPerPage = 20;
 	function inputName(key) {
 		return parent + '[' + key + ']';
+	}
+	async function tryPost() {
+		let map = {};
+		newFormData[newData] = query;
+
+		map[module] = { ...newFormData, id: '0' };
+
+		console.log(map);
+
+		// maybe check if there's any file upload involved, if yes, probably need to convert the map
+		// to formdata or post twice as a subsequent update.. post image first then the rest.
+		//
+
+		// if isFormData, formData
+		await postData(map, {
+			endpoint: 'http://' + PHX_ENDPOINT + '/api/' + module
+		});
 	}
 	async function fetchData(pageNumber) {
 		const apiData = {
@@ -84,17 +102,28 @@
 	>
 	<Dropdown bind:open={dropdownOpen}>
 		<div slot="header" class="p-3">
-			<Search bind:value={query} on:change={() => {
-				console.log(query)
-				fetchData()
-			}} size="md" />
+			<Search
+				bind:value={query}
+				on:change={() => {
+					console.log(query);
+					fetchData();
+				}}
+				size="md"
+			/>
 		</div>
 
 		{#each items as item}
 			<DropdownItem on:click={updateData(item.id, item.name)}>{item.name}</DropdownItem>
 		{/each}
 
-		<Button slot="footer" size="xs" class="m-2">
+		<Button
+			slot="footer"
+			size="xs"
+			class="m-2"
+			on:click={() => {
+				tryPost();
+			}}
+		>
 			<Icon name="check-solid" class="w-4 h-4 mr-2 text-white " />
 			Add
 		</Button>

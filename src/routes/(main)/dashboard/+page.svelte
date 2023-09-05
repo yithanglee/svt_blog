@@ -23,6 +23,7 @@
 	}
 
 	async function postDat() {
+		jsCookie.remove('token')
 		var res = await postData(
 			{
 				scope: 'sign_in',

@@ -51,6 +51,7 @@
 			start: ((pageNumber == null ? 1 : pageNumber) - 1) * itemsPerPage
 		};
 		const queryString = buildQueryString(apiData);
+		console.log(queryString)
 		try {
 			const response = await fetch(cac_url + '/api/' + model + `?${queryString}`, {
 				headers: {
