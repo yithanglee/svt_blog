@@ -1,4 +1,4 @@
-import { PHX_ENDPOINT } from '$lib/constants';
+import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 import jsCookie from 'js-cookie';
 export async function postData(data, options) {
     let res
@@ -6,7 +6,7 @@ export async function postData(data, options) {
     let token = cookieToken != null ? JSON.parse(cookieToken) : 'empty';
     var default_options = {
         method: 'POST',
-        endpoint: 'http://' + PHX_ENDPOINT
+        endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT
     }
     let headers = {
         "Authorization": `Basic ${token}`,

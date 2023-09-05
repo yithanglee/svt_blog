@@ -1,5 +1,5 @@
 <script>
-	import { PHX_ENDPOINT } from '$lib/constants';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import jsCookie from 'js-cookie';
 	
 	import {
@@ -17,7 +17,7 @@
 	let items = [{ key: 'id', value: 'int' }],
 		module = '',
 		title = '';
-	var url = 'http://' + PHX_ENDPOINT;
+	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 	function updateApiData(newData) {
 		items = [...items, newData]; // Append new data to the existing array
 	}

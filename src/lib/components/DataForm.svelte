@@ -3,7 +3,7 @@
 	import { isModalOpen } from '../stores/modal';
 	import { onMount, onDestroy, afterUpdate, beforeUpdate } from 'svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
-	import { PHX_ENDPOINT } from '$lib/constants';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import { Tabs, TabItem } from 'flowbite-svelte';
 
 	import { Icon } from 'flowbite-svelte-icons';
@@ -44,7 +44,7 @@
 		// if isFormData, formData
 		await postData(formData, {
 			isFormData: true,
-			endpoint: 'http://' + PHX_ENDPOINT + '/api/' + module
+			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/api/' + module
 		});
 		refreshData();
 		formModal = false;

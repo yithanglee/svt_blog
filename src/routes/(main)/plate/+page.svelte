@@ -33,13 +33,13 @@
 		count = 0,
 		isStopped = true;
 	let animationId = 0;
-	let imageUrl = 'http://' + PHX_ENDPOINT + '/images/uploads/test1.jpg';
+	let imageUrl = PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/images/uploads/test1.jpg';
 
 	function refreshImage() {
 		// Generate a unique identifier (timestamp) to force image reload
 		const uniqueId = Date.now();
 		imageUrl = `path/to/your/image.png`;
-		imageUrl = 'http://' + PHX_ENDPOINT + `/images/uploads/test1.jpg?${uniqueId}`;
+		imageUrl = PHX_HTTP_PROTOCOL + PHX_ENDPOINT + `/images/uploads/test1.jpg?${uniqueId}`;
 	}
 	function updateChannelData(payload) {
 		console.log(payload);

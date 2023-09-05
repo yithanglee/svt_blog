@@ -1,7 +1,7 @@
 <script>
 	import DataForm from '$lib/components/DataForm.svelte';
 	import DataCell from '$lib/components/DataCell.svelte';
-	import { PHX_ENDPOINT } from '$lib/constants';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import { postData, buildQueryString } from '$lib/index.js';
 	import { onDestroy } from 'svelte';
 	import { page } from '$app/stores';
@@ -32,7 +32,7 @@
 		columns = data.columns,
 		pages = [],
 		selectedData = {},
-		cac_url = 'http://' + PHX_ENDPOINT,
+		cac_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT,
 		model = data.model;
 
 	const itemsPerPage = 10;
@@ -104,7 +104,7 @@
 		confirmModal = false;
 		postData(
 			{},
-			{ method: 'DELETE', endpoint: 'http://' + PHX_ENDPOINT + '/api/' + model + '/' + id }
+			{ method: 'DELETE', endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/api/' + model + '/' + id }
 		);
 		checkPage();
 		selectedId = null;

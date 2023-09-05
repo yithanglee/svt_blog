@@ -1,7 +1,7 @@
 <script>
 	import { Button, Dropdown, Input, Radio, DropdownItem, Checkbox, Search } from 'flowbite-svelte';
 
-	import { PHX_ENDPOINT } from '$lib/constants';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import { postData, buildQueryString } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	import { Icon } from 'flowbite-svelte-icons';
@@ -13,7 +13,7 @@
 		title = 'Selected',
 		pages = [],
 		items = [],
-		cac_url = 'http://' + PHX_ENDPOINT,
+		cac_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT,
 		query,
 		itemsPerPage = 20;
 	function inputName(key) {
@@ -33,7 +33,7 @@
 
 		// if isFormData, formData
 		await postData(map, {
-			endpoint: 'http://' + PHX_ENDPOINT + '/api/' + module
+			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/api/' + module
 		});
 	}
 	async function fetchData(pageNumber) {
