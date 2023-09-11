@@ -13,7 +13,7 @@
 		Fileupload,
 		Label
 	} from 'flowbite-svelte';
-	import { PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+	import {PHX_HTTP_PROTOCOL,  PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	/** @type {import('./$types').PageData} */
 	export let data;
 	let channel,
