@@ -86,3 +86,43 @@ export async function genInputs(url, module) {
         return [];
     }
 }
+export async function api_get(url, params) {
+
+    const apiData = params;
+    const queryString = buildQueryString(apiData);
+    
+    const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (response.ok) {
+        let dataList = await response.json();
+        
+        return dataList;
+    } else {
+
+        console.error('API request failed');
+        return [];
+    }
+}
+export async function ngrok_get(url, params) {
+
+    const apiData = params;
+    const queryString = buildQueryString(apiData);
+    
+    const response = await fetch(url + '/ngrok/webhook' + `?${queryString}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    if (response.ok) {
+        let dataList = await response.json();
+        
+        return dataList;
+    } else {
+
+        console.error('API request failed');
+        return [];
+    }
+}

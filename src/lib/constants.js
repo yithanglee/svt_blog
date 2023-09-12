@@ -6,6 +6,8 @@ export const MENUS = [
         path: '#', title: 'Experiments', icon: null, children: [
             { path: '/plate', title: 'Car Plate', icon: 'camera-foto-solid' },
             { path: '/camera', title: 'Camera', icon: 'camera-foto-solid' },
+       
+            { path: '/iots', title: 'IOTs', icon: 'desktop-pc-solid' },
         ]
     },
     { path: '/blogs', title: 'Blogs', icon: 'book-solid' },
