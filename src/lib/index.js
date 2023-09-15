@@ -59,8 +59,19 @@ export function buildQueryString(data, parentKey = null) {
         .join('&');
 }
 
-export async function genInputs(response) {
-    let items = []
+export async function genInputs(url, module) {
+
+    let items = [];
+    const apiData = {
+        scope: 'gen_inputs',
+        module: module
+    };
+    const queryString = buildQueryString(apiData);
+    const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
     if (response.ok) {
         let dataList = await response.json();
         let keys = Object.keys(dataList);
@@ -74,6 +85,7 @@ export async function genInputs(response) {
         console.log(items);
         return items;
     } else {
+
         console.error('API request failed');
         return [];
     }

@@ -1,15 +1,12 @@
 /** @type {import('./$types').PageLoad} */
 import { genInputs } from '$lib/index.js';
-export async function load({ parent, fetch }) {
-    let module = 'Category'
-    const response0 = await fetch('/api/gen_input/' + module, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    let inputs = await genInputs(response0)
+import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+export async function load() {
+    let url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+    let inputs = await genInputs(url, 'Category')
+
     return {
-        module: module,
+        module: 'Category',
         inputs: inputs
     };
 };
