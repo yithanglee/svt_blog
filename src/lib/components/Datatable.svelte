@@ -61,9 +61,7 @@
 				}
 			});
 			if (response.ok) {
-				console.log(response);
-				console.log('server datatable');
-				console.log(await response.json());
+			
 				let dataList = await response.json();
 				console.log(dataList);
 				items = dataList.data;
