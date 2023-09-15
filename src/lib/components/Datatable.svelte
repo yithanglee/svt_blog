@@ -51,17 +51,21 @@
 			start: ((pageNumber == null ? 1 : pageNumber) - 1) * itemsPerPage
 		};
 		const queryString = buildQueryString(apiData);
-		console.log(queryString)
+		console.log(queryString);
 		try {
+			let blog_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
-
-			const response = await fetch( '/api/datatable/' + model + `?${queryString}`, {
+			const response = await fetch(blog_url + '/api/' + model + `/${queryString}`, {
 				headers: {
-					'Content-Type': 'application/json'
+					'content-type': 'application/json'
 				}
 			});
 			if (response.ok) {
+				console.log(response);
+				console.log('server datatable');
+				console.log(await response.json());
 				let dataList = await response.json();
+				console.log(dataList);
 				items = dataList.data;
 
 				var totalPages = Math.ceil(dataList.recordsFiltered / itemsPerPage);
