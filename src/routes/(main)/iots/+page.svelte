@@ -2,7 +2,8 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 	import { Socket } from 'phoenix';
-	import { ngrok_get } from '$lib/index.js';
+	import { isToastOpen } from '$lib/stores/toast';
+	import { api_get, ngrok_get } from '$lib/index.js';
 	import { onDestroy, onMount } from 'svelte';
 	import {
 		Table,
@@ -15,17 +16,35 @@
 		Button,
 		ButtonGroup
 	} from 'flowbite-svelte';
-	let searchTerm = '',
+	let items = [],
+		searchTerm = '',
 		channel,
 		isJoined = false;
 	import { PHX_HTTP_PROTOCOL, PHX_WS_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 
-	console.log('curent list');
-	console.log(data.device_list);
+	function addItem(newData) {
+		items = [...items, newData];
+	
+	}
 
+	async function getDeviceList() {
+		let url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+		const uniqueId = Date.now();
+		let connected = await api_get(url, { scope: 'connected', timestamp: uniqueId });
+		console.log(connected);
+		list = Object.keys(connected);
+		items = [];
+		console.log(items)
+		list.forEach((v, i) => {
+			addItem(data.device_list[v]);
+		});
+		filteredItems = items.filter(
+			(item) => item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1
+		);
+		console.log(filteredItems)
+	}
 	let list = Object.keys(data.device_list);
 
-	let items = [];
 	list.forEach((v, i) => {
 		items.push(data.device_list[v]);
 	});
@@ -36,6 +55,7 @@
 	let url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 	let Device = {
 		startPwm: (uuid) => {
+			isToastOpen.notify("start uuid ..." + uuid)
 			ngrok_get(url, {
 				receiver: uuid,
 				url: 'http://localhost:5120/api?scope=pwm_start',
@@ -43,6 +63,7 @@
 			});
 		},
 		stopPwm: (uuid) => {
+			isToastOpen.notify("stop uuid ..." + uuid)
 			ngrok_get(url, {
 				receiver: uuid,
 				url: 'http://localhost:5120/api?scope=pwm_stop',
@@ -50,8 +71,10 @@
 			});
 		},
 		initiateDevice: async (uuid) => {
+			
 			console.log('initiating uuid');
 			if (channel.state == 'joined') {
+				isToastOpen.notify("initiating device with uuid " + uuid)
 				channel.push('ask_initiate', { uuid: uuid });
 			}
 		}
@@ -124,19 +147,21 @@
 					<ButtonGroup>
 						<Button color="primary" on:click={Device.initiateDevice(item.uuid)}>Initiate</Button>
 
-						<Button color="blue" on:click={Device.startPwm(item.uuid)}>Start</Button>
+						<Button on:click={Device.startPwm(item.uuid)}>Start</Button>
 
-						<Button color="purple" on:click={Device.stopPwm(item.uuid)}>Stop</Button>
+						<Button  on:click={Device.stopPwm(item.uuid)}>Stop</Button>
 					</ButtonGroup>
 				</TableBodyCell>
 			</TableBodyRow>
 		{/each}
 	</TableBody>
 </TableSearch>
-
+<Button class="my-4" on:click={getDeviceList}>Refresh</Button>
 <section class="block md:hidden">
 	{#each filteredItems as item}
-		<div class="rounded-lg border border-gray-600 border-1 flex flex-col gap-4 dark:text-white m-4 p-4">
+		<div
+			class="rounded-lg border border-gray-600 border-1 flex flex-col gap-4 dark:text-white m-4 p-4"
+		>
 			<di>
 				{item.name}
 			</di>

@@ -53,13 +53,13 @@
 		const queryString = buildQueryString(apiData);
 		console.log(queryString)
 		try {
-			const response = await fetch(cac_url + '/api/' + model + `?${queryString}`, {
+
+
+			const response = await fetch( '/api/datatable/' + model + `?${queryString}`, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
-				// body: JSON.stringify(requestBody)
 			});
-
 			if (response.ok) {
 				let dataList = await response.json();
 				items = dataList.data;

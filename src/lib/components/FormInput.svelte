@@ -12,10 +12,13 @@
 
 	console.log(data);
 
-	let editor;
+	let editorData ;
 	if (input == null) {
 		input = { key: key.label, value: 'id' };
 		console.log(input);
+	}
+	if ( key.editor == true) {
+		editorData = data[input.key] != null ? data[input.key] : ""
 	}
 	function inputName(key) {
 		return module + '[' + key + ']';
@@ -50,11 +53,11 @@
 		<div class="w-full mx-4 my-2">
 			<Label class="space-y-2 mb-3">
 				<span class="capitalize">{input.key.replace('_', ' ')}</span>
-				<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
+				<Input type="hidden" name={inputName(input.key)} bind:value={editorData} />
 			</Label>
 			<TinyMCEditor
 				apiKey="xnjuj4xq5iahoahtbzk5epjfsu1qxl31o9iy15y9100ihcsv"
-				bind:value={data[input.key]}
+				bind:value={editorData}
 			/>
 		</div>
 	{:else if key.editor2 == true}

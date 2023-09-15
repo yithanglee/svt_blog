@@ -1,37 +1,49 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { postData } from '$lib/index.js';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
-    import Cookies from 'js-cookie';
-	let username = '';
-	let password = '';
-
+	import Cookies from 'js-cookie';
+	let username = '',
+		password = '';
 	async function handleLogin() {
-	    const user = { id: 1, username: 'example_user' };
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+		const map = { id: 0, username: username, password: password, scope: 'sign_in' };
+		var res = await postData(map, {
+			endpoint: url + '/api/webhook'
+		});
+		console.log(res);
+		
 		// Set user session/token/cookie
-		localStorage.setItem('userToken', 'exampleToken');
-        Cookies.set('user', JSON.stringify(user));
-		// Redirect to dashboard
+		Cookies.set('token', JSON.stringify(res.res));
 
-		session.login(user)
-		goto('/dashboard');
+		// Redirect to dashboard
+		console.log('login user');
+		session.login({username: username, token: JSON.stringify(res.res)});
+
+		goto('/dashboard', { withParams: { token: 'lngToken' } });
 	}
 </script>
 
 <main>
 	<form on:submit|preventDefault={handleLogin} class="flex justify-center">
-
 		<Card class="w-full max-w-md">
-			<div class="flex flex-col space-y-6" >
+			<div class="flex flex-col space-y-6">
 				<h3 class="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
 				<Label class="space-y-2">
 					<span>Email</span>
-					<Input type="email" value="d@1.com" name="email" placeholder="name@company.com" required />
+					<Input
+						type="email"
+						value="d@1.com"
+						name="email"
+						placeholder="name@company.com"
+						required
+					/>
 				</Label>
 				<Label class="space-y-2">
 					<span>Your password</span>
-					<Input type="password" value="123"  name="password" placeholder="•••••" required />
+					<Input type="password" value="123" name="password" placeholder="•••••" required />
 				</Label>
 				<div class="flex items-start">
 					<Checkbox>Remember me</Checkbox>

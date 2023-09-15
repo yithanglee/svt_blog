@@ -52,11 +52,17 @@
 		};
 		const queryString = buildQueryString(apiData);
 		try {
-			const response = await fetch(cac_url + '/api/' + module + `?${queryString}`, {
+			// const response = await fetch(cac_url + '/api/' + module + `?${queryString}`, {
+			// 	headers: {
+			// 		'Content-Type': 'application/json'
+			// 	}
+			
+			// });
+
+			const response = await fetch( '/api/datatable/' + module + `?${queryString}`, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
-				// body: JSON.stringify(requestBody)
 			});
 
 			if (response.ok) {

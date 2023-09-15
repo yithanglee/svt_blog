@@ -1,4 +1,5 @@
 import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+import { isToastOpen } from '$lib/stores/toast';
 import jsCookie from 'js-cookie';
 export async function postData(data, options) {
     let res
@@ -26,12 +27,15 @@ export async function postData(data, options) {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
         console.log(response)
         if (response.ok) {
+            isToastOpen.notify( "Submitted succesfully!")
             res = await response.json();
         } else {
+            isToastOpen.notify("Not Submitted!")
             let errorMessage = "Failed to post data.";
         }
     } catch (error) {
         console.error(error)
+        isToastOpen.notify("Error!")
         let errorMessage = "An error occurred.";
     }
     return res;
@@ -55,19 +59,8 @@ export function buildQueryString(data, parentKey = null) {
         .join('&');
 }
 
-export async function genInputs(url, module) {
-
-    let items = [];
-    const apiData = {
-        scope: 'gen_inputs',
-        module: module
-    };
-    const queryString = buildQueryString(apiData);
-    const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+export async function genInputs(response) {
+    let items = []
     if (response.ok) {
         let dataList = await response.json();
         let keys = Object.keys(dataList);
@@ -81,7 +74,6 @@ export async function genInputs(url, module) {
         console.log(items);
         return items;
     } else {
-
         console.error('API request failed');
         return [];
     }
@@ -90,7 +82,7 @@ export async function api_get(url, params) {
 
     const apiData = params;
     const queryString = buildQueryString(apiData);
-    
+
     const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
         headers: {
             'Content-Type': 'application/json'
@@ -98,7 +90,7 @@ export async function api_get(url, params) {
     });
     if (response.ok) {
         let dataList = await response.json();
-        
+
         return dataList;
     } else {
 
@@ -110,7 +102,7 @@ export async function ngrok_get(url, params) {
 
     const apiData = params;
     const queryString = buildQueryString(apiData);
-    
+
     const response = await fetch(url + '/ngrok/webhook' + `?${queryString}`, {
         headers: {
             'Content-Type': 'application/json'
@@ -118,7 +110,7 @@ export async function ngrok_get(url, params) {
     });
     if (response.ok) {
         let dataList = await response.json();
-        
+
         return dataList;
     } else {
 

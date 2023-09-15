@@ -1,7 +1,14 @@
 <script>
 	import Datatable from '$lib/components/Datatable.svelte';
+	import { onMount } from 'svelte';
 	/** @type {import('./$types').PageData} */
 	export let data;
+    onMount(async () => {
+    
+    
+    })
+
+
 	let module = data.module,
 		inputs = data.inputs;
 </script>

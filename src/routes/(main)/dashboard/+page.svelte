@@ -1,7 +1,7 @@
 <script>
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import jsCookie from 'js-cookie';
-	
+	import { isToastOpen } from '$lib/stores/toast';
 	import {
 		Table,
 		TableBody,
@@ -109,6 +109,9 @@
 
 				<Button type="submit" class="w-full">Check</Button>
 				<Button color="blue" on:click={postDat}>Test</Button>
+				<Button color="blue" on:click={() => {
+					isToastOpen.notify("notify dashboard")
+				}}>Notify</Button>
 			</form>
 		</Card>
 	</div>

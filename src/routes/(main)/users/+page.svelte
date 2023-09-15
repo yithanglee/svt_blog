@@ -1,9 +1,7 @@
 <script>
 	import Datatable from '$lib/components/Datatable.svelte';
-	import { buildQueryString } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	export let data;
-
 	let inputs = data.inputs;
 </script>
 
