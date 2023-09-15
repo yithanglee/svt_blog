@@ -12,5 +12,6 @@ export async function GET({ params, url }) {
             'Content-Type': 'application/json'
         }
     });
+    console.log(response)
     return response;
 };
