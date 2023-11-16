@@ -23,7 +23,8 @@
 	export let data;
 
 	let customCols = data.customCols,
-		query,
+		query = {},
+		query2,
 		confirmModal = false,
 		selectedId = 0,
 		inputs = data.inputs,
@@ -35,21 +36,51 @@
 		cac_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT,
 		model = data.model;
 
-	const itemsPerPage = 10;
+	const itemsPerPage = 100;
+	let apiData = {
+		search: { regex: 'false', value: query != null ? query : '' },
+		additional_join_statements: data.join_statements,
+		additional_search_queries: data.search_queries,
+		draw: '1',
+		length: itemsPerPage,
+		model: data.model,
+		columns: { 0: { data: 'id', name: 'id' } },
+		order: { 0: { column: 0, dir: 'desc' } },
+		preloads: JSON.stringify(data.preloads),
+		start: null
+	};
+
+	function buildSearchString(query) {
+		var slist = [];
+		// this query is map
+		var keys = Object.keys(query);
+		if (keys.length > 0) {
+			try {
+				
+				console.log(keys);
+
+				keys.forEach((v, i) => {
+					if (query[v]   ){
+						slist.push(v + '=' + query[v]);
+					}
+					
+				});
+				return slist.join('|');
+			} catch (e) {
+				console.log(e);
+				return data.search_queries;
+			}
+		} else {
+			return data.search_queries;
+		}
+	}
 
 	async function fetchData(pageNumber) {
-		const apiData = {
-			search: { regex: 'false', value: query != null ? query.trim() : '' },
-			additional_join_statements: data.join_statements,
-			additional_search_queries: data.search_queries,
-			draw: '1',
-			length: itemsPerPage,
-			model: data.model,
-			columns: { 0: { data: 'id', name: 'id' } },
-			order: { 0: { column: 0, dir: 'desc' } },
-			preloads: JSON.stringify(data.preloads),
-			start: ((pageNumber == null ? 1 : pageNumber) - 1) * itemsPerPage
-		};
+		// start transform the query
+
+		apiData.additional_search_queries = buildSearchString(query);
+
+		apiData.start = ((pageNumber == null ? 1 : pageNumber) - 1) * itemsPerPage;
 		const queryString = buildQueryString(apiData);
 		console.log(queryString);
 		try {
@@ -61,7 +92,6 @@
 				}
 			});
 			if (response.ok) {
-			
 				let dataList = await response.json();
 				console.log(dataList);
 				items = dataList.data;
@@ -129,7 +159,20 @@
 	<div class="">
 		<Label for="default-input" class="block mb-2">Search</Label>
 		<div class="flex gap-4 items-center">
-			<Input id="default-input" bind:value={query} placeholder="type query here" />
+			{#if data.search_queries != null}
+				{#if data.search_queries != []}
+					{#each data.search_queries as search_query}
+						{#each search_query.split('|') as single_query}
+							<Input
+								id="default-input"
+								bind:value={query['' + single_query + '']}
+								placeholder={single_query.split(".")[1]}
+							/>
+						{/each}
+					{/each}
+				{/if}
+			{/if}
+
 			<Button
 				on:click={() => {
 					fetchData(1);
@@ -171,6 +214,20 @@
 						href="#"
 						class="font-medium text-primary-600 hover:underline dark:text-primary-500">Edit</a
 					>
+
+					{#if data.buttons != null}
+						{#if data.buttons != []}
+							{#each data.buttons as button}
+								|
+								<a
+									on:click|preventDefault={button.onclickFn(item)}
+									href="#"
+									class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+									>{button.name}</a
+								>
+							{/each}
+						{/if}
+					{/if}
 					|
 					<a
 						on:click|preventDefault={deleteData(item)}

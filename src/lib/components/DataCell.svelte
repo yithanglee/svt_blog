@@ -41,11 +41,9 @@
 {:else if col.color != null}
 	<Badge class="capitalize" color={badgeColor(item[col.data], col.color)}
 		>{item[col.data]
-			.split('_')
-			.map((v, i) => {
-				return v;
-			})
-			.join(' ')}</Badge
+			}
+			
+			</Badge
 	>
 {:else if col.isBadge}
 	<Badge class="capitalize" color="pink"

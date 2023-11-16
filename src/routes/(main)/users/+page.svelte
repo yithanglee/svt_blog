@@ -10,14 +10,17 @@
 		inputs: inputs,
 		search_queries: null,
 		model: 'User',
-		// preloads: ['corporate_account'],
+		preloads: ['rank'],
 		customCols: [{title: 'General', list: ['id', 'full_name']}],
 		columns: [
 			{ label: 'ID', data: 'id' },
+			{ label: 'Rank', data: 'rank_name' },
 			{ label: 'Full', data: 'full_name' },
 			{ label: 'Username', data: 'username' },
+			{ label: 'Phone', data: 'phone' },
+			{ label: 'Email', data: 'email' },
 			// { label: 'Code', data: 'member_code', isBadge: true },
-			// { label: 'Account', data: 'name', through: ['corporate_account']  },
+			{ label: 'Rank', data: 'name', through: ['rank']  },
 		]
 	}}
 />

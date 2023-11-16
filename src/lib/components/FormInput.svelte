@@ -12,13 +12,13 @@
 
 	console.log(data);
 
-	let editorData ;
+	let editorData;
 	if (input == null) {
 		input = { key: key.label, value: 'id' };
 		console.log(input);
 	}
-	if ( key.editor == true) {
-		editorData = data[input.key] != null ? data[input.key] : ""
+	if (key.editor == true) {
+		editorData = data[input.key] != null ? data[input.key] : '';
 	}
 	function inputName(key) {
 		return module + '[' + key + ']';
@@ -37,7 +37,6 @@
 		<div class="w-full mx-4 my-2">
 			<Label class="space-y-2 mb-3">
 				<span class="capitalize">{input.key.replace('_', ' ')}</span>
-		
 			</Label>
 			<Dropdown
 				{data}
@@ -81,6 +80,13 @@
 			<Label class="space-y-2">
 				<span class="capitalize">{input.key.replace('_', ' ')}</span>
 				<Input type="file" id={input.key} name={inputName(input.key)} />
+			</Label>
+		</div>
+	{:else if key.boolean == true}
+		<div class="w-full mx-4 my-2">
+			<Label class="space-y-2">
+				
+				<Checkbox id={input.key} name={inputName(input.key)}><span class="ms-2 capitalize text-xl">{input.key.replace('_', ' ')}</span></Checkbox>
 			</Label>
 		</div>
 	{:else if input.value == 'id'}
