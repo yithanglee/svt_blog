@@ -67,7 +67,7 @@ export async function genInputs(url, module) {
         module: module
     };
     const queryString = buildQueryString(apiData);
-    const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
+    const response = await fetch(url + '/svt_api/webhook' + `?${queryString}`, {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -95,7 +95,7 @@ export async function api_get(url, params) {
     const apiData = params;
     const queryString = buildQueryString(apiData);
 
-    const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
+    const response = await fetch(url + '/svt_api/webhook' + `?${queryString}`, {
         headers: {
             'Content-Type': 'application/json'
         }

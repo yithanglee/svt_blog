@@ -11,7 +11,7 @@
 		var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 		const map = { id: 0, username: username, password: password, scope: 'sign_in' };
 		var res = await postData(map, {
-			endpoint: url + '/api/webhook'
+			endpoint: url + '/svt_api/webhook'
 		});
 		console.log(res);
 		

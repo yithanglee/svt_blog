@@ -30,7 +30,7 @@
 				username: 'damien'
 			},
 			{
-				endpoint: url + '/api/webhook'
+				endpoint: url + '/svt_api/webhook'
 			}
 		);
 		console.log(res);
@@ -44,7 +44,7 @@
 			module: module
 		};
 		const queryString = buildQueryString(apiData);
-		const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
+		const response = await fetch(url + '/svt_api/webhook' + `?${queryString}`, {
 			headers: {
 				'Content-Type': 'application/json'
 			}

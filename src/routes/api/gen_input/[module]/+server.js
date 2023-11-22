@@ -10,7 +10,7 @@ export async function GET({ params }) {
         module: params.module
     };
     const queryString = buildQueryString(apiData);
-    const response = await fetch(url + '/api/webhook' + `?${queryString}`, {
+    const response = await fetch(url + '/svt_api/webhook' + `?${queryString}`, {
         headers: {
             'Content-Type': 'application/json'
         }

@@ -16,7 +16,7 @@
 		]),
 		search_queries: ['b.username|b.fullname'],
 		model: 'Sale',
-		preloads: ['user'],
+		preloads: ['user', 'sales_person'],
 		customCols: [
 			{
 				title: 'Order',
@@ -52,6 +52,7 @@
 				]
 			},
 			{ label: 'User', data: 'username', through: ['user'] },
+			{ label: 'Sales Person', data: 'username', through: ['sales_person'] },
 			// {
 			// 	label: 'Receiver',
 			// 	data: 'receiver_name',
