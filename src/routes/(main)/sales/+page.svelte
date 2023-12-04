@@ -1,10 +1,27 @@
 <script>
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+
 	import Datatable from '$lib/components/Datatable.svelte';
-	import { buildQueryString } from '$lib/index.js';
+	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	export let data;
 
 	let inputs = data.inputs;
+	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+	function approveTransfer(data, checkPage) {
+		console.log(data);
+		console.log('transfer approved!');
+		postData(
+			{ scope: 'manual_approve_fpx', id: data.payment.billplz_code },
+			{
+				endpoint: url + '/svt_api/webhook',
+				successCallback: () => {
+					checkPage();
+				}
+			}
+		);
+	
+	}
 </script>
 
 <Datatable
@@ -16,11 +33,27 @@
 		]),
 		search_queries: ['b.username|b.fullname'],
 		model: 'Sale',
-		preloads: ['user', 'sales_person'],
+		preloads: ['user', 'sales_person', 'payment'],
+		buttons: [{ name: 'Manual Approve', onclickFn: approveTransfer }],
 		customCols: [
 			{
 				title: 'Order',
-				list: ['id', 'remarks', { label: 'user_id', expose: true }]
+				list: [
+					'id',
+					{label: 'status', selection: ['processing', 'sent', 'cancelled']},
+					'remarks',
+				
+				]
+			},
+			{
+				title: 'Others',
+				list: [
+					
+					'total_point_value',
+					{ label: 'registration_details', editor2: true },
+					
+					{ label: 'user_id', expose: true }
+				]
 			}
 		],
 		columns: [
@@ -31,7 +64,8 @@
 			// 	subtitle: { label: 'Courier', data: 'delivery_method' }
 			// },
 			{ label: 'Sale Date', data: 'sale_date' },
-            { label: 'Point Value', data: 'total_point_value' },
+			{ label: 'Code', data: 'billplz_code', through: ['payment'] },
+			{ label: 'Point Value', data: 'total_point_value' },
 			{
 				label: 'Status',
 				data: 'status',
@@ -52,7 +86,7 @@
 				]
 			},
 			{ label: 'User', data: 'username', through: ['user'] },
-			{ label: 'Sales Person', data: 'username', through: ['sales_person'] },
+			{ label: 'Sales Person', data: 'username', through: ['sales_person'] }
 			// {
 			// 	label: 'Receiver',
 			// 	data: 'receiver_name',

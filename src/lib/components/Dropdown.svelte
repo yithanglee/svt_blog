@@ -6,7 +6,8 @@
 	/** @type {import('./$types').PageData} */
 	import { Icon } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
-	export let data, input, newData, name, module, parent, search_queries;
+	export let data, input, newData, name, module, parent, search_queries, title_key, selection;
+
 	let dropdownOpen = false,
 		group1 = 0,
 		newFormData = {},
@@ -22,18 +23,11 @@
 	async function tryPost() {
 		let map = {};
 		newFormData[newData] = query;
-
 		map[module] = { ...newFormData, id: '0' };
-
 		console.log(map);
 
-		// maybe check if there's any file upload involved, if yes, probably need to convert the map
-		// to formdata or post twice as a subsequent update.. post image first then the rest.
-		//
-
-		// if isFormData, formData
 		await postData(map, {
-			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/api/' + module
+			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/' + module
 		});
 	}
 	async function fetchData(pageNumber) {
@@ -52,14 +46,7 @@
 		};
 		const queryString = buildQueryString(apiData);
 		try {
-			// const response = await fetch(cac_url + '/api/' + module + `?${queryString}`, {
-			// 	headers: {
-			// 		'Content-Type': 'application/json'
-			// 	}
-			
-			// });
-
-			const response = await fetch( '/api/datatable/' + module + `?${queryString}`, {
+			const response = await fetch('/api/datatable/' + module + `?${queryString}`, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -91,10 +78,21 @@
 	}
 	onMount(() => {
 		try {
+			console.log(title_key);
+			if (title_key == null) {
+				title_key = 'name';
+			}
+			console.log(data);
 			title = data[input.key.replace('_id', '')].name;
+			if (selection != null) {
+				items = selection.map((v, i) => {
+					return { id: v, name: v };
+				});
+				title = data[input.key]
+			} else {
+				fetchData();
+			}
 		} catch (e) {}
-
-		fetchData();
 	});
 </script>
 
@@ -119,19 +117,20 @@
 		</div>
 
 		{#each items as item}
-			<DropdownItem on:click={updateData(item.id, item.name)}>{item.name}</DropdownItem>
+			<DropdownItem on:click={updateData(item.id, item[title_key])}>{item[title_key]}</DropdownItem>
 		{/each}
-
-		<Button
-			slot="footer"
-			size="xs"
-			class="m-2"
-			on:click={() => {
-				tryPost();
-			}}
-		>
-			<Icon name="check-solid" class="w-4 h-4 mr-2 text-white " />
-			Add
-		</Button>
+		{#if selection == null}
+			<Button
+				slot="footer"
+				size="xs"
+				class="m-2"
+				on:click={() => {
+					tryPost();
+				}}
+			>
+				<Icon name="check-solid" class="w-4 h-4 mr-2 text-white " />
+				Add
+			</Button>
+		{/if}
 	</Dropdown>
 </div>

@@ -41,8 +41,10 @@
 			<Dropdown
 				{data}
 				{input}
+				selection={key.selection}
 				newData={key.newData}
 				parent={module}
+				title_key={key.title_key}
 				name={inputName(input.key)}
 				module={key.selection}
 				search_queries={key.search_queries}

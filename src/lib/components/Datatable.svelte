@@ -22,7 +22,7 @@
 	import { isModalOpen } from '../stores/modal';
 	export let data;
 
-	let customCols = data.customCols,
+	let customCols = data.customCols, appendQueries = data.appendQueries,
 		query = {},
 		query2,
 		confirmModal = false,
@@ -81,7 +81,7 @@
 		apiData.additional_search_queries = buildSearchString(query);
 
 		apiData.start = ((pageNumber == null ? 1 : pageNumber) - 1) * itemsPerPage;
-		const queryString = buildQueryString(apiData);
+		const queryString = buildQueryString({...apiData, ...appendQueries});
 		console.log(queryString);
 		try {
 			let blog_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
@@ -136,7 +136,7 @@
 		confirmModal = false;
 		postData(
 			{},
-			{ method: 'DELETE', endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/api/' + model + '/' + id }
+			{ method: 'DELETE', endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/' + model + '/' + id }
 		);
 		checkPage();
 		selectedId = null;
@@ -220,7 +220,7 @@
 							{#each data.buttons as button}
 								|
 								<a
-									on:click|preventDefault={button.onclickFn(item)}
+									on:click|preventDefault={button.onclickFn(item, checkPage)}
 									href="#"
 									class="font-medium text-primary-600 hover:underline dark:text-primary-500"
 									>{button.name}</a

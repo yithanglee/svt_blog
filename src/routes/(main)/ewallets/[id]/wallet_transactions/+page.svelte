@@ -1,22 +1,23 @@
 <script>
 	import Datatable from '$lib/components/Datatable.svelte';
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
+
+
 	/** @type {import('./$types').PageData} */
 	export let data;
 	onMount(async () => {});
 
 	let module = data.module,
 		inputs = data.inputs;
-	function viewTransfer(data) {
-		console.log(data);
-		console.log('transfer approved!');
-		goto('/ewallets/' + data.id + '/wallet_transactions');
-	}
+	import { buildQueryString, postData } from '$lib/index.js';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+
 </script>
 
 <Datatable
 	data={{
+		appendQueries: { ewallet_id: data.id },
 		inputs: inputs,
 		join_statements: JSON.stringify([
 			// { corporate_account: 'corporate_account' },
@@ -25,19 +26,19 @@
 		search_queries: ['b.username'],
 		model: module,
 		preloads: ['user'],
-		customCols: [
-			{
+		customCols: [{
 				title: 'General',
-				list: ['id']
-			}
-		],
-		buttons: [{ name: 'View', onclickFn: viewTransfer }],
+				list: ['id', 'before', 'after', 'amount']
+			}],
+		buttons: [],
 		columns: [
 			{ label: 'ID', data: 'id' },
 
 			{ label: 'User', data: 'username', through: ['user'] },
-			{ label: 'Type', data: 'wallet_type' },
-			{ label: 'Total', data: 'total' }
+			{ label: 'Before', data: 'before' },
+			{ label: 'Amount', data: 'amount' },
+			{ label: 'After', data: 'after' },
+			{ label: 'Remarks', data: 'remarks' }
 		]
 	}}
 />

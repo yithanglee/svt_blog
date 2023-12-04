@@ -44,7 +44,7 @@
 		// if isFormData, formData
 		await postData(formData, {
 			isFormData: true,
-			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/api/' + module
+			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/' + module
 		});
 		refreshData();
 		formModal = false;

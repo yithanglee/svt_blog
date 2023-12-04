@@ -25,10 +25,30 @@ export async function postData(data, options) {
 
     try {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
-        console.log(response)
+
         if (response.ok) {
-            isToastOpen.notify( "Submitted succesfully!")
+
+
+
             res = await response.json();
+            console.log(res)
+            if (res.status != null) {
+                if (res.status == "ok") {
+
+                } else if (res.status == "error") {
+                    if ( res.reason != null) {
+                        isToastOpen.notify("Error! " + res.reason)
+                    }
+                 
+                }
+
+            } else {
+                isToastOpen.notify("Submitted succesfully!")
+            }
+
+            if (options.successCallback != null) {
+                options.successCallback()
+            }
         } else {
             isToastOpen.notify("Not Submitted!")
             let errorMessage = "Failed to post data.";

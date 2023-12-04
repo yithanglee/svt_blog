@@ -11,11 +11,27 @@
 		search_queries: null,
 		model: 'User',
 		preloads: ['rank'],
-		customCols: [{title: 'General', list: ['id', 'full_name']}],
+		customCols: [{title: 'General', list: ['id', 'fullname', {label: 'is_stockist', boolean: true}]}],
 		columns: [
 			{ label: 'ID', data: 'id' },
+			{
+				label: 'Stockist?',
+				data: 'is_stockist',
+				isBadge: true,
+				color: [
+					{
+						key: false,
+						value: 'yellow'
+					},
+
+					{
+						key: true,
+						value: 'green'
+					}
+				]
+			},
 			{ label: 'Rank', data: 'rank_name' },
-			{ label: 'Full', data: 'full_name' },
+			{ label: 'Full', data: 'fullname' },
 			{ label: 'Username', data: 'username' },
 			{ label: 'Phone', data: 'phone' },
 			{ label: 'Email', data: 'email' },
