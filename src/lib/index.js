@@ -3,12 +3,13 @@ import { isToastOpen } from '$lib/stores/toast';
 import jsCookie from 'js-cookie';
 export async function postData(data, options) {
     let res
-    let cookieToken = jsCookie.get('token');
-    let token = cookieToken != null ? JSON.parse(cookieToken) : 'empty';
+    let cookieToken = jsCookie.get('_commerce_front_key');
+    let token = cookieToken != null ? cookieToken : 'empty';
     var default_options = {
         method: 'POST',
         endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT
     }
+
     let headers = {
         "Authorization": `Basic ${token}`,
         "Content-Type": "application/json",
@@ -27,8 +28,6 @@ export async function postData(data, options) {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
 
         if (response.ok) {
-
-
 
             res = await response.json();
             console.log(res)

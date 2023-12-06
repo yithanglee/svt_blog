@@ -24,13 +24,14 @@
 	let open = true,
 		toastMessage = '',
 		nav_class = 'hidden',
-		loggedIn = 'false';
+		loggedIn = 'false',
+		app_routes = [];
 	console.log('this is loaded 0s');
 	function logOut() {
 		session.logout();
 		loggedIn = 'false';
 		jsCookie.remove('user');
-		jsCookie.remove('token');
+		jsCookie.remove('_commerce_front_key');
 		goto('/');
 	}
 	function appendClass(existing_class) {
@@ -39,9 +40,13 @@
 
 	onMount(() => {});
 	session.subscribe((value) => {
+		console.log('subscribed session!');
 		console.log(value);
 		if (value && value.loggedIn) {
 			nav_class = '';
+			app_routes = value.user.role_app_routes;
+
+			console.log(app_routes);
 		}
 		if (value.loggedIn == false) {
 			nav_class = 'hidden';
@@ -82,13 +87,17 @@
 		{#each MENUS as menu}
 			{#if !menu.hidden}
 				{#if menu.children}
-					<NavLi class={appendClass(nav_class)} id={menu.title}>{menu.title}</NavLi>
-					<Dropdown triggeredBy="#{menu.title}" class="w-44 z-20">
-						{#each menu.children as child}
-							<DropdownItem href={child.path}>{child.title}</DropdownItem>
-						{/each}
-					</Dropdown>
-				{:else}
+					{#if app_routes.some((app_route) => app_route.name === menu.title)}
+						<NavLi class={appendClass(nav_class)} id={menu.title}>{menu.title}</NavLi>
+						<Dropdown triggeredBy="#{menu.title}" class="w-44 z-20">
+							{#each menu.children as child}
+								{#if app_routes.some((app_route) => app_route.route === child.path)}
+									<DropdownItem href={child.path}>{child.title}</DropdownItem>
+								{/if}
+							{/each}
+						</Dropdown>
+					{/if}
+				{:else if app_routes.some((app_route) => app_route.route === menu.path)}
 					<NavLi class={nav_class} id={menu.title} href={menu.path}>{menu.title}</NavLi>
 				{/if}
 			{/if}

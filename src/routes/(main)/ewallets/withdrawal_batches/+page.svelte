@@ -16,18 +16,21 @@
 		console.log('transfer approved!');
 		goto('/ewallets/withdrawal_batches/' + data.id + '/wallet_withdrawals');
 	}
-	function approveTransfer(data, checkPage) {
+	function approveTransfer(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
-		postData(
-			{ scope: 'approve_withdrawal_batch', id: data.id },
-			{
-				endpoint: url + '/svt_api/webhook',
-				successCallback: () => {
-					checkPage();
+
+		confirmModal(true, 'Are you sure to approve these withdrawals?', () => {
+			postData(
+				{ scope: 'approve_withdrawal_batch', id: data.id },
+				{
+					endpoint: url + '/svt_api/webhook',
+					successCallback: () => {
+						checkPage();
+					}
 				}
-			}
-		);
+			);
+		});
 	}
 </script>
 
@@ -42,7 +45,6 @@
 			{
 				title: 'General',
 				list: [
-				
 					{ label: 'code', expose: true },
 					{ label: 'day', expose: true },
 					{ label: 'month', expose: true },
@@ -61,7 +63,7 @@
 			{ label: 'ID', data: 'id' },
 			{ label: 'Code', data: 'code' },
 			{ label: 'Paid', data: 'paid_date' },
-		
+
 			{ label: 'DD', data: 'day' },
 			{ label: 'MM', data: 'month' },
 			{ label: 'YYYY', data: 'year' },

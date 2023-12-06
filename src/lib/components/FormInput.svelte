@@ -4,6 +4,7 @@
 	import Editor from 'cl-editor/src/Editor.svelte';
 	import Gallery from '$lib/components/Gallery.svelte';
 	import Dropdown from '$lib/components/Dropdown.svelte';
+	import MultiSelection from '$lib/components/MultiSelection.svelte';
 	import { afterUpdate, onMount } from 'svelte';
 	export let input, key, module;
 	export let data;
@@ -32,6 +33,23 @@
 				<span class="capitalize">{input.key.replace('_', ' ')}</span>
 				<Input type="text" name={inputName(input.key)} bind:value={data[input.key]} />
 			</Label>
+		</div>
+	{:else if key.multiSelection != null}
+		<div class="w-full mx-4 my-2">
+			<Label class="space-y-2 mb-3">
+				<span class="capitalize">{input.key.replace('_', ' ')}</span>
+			</Label>
+			<MultiSelection
+				{data}
+				{input}
+				parent_id={key.parentId}
+				parent={module}
+				parent_module={key.parent_module}
+				selection={key.selection}
+				name={inputName(input.key)}
+				module={key.module}
+				search_queries={key.search_queries}
+			/>
 		</div>
 	{:else if key.selection != null}
 		<div class="w-full mx-4 my-2">
@@ -87,8 +105,15 @@
 	{:else if key.boolean == true}
 		<div class="w-full mx-4 my-2">
 			<Label class="space-y-2">
-				
-				<Checkbox id={input.key} name={inputName(input.key)}><span class="ms-2 capitalize text-xl">{input.key.replace('_', ' ')}</span></Checkbox>
+				{#if data[input.key]}
+					<Checkbox id={input.key} checked aria-data={data[input.key]} name={inputName(input.key)}
+						><span class="ms-2 capitalize text-xl">{input.key.replace('_', ' ')}</span></Checkbox
+					>
+				{:else}
+					<Checkbox id={input.key} aria-data={data[input.key]} name={inputName(input.key)}
+						><span class="ms-2 capitalize text-xl">{input.key.replace('_', ' ')}</span></Checkbox
+					>
+				{/if}
 			</Label>
 		</div>
 	{:else if input.value == 'id'}

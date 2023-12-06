@@ -8,19 +8,21 @@
 
 	let inputs = data.inputs;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
-	function approveTransfer(data, checkPage) {
+	function approveTransfer(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
-		postData(
-			{ scope: 'manual_approve_fpx', id: data.payment.billplz_code },
-			{
-				endpoint: url + '/svt_api/webhook',
-				successCallback: () => {
-					checkPage();
+
+		confirmModal(true, 'Are you sure to manually approve this sale?', () => {
+			postData(
+				{ scope: 'manual_approve_fpx', id: data.payment.billplz_code },
+				{
+					endpoint: url + '/svt_api/webhook',
+					successCallback: () => {
+						checkPage();
+					}
 				}
-			}
-		);
-	
+			);
+		});
 	}
 </script>
 
@@ -38,20 +40,14 @@
 		customCols: [
 			{
 				title: 'Order',
-				list: [
-					'id',
-					{label: 'status', selection: ['processing', 'sent', 'cancelled']},
-					'remarks',
-				
-				]
+				list: ['id', { label: 'status', selection: ['processing', 'sent', 'pending_delivery', 'complete', 'cancelled'] }, 'remarks']
 			},
 			{
 				title: 'Others',
 				list: [
-					
 					'total_point_value',
 					{ label: 'registration_details', editor2: true },
-					
+
 					{ label: 'user_id', expose: true }
 				]
 			}
@@ -72,6 +68,10 @@
 				isBadge: true,
 				color: [
 					{
+						key: 'pending_payment',
+						value: 'yellow'
+					},
+					{
 						key: 'pending_confirmation',
 						value: 'yellow'
 					},
@@ -80,7 +80,15 @@
 						value: 'blue'
 					},
 					{
+						key: 'sent',
+						value: 'pink'
+					},
+					{
 						key: 'pending_delivery',
+						value: 'purple'
+					},
+					{
+						key: 'complete',
 						value: 'green'
 					}
 				]

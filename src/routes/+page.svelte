@@ -5,8 +5,9 @@
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import Cookies from 'js-cookie';
-	let username = '',
-		password = '';
+	let username = 'summer',
+		email = '',
+		password = 'abc123';
 	async function handleLogin() {
 		var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 		const map = { id: 0, username: username, password: password, scope: 'sign_in' };
@@ -14,15 +15,22 @@
 			endpoint: url + '/svt_api/webhook'
 		});
 		console.log(res);
-		
-		// Set user session/token/cookie
-		Cookies.set('token', JSON.stringify(res.res));
+		if (res.status == 'ok') {
+			// Set user session/token/cookie
+			Cookies.set('_commerce_front_key', res.res);
 
-		// Redirect to dashboard
-		console.log('login user');
-		session.login({username: username, token: JSON.stringify(res.res)});
+			// Redirect to dashboard
+			console.log('login user');
+			session.login({
+				username: username,
+				token: JSON.stringify(res.res),
+				role_app_routes: res.role_app_routes
+			});
 
-		goto('/dashboard', { withParams: { token: 'lngToken' } });
+			goto('/dashboard', { withParams: { token: 'lngToken' } });
+		} else if (res.status == 'error') {
+			goto('/', { withParams: { token: null } });
+		}
 	}
 </script>
 
@@ -32,18 +40,28 @@
 			<div class="flex flex-col space-y-6">
 				<h3 class="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
 				<Label class="space-y-2">
-					<span>Email</span>
+					<span>Username</span>
 					<Input
-						type="email"
-						value="d@1.com"
-						name="email"
-						placeholder="name@company.com"
+						type="text"
+						bind:value={username}
+						name="username"
+						placeholder="administrator"
 						required
 					/>
 				</Label>
 				<Label class="space-y-2">
+					<span>Email</span>
+					<Input type="email" bind:value={email} name="email" placeholder="name@company.com" />
+				</Label>
+				<Label class="space-y-2">
 					<span>Your password</span>
-					<Input type="password" value="123" name="password" placeholder="•••••" required />
+					<Input
+						type="password"
+						bind:value={password}
+						name="password"
+						placeholder="•••••"
+						required
+					/>
 				</Label>
 				<div class="flex items-start">
 					<Checkbox>Remember me</Checkbox>

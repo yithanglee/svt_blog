@@ -6,7 +6,7 @@
 	/** @type {import('./$types').PageData} */
 	import { Icon } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
-	export let data, input, newData, name, module, parent, search_queries, title_key, selection;
+	export let data, input, newData, name, module, parent, parent_id, search_queries, title_key, selection;
 
 	let dropdownOpen = false,
 		group1 = 0,
@@ -17,8 +17,8 @@
 		cac_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT,
 		query,
 		itemsPerPage = 20;
-	function inputName(key) {
-		return parent + '[' + key + ']';
+	function inputName(key, value) {
+		return parent + '[' + key + '][' + parent_id + '][' + value + ']';
 	}
 	async function tryPost() {
 		let map = {};
@@ -78,63 +78,39 @@
 	}
 	onMount(() => {
 		try {
-			console.log(typeof selection == 'string')
+			console.log(typeof selection == 'string');
 			console.log(title_key);
 			if (title_key == null) {
 				title_key = 'name';
 			}
 			console.log(data);
-		
+
 			if (typeof selection == 'string') {
 				fetchData();
-				title = data[input.key.replace('_id', '')].name;
+				title = data[input.key];
 			} else {
-				
+				title = data[input.key.replace('_id', '')].name;
 				items = selection.map((v, i) => {
 					return { id: v, name: v };
 				});
 				title = data[input.key];
-			
 			}
 		} catch (e) {}
 	});
 </script>
 
 <div>
-	<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
-	<Button
-		>{title}<Icon
-			name="chevron-down-solid"
-			class="w-3 h-3 ml-2 text-white dark:text-white"
-		/></Button
+	<p class="mb-4 font-semibold text-gray-900 dark:text-white">Technology</p>
+	<ul
+		class="w-48 bg-white rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600 divide-y divide-gray-200 dark:divide-gray-600"
 	>
-	<Dropdown bind:open={dropdownOpen}>
-		<div slot="header" class="p-3">
-			<Search
-				bind:value={query}
-				on:change={() => {
-					console.log(query);
-					fetchData();
-				}}
-				size="md"
-			/>
-		</div>
-
 		{#each items as item}
-			<DropdownItem on:click={updateData(item.id, item[title_key])} >{item[title_key]}</DropdownItem>
+			<li>
+				<Checkbox class="p-3" name={inputName(input.key, item.id)} bind:value={data[input.key]}
+					>{item.name}</Checkbox
+				>
+			</li>
 		{/each}
-		{#if typeof selection == 'string'}
-			<Button
-				slot="footer"
-				size="xs"
-				class="m-2"
-				on:click={() => {
-					tryPost();
-				}}
-			>
-				<Icon name="check-solid" class="w-4 h-4 mr-2 text-white " />
-				Add
-			</Button>
-		{/if}
-	</Dropdown>
+		<!-- <li><Checkbox class="p-3">Vue JS</Checkbox></li> -->
+	</ul>
 </div>

@@ -22,7 +22,7 @@
 	import { isModalOpen } from '../stores/modal';
 	export let data;
 
-	let customCols = data.customCols, appendQueries = data.appendQueries,
+	let modalFn, modalMessage, customCols = data.customCols, appendQueries = data.appendQueries,
 		query = {},
 		query2,
 		confirmModal = false,
@@ -146,6 +146,12 @@
 
 		isModalOpen.set(!isOpen);
 	}
+	function confirmModalFn(bool, message, fn) {
+		modalMessage = message
+		confirmModal = bool
+		modalFn = fn
+		
+	}
 	onMount(() => {});
 
 	let unsub = isModalOpen.subscribe((v) => {
@@ -220,7 +226,7 @@
 							{#each data.buttons as button}
 								|
 								<a
-									on:click|preventDefault={button.onclickFn(item, checkPage)}
+									on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
 									href="#"
 									class="font-medium text-primary-600 hover:underline dark:text-primary-500"
 									>{button.name}</a
@@ -245,14 +251,25 @@
 
 <Modal title="Confirm?" bind:open={confirmModal} autoclose outsideclose>
 	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+		{#if modalMessage != null}
+			{modalMessage}
+		{:else }
 		Are you sure you want to delete?
+		{/if }
 	</p>
 	<svelte:fragment slot="footer">
 		<Button
 			color="red"
 			on:click={() => {
-				confirmDelete(selectedId);
-			}}>Delete</Button
+				if (modalFn != null) {
+					modalFn( )
+					modalMessage = null 
+					modalFn = null
+				} else {
+					confirmDelete(selectedId);
+				}
+				
+			}}>Confirm</Button
 		>
 	</svelte:fragment>
 </Modal>

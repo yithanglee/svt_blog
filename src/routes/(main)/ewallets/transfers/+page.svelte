@@ -45,7 +45,8 @@
 						selection: 'WalletType',
 						customCols: null,
 						search_queries: ['a.name'],
-						newData: 'name'
+						newData: 'name',
+						title_key: 'name'
 					},
 					{ label: 'is_approved', boolean: true }
 				]

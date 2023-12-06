@@ -4,7 +4,7 @@ function createSession() {
     var map = {
         user: null,
         loggedIn: false,
-        token: null,
+        token: null
 
     }
     const { subscribe, set, update } = writable(map);

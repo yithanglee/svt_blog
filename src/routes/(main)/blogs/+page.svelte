@@ -38,7 +38,8 @@
 						selection: 'Category',
 						customCols: null,
 						search_queries: ['a.name'],
-						newData: 'name'
+						newData: 'name',
+						title_key: 'name'
 					},
 					{ label: 'content', editor: true },
 					{ label: 'stored_medias', gallery: true, child: 's3_url' }

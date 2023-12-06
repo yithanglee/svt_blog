@@ -4,6 +4,8 @@ import jsCookie from 'js-cookie';
 import { redirect } from "@sveltejs/kit";
 import { onDestroy } from 'svelte';
 import { isToastOpen } from '$lib/stores/toast';
+import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+
 export async function load({ locals }) {
 
     console.log("check if this load 1")
@@ -16,16 +18,38 @@ export async function load({ locals }) {
     }
 
 
-    let cookieToken = jsCookie.get('token');
+    let cookieToken = jsCookie.get('_commerce_front_key');
+    console.log("from main layout js")
     console.log(cookieToken);
     console.log(session.user())
     if (cookieToken != null) {
-        // from the token get the username data
-        session.login({ id: 0, username: 'username', token: cookieToken });
+        const response = await fetch((PHX_HTTP_PROTOCOL + PHX_ENDPOINT) + '/svt_api/webhook?scope=get_cookie_user&cookie=' + cookieToken, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (response.ok) {
+            // use cookie to call the user
+            // from the token get the username data
+           let res = await response.json()
+           console.log(res)
+            session.login({ 
+                
+                username: res.user.username,
+                token: cookieToken , 
+                role_app_routes: res.user.role.app_routes
+            });
+        } else {
+            relogin();
+            isToastOpen.notify("Please login!")
+
+            redirect(307, '/');
+        }
+
 
     } else {
         relogin();
-        isToastOpen.notify( "Please login!")
+        isToastOpen.notify("Please login!")
 
         redirect(307, '/');
     }

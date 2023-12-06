@@ -25,8 +25,7 @@
 				list: [
 					'id',
 					'name',
-					'desc',
-			
+					{ label: 'desc', editor2: true },
 				]
 			},
 			{
@@ -35,7 +34,7 @@
                     'retail_price',
                     'register_point',
                     'point_value',
-					{ label: 'desc', binary: true },
+					
 					{ label: 'img_url', upload: true }
 				]
 			}
