@@ -34,6 +34,7 @@
 	function logout() {
 		session.logout();
 		jsCookie.remove('user');
+		jsCookie.remove('_commerce_front_key');
 		setTimeout(() => {
 			goto('/');
 		}, 200);

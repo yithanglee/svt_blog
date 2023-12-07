@@ -21,7 +21,7 @@
 	import { MENUS } from '$lib/constants';
 	/** @type {import('./$types').LayoutData} */
 	export let data;
-	let open = true,
+	let open = true, username = 'Svelte Admin',
 		toastMessage = '',
 		nav_class = 'hidden',
 		loggedIn = 'false',
@@ -45,6 +45,7 @@
 		if (value && value.loggedIn) {
 			nav_class = '';
 			app_routes = value.user.role_app_routes;
+			username = value.user.username
 
 			console.log(app_routes);
 		}
@@ -74,7 +75,7 @@
 	<NavBrand href="/">
 		<img src="/images/2damienslab.png" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-			>Svelte Admin</span
+			>{username}</span
 		>
 	</NavBrand>
 	<div class="flex md:order-2">

@@ -17,6 +17,7 @@
 		console.log(res);
 		if (res.status == 'ok') {
 			// Set user session/token/cookie
+		
 			Cookies.set('_commerce_front_key', res.res);
 
 			// Redirect to dashboard
@@ -27,9 +28,13 @@
 				role_app_routes: res.role_app_routes
 			});
 
-			goto('/dashboard', { withParams: { token: 'lngToken' } });
+			goto('/dashboard');
 		} else if (res.status == 'error') {
-			goto('/', { withParams: { token: null } });
+			session.logout();
+			// loggedIn = 'false';
+			jsCookie.remove('user');
+			jsCookie.remove('_commerce_front_key');
+			goto('/');
 		}
 	}
 </script>

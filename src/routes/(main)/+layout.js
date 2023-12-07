@@ -18,10 +18,11 @@ export async function load({ locals }) {
     }
 
 
-    let cookieToken = jsCookie.get('_commerce_front_key');
+    let cookieToken = await jsCookie.get('_commerce_front_key');
     console.log("from main layout js")
     console.log(cookieToken);
     console.log(session.user())
+
     if (cookieToken != null) {
         const response = await fetch((PHX_HTTP_PROTOCOL + PHX_ENDPOINT) + '/svt_api/webhook?scope=get_cookie_user&cookie=' + cookieToken, {
             headers: {
@@ -31,26 +32,34 @@ export async function load({ locals }) {
         if (response.ok) {
             // use cookie to call the user
             // from the token get the username data
-           let res = await response.json()
-           console.log(res)
-            session.login({ 
-                
-                username: res.user.username,
-                token: cookieToken , 
-                role_app_routes: res.user.role.app_routes
-            });
+            let res = await response.json()
+            console.log(res)
+            if (res != null) {
+                session.login({
+
+                    username: res.user.username,
+                    token: cookieToken,
+                    role_app_routes: res.user.role.app_routes
+                });
+            } else {
+
+                relogin();
+                isToastOpen.notify("Please login!")
+                redirect(307, '/');
+            }
+
         } else {
+
             relogin();
             isToastOpen.notify("Please login!")
-
             redirect(307, '/');
         }
 
 
     } else {
+
         relogin();
         isToastOpen.notify("Please login!")
-
         redirect(307, '/');
     }
 
