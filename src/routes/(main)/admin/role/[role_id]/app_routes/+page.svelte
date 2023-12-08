@@ -6,7 +6,8 @@
 </script>
 
 <Datatable
-	data={{		appendQueries: { role_id: data.role_id },
+	data={{
+		appendQueries: { role_id: data.role_id },
 		inputs: inputs,
 		search_queries: null,
 		model: 'RoleAppRoute',

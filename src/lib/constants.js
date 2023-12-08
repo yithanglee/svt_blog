@@ -14,8 +14,9 @@ export const MENUS = [
 
     {
         path: '#', title: 'Commission', icon: null, children: [
-            { path: '/rewards', title: 'Commission', icon: 'camera-foto-solid' },
-
+            { path: '/rewards/summary', title: 'Commission Summary', icon: 'camera-foto-solid' },
+            { path: '/rewards/details', title: 'Commission Details', icon: 'camera-foto-solid' },
+            { path: '/rewards', title: 'All Commission', icon: 'camera-foto-solid' },
         ]
     },
     {
