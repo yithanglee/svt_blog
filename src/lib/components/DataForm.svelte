@@ -9,7 +9,7 @@
 	import { Icon } from 'flowbite-svelte-icons';
 	import { postData } from '$lib/index.js';
 
-	export let data, inputs, customCols, module, postFn;
+	export let data, inputs, customCols, module, postFn, showNew;
 
 	console.log('customCols');
 	console.log(customCols);
@@ -122,13 +122,15 @@
 	});
 </script>
 
-<Button
-	on:click={() => {
-		formModal = true;
-		data = { id: 0 };
-	}}
-	class="">New</Button
->
+{#if showNew}
+	<Button
+		on:click={() => {
+			formModal = true;
+			data = { id: 0 };
+		}}
+		class="">New</Button
+	>
+{/if}
 
 <Modal bind:open={formModal} size="lg" autoclose={false} class="w-full" outsideclose>
 	<form class="flex flex-col space-y-6" id="currentForm" action="#">

@@ -26,7 +26,7 @@ export const MENUS = [
 
         ]
     },
-
+    { path: '/deliveries', title: 'Deliveries', icon: 'book-solid' },
     { path: '/sales', title: 'Sales', icon: 'book-solid' },
     { path: '/products', title: 'Product', icon: 'book-solid' },
     { path: '/users', title: 'Users', icon: 'book-solid' },

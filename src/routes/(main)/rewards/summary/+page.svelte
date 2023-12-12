@@ -37,7 +37,7 @@
 </script>
 
 <SimpleTable
-	data={{
+	data={{apiData: {},
 		buttons: [
 			{
 				name: 'Pay',

@@ -35,7 +35,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{showNew: true, canDelete: true,
 		inputs: inputs,
 		join_statements: JSON.stringify([]),
 		// search_queries: [],

@@ -19,9 +19,11 @@
 	} from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 	import { isModalOpen } from '$lib/stores/modal';
-	export let data;
+	export let data, title, description;
 
-	let modalFn, scope = data.scope, 
+	let modalFn,
+		apiData = data.apiData,
+		scope = data.scope,
 		columns = data.columns,
 		modalMessage,
 		confirmModal = false,
@@ -35,9 +37,12 @@
 
 	async function fetchData(pageNumber) {
 		// start transform the query
+
+		const queryString = buildQueryString(apiData);
+		console.log(queryString);
 		try {
 			let blog_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
-			const response = await fetch(blog_url + '/api/webhook?scope=' + scope, {
+			const response = await fetch(blog_url + '/api/webhook?scope=' + scope + `&${queryString}`, {
 				headers: {
 					'content-type': 'application/json'
 				}
@@ -89,7 +94,7 @@
 </script>
 
 <div class="mb-6 flex flex items-center">
-	<div class="">
+	<div class="hidden">
 		<Label for="default-input" class="block mb-2">Search</Label>
 		<div class="flex gap-4 items-center">
 			<Button
@@ -98,6 +103,16 @@
 				}}>Search</Button
 			>
 		</div>
+	</div>
+	<div class="flex flex-col">
+		{#if title}
+			<h1 class="text-lg font-bold  dark:text-white">
+				{title}
+			</h1>
+		{/if}
+		{#if description}
+			<p class=" dark:text-white">{@html description}</p>
+		{/if}
 	</div>
 </div>
 <div class="flex flex-col items-center justify-center gap-2 mb-4" />
@@ -123,13 +138,12 @@
 					{#if data.buttons != null}
 						{#if data.buttons != []}
 							{#each data.buttons as button}
-								
 								<a
 									on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
 									href="#"
 									class="font-medium text-primary-600 hover:underline dark:text-primary-500"
 									>{button.name}</a
-								> <span class="mx-1">|</span> 
+								> <span class="mx-1">|</span>
 							{/each}
 						{/if}
 					{/if}
@@ -154,11 +168,9 @@
 		<Button
 			color="red"
 			on:click={() => {
-		
-					modalFn();
-					modalMessage = null;
-					modalFn = null;
-				
+				modalFn();
+				modalMessage = null;
+				modalFn = null;
 			}}>Confirm</Button
 		>
 	</svelte:fragment>

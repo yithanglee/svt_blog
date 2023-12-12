@@ -2,6 +2,7 @@
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import jsCookie from 'js-cookie';
 	import { isToastOpen } from '$lib/stores/toast';
+	import { onMount } from 'svelte';
 	import {
 		Table,
 		TableBody,
@@ -13,6 +14,27 @@
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
+	import Chart from 'chart.js/auto';
+
+	let chart;
+
+	let chartData = [
+		{
+			apr: null,
+			aug: null,
+			dec: 13250.0,
+			feb: null,
+			jan: null,
+			jul: null,
+			jun: null,
+			mar: null,
+			may: null,
+			nov: 272950.0,
+			oct: null,
+			sep: null,
+			year: '2023'
+		}
+	];
 	export let data;
 	let items = [{ key: 'id', value: 'int' }],
 		module = '',
@@ -23,7 +45,7 @@
 	}
 
 	async function postDat() {
-		jsCookie.remove('token')
+		jsCookie.remove('token');
 		var res = await postData(
 			{
 				scope: 'sign_in',
@@ -66,10 +88,50 @@
 			console.error('API request failed');
 		}
 	}
+	var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+	var values = []
+	onMount(() => {
+		// const labels = Object.keys(chartData[0]).filter((key) => key !== 'year');
+		// const values = labels.map((label) => chartData[0][label]);
+		// console.log(labels);
+		// console.log(values);
+
+		months.forEach((v,i) => {
+			 console.log(chartData[0][v])
+			var vsales = 0
+
+			if (chartData[0][v] != null){
+				vsales = chartData[0][v]; 
+			}
+
+			// values = [vsales,  ...values];
+			values .push(vsales); 
+		})
+
+		console.log(values)
+
+		const ctx = document.getElementById('myChart').getContext('2d');
+		chart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+				datasets: [
+					{
+						label: 'Monthly Values',
+						data: values,
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgba(75, 192, 192, 1)',
+						borderWidth: 1
+					}
+				]
+			}
+		});
+	});
 </script>
 
 <div class="flex sm:grid grid-cols-12 flex-col-reverse">
 	<div class="col-span-8 mx-4">
+		<canvas id="myChart" />
 		<h1 class="my-4 dark:text-white">Model: {title}</h1>
 		<Table>
 			<TableHead>
@@ -109,9 +171,12 @@
 
 				<Button type="submit" class="w-full">Check</Button>
 				<Button color="blue" on:click={postDat}>Test</Button>
-				<Button color="blue" on:click={() => {
-					isToastOpen.notify("notify dashboard")
-				}}>Notify</Button>
+				<Button
+					color="blue"
+					on:click={() => {
+						isToastOpen.notify('notify dashboard');
+					}}>Notify</Button
+				>
 			</form>
 		</Card>
 	</div>

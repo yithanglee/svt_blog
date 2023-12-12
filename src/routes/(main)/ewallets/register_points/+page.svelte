@@ -10,18 +10,22 @@
 	import { buildQueryString, postData } from '$lib/index.js';
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
-	function approveTransfer(data, checkPage) {
+
+	function approveTransfer(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
-		postData(
-			{ scope: 'approve_topup', id: data.id },
-			{
-				endpoint: url + '/svt_api/webhook',
-				successCallback: () => {
-					checkPage();
+
+		confirmModal(true, 'Are you sure to approve this topup?', () => {
+			postData(
+				{ scope: 'approve_topup', id: data.id },
+				{
+					endpoint: url + '/svt_api/webhook',
+					successCallback: () => {
+						checkPage();
+					}
 				}
-			}
-		);
+			);
+		}, {img_url: data.img_url});
 	}
 </script>
 
@@ -45,7 +49,7 @@
 
 					'user_id',
 					'amount',
-					'remarks',
+					'remarks'
 
 					// { label: 'is_approved', boolean: true }
 				]
@@ -70,7 +74,7 @@
 					}
 				]
 			},
-
+			{ label: 'Method', data: 'payment_method' },
 			{ label: 'From', data: 'username', through: ['user'] },
 			{ label: 'Amount', data: 'amount' },
 			{ label: 'Remarks', data: 'remarks' }

@@ -6,6 +6,7 @@
 	import { onDestroy } from 'svelte';
 	import { page } from '$app/stores';
 	import {
+		Img,
 		Pagination,
 		Modal,
 		Button,
@@ -22,7 +23,12 @@
 	import { isModalOpen } from '../stores/modal';
 	export let data;
 
-	let modalFn, modalMessage, customCols = data.customCols, appendQueries = data.appendQueries,
+	let showNew = data.showNew != null ? data.showNew : false,
+		canDelete = data.canDelete != null ? data.canDelete : false,
+		modalFn,
+		modalMessage,
+		customCols = data.customCols,
+		appendQueries = data.appendQueries,
 		query = {},
 		query2,
 		confirmModal = false,
@@ -56,14 +62,12 @@
 		var keys = Object.keys(query);
 		if (keys.length > 0) {
 			try {
-				
 				console.log(keys);
 
 				keys.forEach((v, i) => {
-					if (query[v]   ){
+					if (query[v]) {
 						slist.push(v + '=' + query[v]);
 					}
-					
 				});
 				return slist.join('|');
 			} catch (e) {
@@ -81,7 +85,7 @@
 		apiData.additional_search_queries = buildSearchString(query);
 
 		apiData.start = ((pageNumber == null ? 1 : pageNumber) - 1) * itemsPerPage;
-		const queryString = buildQueryString({...apiData, ...appendQueries});
+		const queryString = buildQueryString({ ...apiData, ...appendQueries });
 		console.log(queryString);
 		try {
 			let blog_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
@@ -136,7 +140,10 @@
 		confirmModal = false;
 		postData(
 			{},
-			{ method: 'DELETE', endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/' + model + '/' + id }
+			{
+				method: 'DELETE',
+				endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/' + model + '/' + id
+			}
 		);
 		checkPage();
 		selectedId = null;
@@ -146,11 +153,22 @@
 
 		isModalOpen.set(!isOpen);
 	}
-	function confirmModalFn(bool, message, fn) {
-		modalMessage = message
-		confirmModal = bool
-		modalFn = fn
-		
+	let img_url;
+	function confirmModalFn(bool, message, fn, opts) {
+		let default_opts = {
+			img_url: null
+		};
+
+		img_url =
+			opts != null
+				? opts.img_url != null
+					? opts.img_url
+					: default_opts.img_url
+				: default_opts.img_url;
+
+		modalMessage = message;
+		confirmModal = bool;
+		modalFn = fn;
 	}
 	onMount(() => {});
 
@@ -172,7 +190,7 @@
 							<Input
 								id="default-input"
 								bind:value={query['' + single_query + '']}
-								placeholder={single_query.split(".")[1]}
+								placeholder={single_query.split('.')[1]}
 							/>
 						{/each}
 					{/each}
@@ -184,7 +202,9 @@
 					fetchData(1);
 				}}>Search</Button
 			>
+
 			<DataForm
+				{showNew}
 				{customCols}
 				data={selectedData}
 				{inputs}
@@ -234,12 +254,14 @@
 							{/each}
 						{/if}
 					{/if}
-					|
-					<a
-						on:click|preventDefault={deleteData(item)}
-						href="#"
-						class="font-medium text-primary-600 hover:underline dark:text-primary-500">Delete</a
-					>
+					{#if canDelete}
+						|
+						<a
+							on:click|preventDefault={deleteData(item)}
+							href="#"
+							class="font-medium text-primary-600 hover:underline dark:text-primary-500">Delete</a
+						>
+					{/if}
 				</TableBodyCell>
 			</TableBodyRow>
 		{/each}
@@ -250,25 +272,28 @@
 </div>
 
 <Modal title="Confirm?" bind:open={confirmModal} autoclose outsideclose>
+	{#if img_url != null}
+		<Img src="{cac_url}{img_url}" alt="sample 1" />
+	{/if}
+
 	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
 		{#if modalMessage != null}
 			{modalMessage}
-		{:else }
-		Are you sure you want to delete?
-		{/if }
+		{:else}
+			Are you sure you want to delete?
+		{/if}
 	</p>
 	<svelte:fragment slot="footer">
 		<Button
 			color="red"
 			on:click={() => {
 				if (modalFn != null) {
-					modalFn( )
-					modalMessage = null 
-					modalFn = null
+					modalFn();
+					modalMessage = null;
+					modalFn = null;
 				} else {
 					confirmDelete(selectedId);
 				}
-				
 			}}>Confirm</Button
 		>
 	</svelte:fragment>

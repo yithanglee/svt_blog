@@ -1,6 +1,6 @@
 <script>
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
-
+	import { goto } from '$app/navigation';
 	import Datatable from '$lib/components/Datatable.svelte';
 	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
@@ -9,18 +9,36 @@
 	let inputs = data.inputs;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
-
-	function downloadCO(data, checkPage, confirmModal) {
-		window.open( url + "/pdf?id=" + data.id, '_blank').focus();
-
+	function downloadDO(data, checkPage, confirmModal) {
+		window.open(url + '/pdf?type=do&id=' + data.id, '_blank').focus();
 	}
-	function approveTransfer(data, checkPage, confirmModal) {
+	function viewDO(data, checkPage, confirmModal) {
+        goto("/deliveries/" + data.id)
+	}
+
+	function doMarkPendingDelivery(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
 
-		confirmModal(true, 'Are you sure to manually approve this sale?', () => {
+		confirmModal(true, 'Are you sure to mark this order as pending delivery?', () => {
 			postData(
-				{ scope: 'manual_approve_fpx', id: data.payment.billplz_code },
+				{ scope: 'mark_do', id: data.id, status: 'pending_delivery' },
+				{
+					endpoint: url + '/svt_api/webhook',
+					successCallback: () => {
+						checkPage();
+					}
+				}
+			);
+		});
+	}
+	function doMarkSent(data, checkPage, confirmModal) {
+		console.log(data);
+		console.log('transfer approved!');
+
+		confirmModal(true, 'Are you sure to mark this order as sent?', () => {
+			postData(
+				{ scope: 'mark_do', id: data.id, status: 'sent' },
 				{
 					endpoint: url + '/svt_api/webhook',
 					successCallback: () => {
@@ -42,32 +60,29 @@
 		search_queries: ['a.id|b.username|b.fullname'],
 		model: 'Sale',
 		preloads: ['user', 'sales_person', 'payment'],
-		buttons: [{ name: 'Download CO (PDF)', onclickFn: downloadCO } , { name: 'Manual Approve', onclickFn: approveTransfer }],
+		buttons: [
+            
+            { name: 'Preview', onclickFn: viewDO },
+			{ name: 'Download DO (PDF)', onclickFn: downloadDO },
+			{ name: 'Mark Pending Delivery', onclickFn: doMarkPendingDelivery },
+			{ name: 'Mark Sent', onclickFn: doMarkSent }
+		],
 		customCols: [
 			{
 				title: 'Order',
-				list: ['id', { label: 'status', selection: ['processing', 'sent', 'pending_delivery', 'complete', 'cancelled'] }, 'remarks']
-			},
-			{
-				title: 'Others',
 				list: [
-					'total_point_value',
-					{ label: 'registration_details', editor2: true },
-
-					{ label: 'user_id', expose: true }
+					'id',
+					
+                    { label: 'remarks', editor2: true },
 				]
-			}
+			},
+			
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
-			// {
-			// 	label: 'Delivery Ref',
-			// 	data: 'delivery_ref',
-			// 	subtitle: { label: 'Courier', data: 'delivery_method' }
-			// },
+
 			{ label: 'Sale Date', data: 'sale_date' },
-			{ label: 'Code', data: 'billplz_code', through: ['payment'] },
-			{ label: 'Point Value', data: 'total_point_value' },
+	
 			{
 				label: 'Status',
 				data: 'status',
@@ -101,11 +116,6 @@
 			},
 			{ label: 'User', data: 'username', through: ['user'] },
 			{ label: 'Sales Person', data: 'username', through: ['sales_person'] }
-			// {
-			// 	label: 'Receiver',
-			// 	data: 'receiver_name',
-			// 	subtitle: { label: 'Phone', data: 'receiver_phone' }
-			// }
 		]
 	}}
 />
