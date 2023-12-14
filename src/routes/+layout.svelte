@@ -21,7 +21,8 @@
 	import { MENUS } from '$lib/constants';
 	/** @type {import('./$types').LayoutData} */
 	export let data;
-	let open = true, username = 'Svelte Admin',
+	let open = true,
+		username = 'Svelte Admin',
 		toastMessage = '',
 		nav_class = 'hidden',
 		loggedIn = 'false',
@@ -45,7 +46,7 @@
 		if (value && value.loggedIn) {
 			nav_class = '';
 			app_routes = value.user.role_app_routes;
-			username = value.user.username
+			username = value.user.username;
 
 			console.log(app_routes);
 		}
@@ -88,18 +89,21 @@
 		{#each MENUS as menu}
 			{#if !menu.hidden}
 				{#if menu.children}
-					{#if app_routes.some((app_route) => app_route.name === menu.title)}	{/if}
-					<NavLi class={appendClass(nav_class)} id={menu.title}>{menu.title}</NavLi>
-					<Dropdown triggeredBy="#{menu.title}" class="w-44 z-20">
-						{#each menu.children as child}
-							{#if app_routes.some((app_route) => app_route.route === child.path)}{/if}
-							<DropdownItem href={child.path}>{child.title}</DropdownItem>
-						{/each}
-					</Dropdown>
-				{:else} 
-				<NavLi class={nav_class} id={menu.title} href={menu.path}>{menu.title}</NavLi>
-				<!-- {:else if app_routes.some((app_route) => app_route.route === menu.path)}
-					<NavLi class={nav_class} id={menu.title} href={menu.path}>{menu.title}</NavLi> -->
+					{#if app_routes.some((app_route) => app_route.name === menu.title)}
+						<NavLi class={appendClass(nav_class)} id={menu.title}>{menu.title}</NavLi>
+						<Dropdown triggeredBy="#{menu.title}" class="w-44 z-20">
+							{#each menu.children as child}
+								{#if app_routes.some((app_route) => app_route.route === child.path)}
+									<DropdownItem href={child.path}>{child.title}</DropdownItem>
+								{/if}
+							{/each}
+						</Dropdown>
+					{/if}
+
+					<!-- {:else} 
+				<NavLi class={nav_class} id={menu.title} href={menu.path}>{menu.title}</NavLi> -->
+				{:else if app_routes.some((app_route) => app_route.route === menu.path)}
+					<NavLi class={nav_class} id={menu.title} href={menu.path}>{menu.title}</NavLi>
 				{/if}
 			{/if}
 		{/each}
