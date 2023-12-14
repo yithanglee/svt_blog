@@ -10,7 +10,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{canDelete: true,
 		inputs: inputs,
 		join_statements: JSON.stringify([
 			// { corporate_account: 'corporate_account' },

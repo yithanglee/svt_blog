@@ -15,7 +15,7 @@
 
 <Datatable
 	data={{
-
+canDelete: true,
 		showNew: true,
 		inputs: inputs,
 		search_queries: null,
