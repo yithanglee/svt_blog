@@ -27,7 +27,7 @@ canDelete: true,
 				list: [
 					'id',
 					'name',
-					'desc',
+			
 			
 				]
 			},
@@ -37,7 +37,7 @@ canDelete: true,
                     'retail_price',
              
                     'point_value',
-					{ label: 'desc', binary: true },
+					{ label: 'desc', editor2: true },
 					{ label: 'img_url', upload: true }
 				]
 			}
