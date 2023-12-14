@@ -100,7 +100,7 @@
 </script>
 
 <div>
-	<p class="mb-4 font-semibold text-gray-900 dark:text-white">Technology</p>
+	<p class="mb-4 font-semibold text-gray-900 dark:text-white"></p>
 	<ul
 		class="w-48 bg-white rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600 divide-y divide-gray-200 dark:divide-gray-600"
 	>

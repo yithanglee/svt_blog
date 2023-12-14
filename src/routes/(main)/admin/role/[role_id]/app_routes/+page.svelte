@@ -6,7 +6,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{showNew: true,
 		appendQueries: { role_id: data.role_id },
 		inputs: inputs,
 		search_queries: null,
