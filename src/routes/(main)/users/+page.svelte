@@ -11,7 +11,9 @@
 		search_queries: null,
 		model: 'User',
 		preloads: ['rank'],
-		customCols: [{title: 'General', list: ['id', 'fullname', {label: 'is_stockist', boolean: true}]}],
+		customCols: [
+			{ title: 'General', list: ['id', 'fullname', { label: 'is_stockist', boolean: true }] }
+		],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{
@@ -36,7 +38,7 @@
 			{ label: 'Phone', data: 'phone' },
 			{ label: 'Email', data: 'email' },
 			// { label: 'Code', data: 'member_code', isBadge: true },
-			{ label: 'Rank', data: 'name', through: ['rank']  },
+			{ label: 'Rank', data: 'name', through: ['rank'] }
 		]
 	}}
 />

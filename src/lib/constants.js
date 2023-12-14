@@ -17,12 +17,17 @@ export const MENUS = [
             { path: '/rewards/summary', title: 'Commission Summary', icon: 'camera-foto-solid' },
             { path: '/rewards/details', title: 'Commission Details', icon: 'camera-foto-solid' },
             { path: '/rewards', title: 'All Commission', icon: 'camera-foto-solid' },
+            { path: '/rewards/royalty_users', title: 'Royalty Users', icon: 'camera-foto-solid' },
+            
         ]
     },
     {
         path: '#', title: 'GroupSales', icon: null, children: [
-            { path: '/gs_summary', title: 'GS Summary', icon: 'book-solid' },
-            { path: '/group_sales_details', title: 'GS Details', icon: 'book-solid' },
+            { path: '/referral_gs_summary', title: 'Referral GS Summary', icon: 'book-solid' },
+            { path: '/referral_gs_details', title: 'Referral GS Details', icon: 'book-solid' },
+                     
+            { path: '/gs_summary', title: 'Placement GS Summary', icon: 'book-solid' },
+            { path: '/group_sales_details', title: 'Placement GS Details', icon: 'book-solid' },
 
         ]
     },

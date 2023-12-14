@@ -87,7 +87,7 @@
 		
 			if (typeof selection == 'string') {
 				fetchData();
-				title = data[input.key.replace('_id', '')].name;
+				title = data[input.key.replace('_id', '')][title_key];
 			} else {
 				
 				items = selection.map((v, i) => {
@@ -108,7 +108,7 @@
 			class="w-3 h-3 ml-2 text-white dark:text-white"
 		/></Button
 	>
-	<Dropdown bind:open={dropdownOpen}>
+	<Dropdown bind:open={dropdownOpen}  class="w-full overflow-y-auto py-1 h-48">
 		<div slot="header" class="p-3">
 			<Search
 				bind:value={query}
