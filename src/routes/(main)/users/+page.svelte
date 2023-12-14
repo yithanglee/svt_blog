@@ -5,21 +5,26 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
-	
-	let fullname, password, phone, email, sponsor, position, username, inputs = data.inputs;
-	async function fetchData()  {
+
+	let fullname,
+		password,
+		phone,
+		email,
+		sponsor,
+		position,
+		username,
+		inputs = data.inputs;
+	async function fetchData() {
 		var form = document.getElementById('currentForm');
 		var formData = new FormData(form);
 		await postData(formData, {
 			isFormData: true,
 			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=admin_register_member'
 		});
-
-    }
+	}
 </script>
 
 <div class="flex sm:grid grid-cols-12 flex-col-reverse">
-
 	<div class="col-span-12 sm:col-span-9 mx-4 p-4">
 		<Datatable
 			data={{
@@ -28,7 +33,23 @@
 				model: 'User',
 				preloads: ['rank'],
 				customCols: [
-					{ title: 'General', list: ['id', 'fullname', { label: 'is_stockist', boolean: true }] }
+					{
+						title: 'General',
+						list: [
+							'id',
+							'fullname',
+							'rank_name',
+							{
+								label: 'rank_id',
+								selection: 'Rank',
+								customCols: null,
+								search_queries: ['a.name'],
+								newData: 'name',
+								title_key: 'name'
+							},
+							{ label: 'is_stockist', boolean: true }
+						]
+					}
 				],
 				columns: [
 					{ label: 'ID', data: 'id' },
@@ -53,7 +74,6 @@
 					{ label: 'Username', data: 'username' },
 					{ label: 'Phone', data: 'phone' },
 					{ label: 'Email', data: 'email' },
-					// { label: 'Code', data: 'member_code', isBadge: true },
 					{ label: 'Rank', data: 'name', through: ['rank'] }
 				]
 			}}
@@ -61,40 +81,48 @@
 	</div>
 	<div class="col-span-12 sm:col-span-3 mr-4 py-4">
 		<Card class="w-full max-w-md ">
-			<form id="currentForm"
+			<form
+				id="currentForm"
 				class="flex flex-col space-y-6"
 				action="javascript:void(0);"
 				on:submit|preventDefault={fetchData}
 			>
-				<h3 class="text-xl font-medium text-gray-900 dark:text-white">Register Member Without Products</h3>
+				<h3 class="text-xl font-medium text-gray-900 dark:text-white">
+					Register Member Without Products
+				</h3>
 				<Label class="space-y-2">
 					<span>Sponsor</span>
-					<Input type="text" name="user[sponsor]" placeholder="" bind:value={sponsor}  />
+					<Input type="text" name="user[sponsor]" placeholder="" bind:value={sponsor} />
 				</Label>
 
 				<Label class="space-y-2">
 					<span>Username</span>
-					<Input type="text" name="user[username]" placeholder="" bind:value={username}  />
+					<Input type="text" name="user[username]" placeholder="" bind:value={username} />
 				</Label>
 				<Label class="space-y-2">
 					<span>IC Name</span>
-					<Input type="text" name="user[fullname]" placeholder="" bind:value={fullname}  />
+					<Input type="text" name="user[fullname]" placeholder="" bind:value={fullname} />
 				</Label>
 				<Label class="space-y-2">
 					<span>Position</span>
-					<Input type="text" name="user[placement][position]" placeholder="" bind:value={position}  />
+					<Input
+						type="text"
+						name="user[placement][position]"
+						placeholder=""
+						bind:value={position}
+					/>
 				</Label>
 				<Label class="space-y-2">
 					<span>Password</span>
-					<Input type="text" name="user[password]" placeholder="" bind:value={password}  />
+					<Input type="text" name="user[password]" placeholder="" bind:value={password} />
 				</Label>
 				<Label class="space-y-2">
 					<span>Phone</span>
-					<Input type="text" name="user[phone]" placeholder="" bind:value={phone}  />
+					<Input type="text" name="user[phone]" placeholder="" bind:value={phone} />
 				</Label>
 				<Label class="space-y-2">
 					<span>Email</span>
-					<Input type="text" name="user[email]" placeholder="" bind:value={email}  />
+					<Input type="text" name="user[email]" placeholder="" bind:value={email} />
 				</Label>
 				<Button type="submit" class="w-full">Create</Button>
 			</form>

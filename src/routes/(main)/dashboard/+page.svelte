@@ -15,27 +15,11 @@
 	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	import Chart from 'chart.js/auto';
-
+	export let data;
 	let chart;
 
-	let chartData = [
-		{
-			apr: null,
-			aug: null,
-			dec: 13250.0,
-			feb: null,
-			jan: null,
-			jul: null,
-			jun: null,
-			mar: null,
-			may: null,
-			nov: 272950.0,
-			oct: null,
-			sep: null,
-			year: '2023'
-		}
-	];
-	export let data;
+	let chartData = data.chartData;
+
 	let items = [{ key: 'id', value: 'int' }],
 		module = '',
 		title = '';
@@ -89,32 +73,45 @@
 		}
 	}
 	var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-	var values = []
+	var values = [];
 	onMount(() => {
 		// const labels = Object.keys(chartData[0]).filter((key) => key !== 'year');
 		// const values = labels.map((label) => chartData[0][label]);
 		// console.log(labels);
 		// console.log(values);
 
-		months.forEach((v,i) => {
-			 console.log(chartData[0][v])
-			var vsales = 0
+		months.forEach((v, i) => {
+			console.log(chartData[0][v]);
+			var vsales = 0;
 
-			if (chartData[0][v] != null){
-				vsales = chartData[0][v]; 
+			if (chartData[0][v] != null) {
+				vsales = chartData[0][v];
 			}
 
 			// values = [vsales,  ...values];
-			values .push(vsales); 
-		})
+			values.push(vsales);
+		});
 
-		console.log(values)
+		console.log(values);
 
 		const ctx = document.getElementById('myChart').getContext('2d');
 		chart = new Chart(ctx, {
 			type: 'bar',
 			data: {
-				labels: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+				labels: [
+					'jan',
+					'feb',
+					'mar',
+					'apr',
+					'may',
+					'jun',
+					'jul',
+					'aug',
+					'sep',
+					'oct',
+					'nov',
+					'dec'
+				],
 				datasets: [
 					{
 						label: 'Monthly Values',
@@ -170,7 +167,7 @@
 				</Label>
 
 				<Button type="submit" class="w-full">Check</Button>
-				<Button color="blue" on:click={postDat}>Test</Button>
+				<Button color="blue" class="hidden" on:click={postDat}>Test</Button>
 				<Button
 					color="blue"
 					on:click={() => {
