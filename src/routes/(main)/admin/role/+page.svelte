@@ -15,7 +15,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{showNew: true,
 		inputs: inputs,
 		search_queries: null,
 		model: 'Role',
