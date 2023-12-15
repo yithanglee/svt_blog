@@ -63,15 +63,17 @@
 	});
 </script>
 
-<Toast color="green" position="top-right" bind:open>
-	<Icon
-		slot="icon"
-		name="check-circle-solid"
-		class="w-5 h-5 text-green-500 transition duration-75 dark:text-green-400 group-hover:text-green-900 dark:group-hover:text-white"
-	/>
+<div class="fixed w-full">
+	<Toast color="green" position="top-right" >
+		<Icon
+			slot="icon"
+			name="check-circle-solid"
+			class="w-5 h-5 text-green-500 transition duration-75 dark:text-green-400 group-hover:text-green-900 dark:group-hover:text-white"
+		/>
 
-	{toastMessage}</Toast
->
+		{toastMessage}</Toast
+	>
+</div>
 <Navbar let:hidden let:toggle>
 	<NavBrand href="/">
 		<img src="/images/2damienslab.png" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
