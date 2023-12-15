@@ -1,5 +1,5 @@
 <script>
-	import { Card, Button, Label, Input, Checkbox, Select } from 'flowbite-svelte';
+	import { Card, Button, Spinner, Label, Input, Checkbox, Select } from 'flowbite-svelte';
 
 	let positions = [
 		{ value: 'left', name: 'Left' },
@@ -10,8 +10,10 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+
 	import { isTableReloaded } from '$lib/stores/reloadTable';
 	let fullname,
+		isLoading = false,
 		password,
 		phone,
 		email,
@@ -20,13 +22,15 @@
 		username,
 		inputs = data.inputs;
 	async function fetchData() {
+		isLoading = true;
 		var form = document.getElementById('currentForm');
 		var formData = new FormData(form);
 		await postData(formData, {
 			isFormData: true,
 			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=admin_register_member',
 			successCallback: () => {
-				isToastOpen.notify('Member recorded!');
+				isLoading = false;
+				// isToastOpen.notify('Member recorded!');
 				isTableReloaded.activate();
 			}
 		});
@@ -68,7 +72,7 @@
 							'email',
 							'rank_name',
 							'ic_no',
-							'password',
+							{ label: 'password', expose: true },
 							'bank_account_holder',
 							'bank_account_no',
 							'bank_name'
@@ -116,16 +120,16 @@
 				</h3>
 				<Label class="space-y-2">
 					<span>Sponsor</span>
-					<Input type="text" name="user[sponsor]" placeholder="" bind:value={sponsor} />
+					<Input type="text" name="user[sponsor]" placeholder=""  />
 				</Label>
 
 				<Label class="space-y-2">
 					<span>Username</span>
-					<Input type="text" name="user[username]" placeholder="" bind:value={username} />
+					<Input type="text" name="user[username]" placeholder=""  />
 				</Label>
 				<Label class="space-y-2">
 					<span>IC Name</span>
-					<Input type="text" name="user[fullname]" placeholder="" bind:value={fullname} />
+					<Input type="text" name="user[fullname]" placeholder=""  />
 				</Label>
 				<Label class="space-y-2">
 					<span>Position</span>
@@ -134,22 +138,26 @@
 						class="mt-2"
 						name="user[placement][position]"
 						items={positions}
-						bind:value={position}
+					
 					/>
 				</Label>
 				<Label class="space-y-2">
 					<span>Password</span>
-					<Input type="text" name="user[password]" placeholder="" bind:value={password} />
+					<Input type="text" name="user[password]" placeholder="" />
 				</Label>
 				<Label class="space-y-2">
 					<span>Phone</span>
-					<Input type="text" name="user[phone]" placeholder="" bind:value={phone} />
+					<Input type="text" name="user[phone]" placeholder=""  />
 				</Label>
 				<Label class="space-y-2">
 					<span>Email</span>
-					<Input type="text" name="user[email]" placeholder="" bind:value={email} />
+					<Input type="text" name="user[email]" placeholder=""  />
 				</Label>
-				<Button type="submit" class="w-full">Create</Button>
+				{#if isLoading}
+					<div class="text-center"><Spinner /></div>
+				{:else}
+					<Button type="submit" class="w-full">Create</Button>
+				{/if}
 			</form>
 		</Card>
 	</div>

@@ -1,7 +1,7 @@
 <script>
 	import Datatable from '$lib/components/Datatable.svelte';
 	import { onMount } from 'svelte';
-	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
+	import { Card, Spinner, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { isToastOpen } from '$lib/stores/toast';
 	import { isTableReloaded } from '$lib/stores/reloadTable';
 	/** @type {import('./$types').PageData} */
@@ -10,7 +10,7 @@
 	import { goto } from '$app/navigation';
 	onMount(async () => {});
 
-	let module = data.module,
+	let  isLoading = false, module = data.module,
 		inputs = data.inputs;
 	import { buildQueryString, postData } from '$lib/index.js';
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
@@ -25,7 +25,7 @@
 			isFormData: true,
 			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=admin_insert_wallet_trx',
 			successCallback: () => {
-				isToastOpen.notify('Transaction recorded!');
+				isLoading = false;
 				isTableReloaded.activate();		
 			}
 		});
@@ -85,7 +85,11 @@
 					<Input type="text" name="remarks" placeholder="" />
 				</Label>
 
-				<Button type="submit" class="w-full">Create</Button>
+				{#if isLoading}
+					<div class="text-center"><Spinner /></div>
+				{:else}
+					<Button type="submit" class="w-full">Create</Button>
+				{/if}
 			</form>
 		</Card>
 	</div>

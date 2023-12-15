@@ -33,7 +33,7 @@ export async function postData(data, options) {
             console.log(res)
             if (res.status != null) {
                 if (res.status == "ok") {
-
+                    isToastOpen.notify("Submitted succesfully!")
                 } else if (res.status == "error") {
                     if ( res.reason != null) {
                         isToastOpen.notify("Error! " + res.reason)

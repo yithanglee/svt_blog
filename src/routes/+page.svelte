@@ -5,9 +5,9 @@
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import Cookies from 'js-cookie';
-	let username = 'summer',
+	let username = '',
 		email = '',
-		password = 'abc123';
+		password = '';
 	async function handleLogin() {
 		var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 		const map = { id: 0, username: username, password: password, scope: 'sign_in' };
