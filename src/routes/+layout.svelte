@@ -64,7 +64,7 @@
 </script>
 
 <div class="fixed w-full">
-	<Toast color="green" position="top-right" >
+	<Toast color="green" position="top-right" bind:open >
 		<Icon
 			slot="icon"
 			name="check-circle-solid"
