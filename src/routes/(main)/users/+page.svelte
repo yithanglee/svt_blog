@@ -46,8 +46,10 @@
 						title: 'General',
 						list: [
 							'id',
+							'username',
 							'fullname',
 							'rank_name',
+
 							{
 								label: 'rank_id',
 								selection: 'Rank',
@@ -57,6 +59,19 @@
 								title_key: 'name'
 							},
 							{ label: 'is_stockist', boolean: true }
+						]
+					},
+					{
+						title: 'Personal Info',
+						list: [
+							'phone',
+							'email',
+							'rank_name',
+							'ic_no',
+							'password',
+							'bank_account_holder',
+							'bank_account_no',
+							'bank_name'
 						]
 					}
 				],
@@ -114,8 +129,13 @@
 				</Label>
 				<Label class="space-y-2">
 					<span>Position</span>
-				
-					<Select class="mt-2" 	name="user[placement][position]" items={positions} bind:value={position} />
+
+					<Select
+						class="mt-2"
+						name="user[placement][position]"
+						items={positions}
+						bind:value={position}
+					/>
 				</Label>
 				<Label class="space-y-2">
 					<span>Password</span>
