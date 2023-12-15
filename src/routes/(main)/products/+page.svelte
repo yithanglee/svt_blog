@@ -3,11 +3,7 @@
 	import { onMount } from 'svelte';
 	/** @type {import('./$types').PageData} */
 	export let data;
-    onMount(async () => {
-    
-    
-    })
-
+	onMount(async () => {});
 
 	let module = data.module,
 		inputs = data.inputs;
@@ -15,7 +11,7 @@
 
 <Datatable
 	data={{
-canDelete: true,
+		canDelete: true,
 		showNew: true,
 		inputs: inputs,
 		search_queries: null,
@@ -24,19 +20,14 @@ canDelete: true,
 		customCols: [
 			{
 				title: 'General',
-				list: [
-					'id',
-					'name',
-			
-			
-				]
+				list: ['id', 'name']
 			},
 			{
 				title: 'Price',
 				list: [
-                    'retail_price',
-             
-                    'point_value',
+					'retail_price',
+
+					'point_value',
 					{ label: 'desc', editor2: true },
 					{ label: 'img_url', upload: true }
 				]

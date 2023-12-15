@@ -3,6 +3,8 @@
 	import DataCell from '$lib/components/DataCell.svelte';
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import { postData, buildQueryString } from '$lib/index.js';
+
+	import { isTableReloaded } from '$lib/stores/reloadTable';
 	import { onDestroy } from 'svelte';
 	import { page } from '$app/stores';
 	import {
@@ -22,7 +24,14 @@
 	import { onMount } from 'svelte';
 	import { isModalOpen } from '../stores/modal';
 	export let data;
+	let unsub2 = isTableReloaded.subscribe((v) => {
+	
+		if (v.open){
+			fetchData(1);
+		}
 
+	
+	});
 	let showNew = data.showNew != null ? data.showNew : false,
 		canDelete = data.canDelete != null ? data.canDelete : false,
 		modalFn,
@@ -122,6 +131,7 @@
 	};
 	onMount(() => {
 		fetchData(1);
+		
 	});
 
 	async function checkPage() {

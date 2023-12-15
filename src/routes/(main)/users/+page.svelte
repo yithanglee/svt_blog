@@ -1,11 +1,16 @@
 <script>
-	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
+	import { Card, Button, Label, Input, Checkbox, Select } from 'flowbite-svelte';
+
+	let positions = [
+		{ value: 'left', name: 'Left' },
+		{ value: 'right', name: 'Right' }
+	];
 	import { postData } from '$lib/index.js';
 	import Datatable from '$lib/components/Datatable.svelte';
 	/** @type {import('./$types').PageData} */
 	export let data;
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
-
+	import { isTableReloaded } from '$lib/stores/reloadTable';
 	let fullname,
 		password,
 		phone,
@@ -19,7 +24,11 @@
 		var formData = new FormData(form);
 		await postData(formData, {
 			isFormData: true,
-			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=admin_register_member'
+			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=admin_register_member',
+			successCallback: () => {
+				isToastOpen.notify('Member recorded!');
+				isTableReloaded.activate();
+			}
 		});
 	}
 </script>
@@ -105,12 +114,8 @@
 				</Label>
 				<Label class="space-y-2">
 					<span>Position</span>
-					<Input
-						type="text"
-						name="user[placement][position]"
-						placeholder=""
-						bind:value={position}
-					/>
+				
+					<Select class="mt-2" 	name="user[placement][position]" items={positions} bind:value={position} />
 				</Label>
 				<Label class="space-y-2">
 					<span>Password</span>
