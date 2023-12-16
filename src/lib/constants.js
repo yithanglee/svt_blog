@@ -10,6 +10,13 @@ export const MENUS = [
             { path: '/admin/app_route', title: 'Route', icon: 'camera-foto-solid' },
         ]
     },
+    {
+        path: '#', title: 'Geo', icon: null, children: [
+            { path: '/geo/countries', title: 'Country', icon: 'camera-foto-solid' },
+            { path: '/geo/states', title: 'States', icon: 'camera-foto-solid' },
+      
+         ]
+    },
     { path: '/announcements', title: 'Announcements', icon: 'book-solid' },
 
     {

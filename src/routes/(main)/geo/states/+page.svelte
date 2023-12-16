@@ -1,51 +1,47 @@
 <script>
 	import Datatable from '$lib/components/Datatable.svelte';
-	import { onMount } from 'svelte';
+	import { buildQueryString } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	export let data;
-	onMount(async () => {});
 
-	let module = data.module,
-		inputs = data.inputs;
+	let inputs = data.inputs;
 </script>
 
 <Datatable
 	data={{
-		canDelete: true,
 		showNew: true,
 		inputs: inputs,
+
 		search_queries: null,
-		model: module,
+		model: data.module,
 		preloads: ['country'],
+
 		customCols: [
 			{
 				title: 'General',
-				list: ['id', 'name' ,{
+				list: [
+					'id',
+					'name',
+					'shortcode',
+					{
 						label: 'country_id',
 						selection: 'Country',
-                        module: 'Country',
+						module: 'Country',
 						customCols: null,
 						search_queries: ['a.name'],
 						newData: 'name',
 						title_key: 'name'
-					}]
-			},
-			{
-				title: 'Price',
-				list: [
-					'retail_price',
-
-					'point_value',
-					{ label: 'desc', editor2: true },
-					{ label: 'img_url', upload: true }
+					}
 				]
 			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
-			{ label: 'Name', data: 'name' },
-			{ label: 'Retail Price (RP)', data: 'retail_price' },
-			{ label: 'Point Value', data: 'point_value' },
+			{
+				label: 'State Name',
+				data: 'name',
+				subtitle: { label: 'shortcode', data: 'shortcode' }
+			},
 			{ label: 'Country', data: 'name', through: ['country'] }
 		]
 	}}
