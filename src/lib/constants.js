@@ -14,7 +14,7 @@ export const MENUS = [
         path: '#', title: 'Geo', icon: null, children: [
             { path: '/geo/countries', title: 'Country', icon: 'camera-foto-solid' },
             { path: '/geo/states', title: 'States', icon: 'camera-foto-solid' },
-      
+            { path: '/geo/pick_up_points', title: 'Pick Up Points', icon: 'camera-foto-solid' },
          ]
     },
     { path: '/announcements', title: 'Announcements', icon: 'book-solid' },

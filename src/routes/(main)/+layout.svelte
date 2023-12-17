@@ -5,7 +5,8 @@
 	import { session } from '$lib/stores/session';
 	import { MENUS } from '$lib/constants';
 	import {
-		CloseButton, Button, 
+		CloseButton,
+		Button,
 		Drawer,
 		SidebarDropdownWrapper,
 		SidebarDropdownItem,
@@ -16,7 +17,7 @@
 	} from 'flowbite-svelte';
 	import { Icon } from 'flowbite-svelte-icons';
 	import { sineIn } from 'svelte/easing';
-	import jsCookie from 'js-cookie';
+	import Cookies from 'js-cookie';
 	import { onDestroy, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	let styles = ['sidebar', 'drawer'],
@@ -33,15 +34,16 @@
 
 	function logout() {
 		session.logout();
-		jsCookie.remove('user');
-		jsCookie.remove('_commerce_front_key');
+		Cookies.remove('user');
+		Cookies.remove('_commerce_front_key');
+
 		setTimeout(() => {
 			goto('/');
 		}, 200);
 	}
 
 	function relogin() {
-		window.location.href = '/';
+		logout();
 	}
 
 	let user = { username: 'Guest' };
@@ -198,10 +200,7 @@
 		</Drawer>
 
 		<div class="mx-auto flex flex-wrap justify-between items-center container">
-			<Button on:click={() => (hidden2 = false)} class="!p-2 mb-4 mt-0">
-				Menu
-
-			</Button>
+			<Button on:click={() => (hidden2 = false)} class="!p-2 mb-4 mt-0">Menu</Button>
 			<div class="w-full grid grid-cols-12">
 				<div class="col-span-12 py-4 sm:py-0">
 					<slot />

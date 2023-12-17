@@ -25,12 +25,9 @@
 	import { isModalOpen } from '../stores/modal';
 	export let data;
 	let unsub2 = isTableReloaded.subscribe((v) => {
-	
-		if (v.open){
+		if (v.open) {
 			fetchData(1);
 		}
-
-	
 	});
 	let showNew = data.showNew != null ? data.showNew : false,
 		canDelete = data.canDelete != null ? data.canDelete : false,
@@ -131,7 +128,6 @@
 	};
 	onMount(() => {
 		fetchData(1);
-		
 	});
 
 	async function checkPage() {
@@ -254,13 +250,25 @@
 					{#if data.buttons != null}
 						{#if data.buttons != []}
 							{#each data.buttons as button}
-								|
-								<a
-									on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
-									href="#"
-									class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-									>{button.name}</a
-								>
+								{#if button.showCondition != null}
+									{#if button.showCondition(item)}
+										|
+										<a
+											on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
+											href="#"
+											class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+											>{button.name}</a
+										>
+									{/if}
+								{:else}
+									|
+									<a
+										on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
+										href="#"
+										class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+										>{button.name}</a
+									>
+								{/if}
 							{/each}
 						{/if}
 					{/if}

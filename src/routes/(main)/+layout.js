@@ -1,6 +1,6 @@
 /** @type {import('./$types').LayoutLoad} */
 import { session } from '$lib/stores/session';
-import jsCookie from 'js-cookie';
+import Cookies from 'js-cookie';
 import { redirect } from "@sveltejs/kit";
 import { onDestroy } from 'svelte';
 import { isToastOpen } from '$lib/stores/toast';
@@ -14,14 +14,18 @@ export async function load({ locals }) {
 
 
     function relogin() {
+        session.logout();
+		Cookies.remove('user');
+        Cookies.remove('_commerce_front_key');
         needLogin = true;
     }
 
 
-    let cookieToken = await jsCookie.get('_commerce_front_key');
+    let cookieToken = await Cookies.get('_commerce_front_key');
     console.log("from main layout js")
     console.log(cookieToken);
     console.log(session.user())
+ 
 
     if (cookieToken != null) {
         const response = await fetch((PHX_HTTP_PROTOCOL + PHX_ENDPOINT) + '/svt_api/webhook?scope=get_cookie_user&cookie=' + cookieToken, {
@@ -29,6 +33,7 @@ export async function load({ locals }) {
                 'Content-Type': 'application/json'
             }
         });
+    
         if (response.ok) {
             // use cookie to call the user
             // from the token get the username data
@@ -44,23 +49,23 @@ export async function load({ locals }) {
             } else {
 
                 relogin();
-                isToastOpen.notify("Please login!")
-                redirect(307, '/');
+                isToastOpen.notify("Close this window and re login!")
+                // redirect(307, '/');
             }
 
         } else {
 
             relogin();
-            isToastOpen.notify("Please login!")
-            redirect(307, '/');
+            isToastOpen.notify("Close this window and re login!")
+            // redirect(307, '/');
         }
 
 
     } else {
 
         relogin();
-        isToastOpen.notify("Please login!")
-        redirect(307, '/');
+        isToastOpen.notify("Close this window and re login!")
+        // redirect(307, '/');
     }
 
 

@@ -1,9 +1,10 @@
+import { goto } from '$app/navigation';
 import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 import { isToastOpen } from '$lib/stores/toast';
-import jsCookie from 'js-cookie';
+import Cookies from 'js-cookie';
 export async function postData(data, options) {
     let res
-    let cookieToken = jsCookie.get('_commerce_front_key');
+    let cookieToken = Cookies.get('_commerce_front_key');
     let token = cookieToken != null ? cookieToken : 'empty';
     var default_options = {
         method: 'POST',
@@ -26,7 +27,12 @@ export async function postData(data, options) {
 
     try {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
-
+        console.log()
+        if (response.status == 403) {
+            Cookies.remove('_commerce_front_key');
+      
+            goto("/")
+        }
         if (response.ok) {
 
             res = await response.json();
@@ -35,10 +41,10 @@ export async function postData(data, options) {
                 if (res.status == "ok") {
                     isToastOpen.notify("Submitted succesfully!")
                 } else if (res.status == "error") {
-                    if ( res.reason != null) {
+                    if (res.reason != null) {
                         isToastOpen.notify("Error! " + res.reason)
                     }
-                 
+
                 }
 
             } else {

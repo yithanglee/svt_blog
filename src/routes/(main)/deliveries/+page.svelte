@@ -15,7 +15,20 @@
 	function viewDO(data, checkPage, confirmModal) {
         goto("/deliveries/" + data.id)
 	}
-
+	function showCondition(data) {
+		var bool = false;
+		if (data.status == "processing") {
+			bool = true;
+		}
+		return bool;
+	}
+	function showCondition2(data) {
+		var bool = false;
+		if (data.status == "pending_delivery") {
+			bool = true;
+		}
+		return bool;
+	}
 	function doMarkPendingDelivery(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
@@ -64,8 +77,8 @@
             
             { name: 'Preview', onclickFn: viewDO },
 			{ name: 'Download DO (PDF)', onclickFn: downloadDO },
-			{ name: 'Mark Pending Delivery', onclickFn: doMarkPendingDelivery },
-			{ name: 'Mark Sent', onclickFn: doMarkSent }
+			{ name: 'Mark Pending Delivery', onclickFn: doMarkPendingDelivery, showCondition: showCondition },
+			{ name: 'Mark Sent', onclickFn: doMarkSent , showCondition: showCondition2}
 		],
 		customCols: [
 			{

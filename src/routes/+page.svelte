@@ -5,9 +5,11 @@
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import Cookies from 'js-cookie';
-	let username = '',
+	let username = '', cookieName = '_commerce_front_key',
 		email = '',
 		password = '';
+
+  
 	async function handleLogin() {
 		var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 		const map = { id: 0, username: username, password: password, scope: 'sign_in' };
@@ -15,10 +17,11 @@
 			endpoint: url + '/svt_api/webhook'
 		});
 		console.log(res);
+	
 		if (res.status == 'ok') {
 			// Set user session/token/cookie
-		
-			Cookies.set('_commerce_front_key', res.res);
+	
+		await Cookies.set('_commerce_front_key', res.res);
 
 			// Redirect to dashboard
 			console.log('login user');
@@ -27,13 +30,16 @@
 				token: JSON.stringify(res.res),
 				role_app_routes: res.role_app_routes
 			});
-
+			let cookieToken = await Cookies.get('_commerce_front_key');
+			console.log("check cookite js")
+			console.log(cookieToken);
 			goto('/dashboard');
 		} else if (res.status == 'error') {
 			session.logout();
 			// loggedIn = 'false';
-			jsCookie.remove('user');
-			jsCookie.remove('_commerce_front_key');
+			Cookies.remove('user');
+			Cookies.remove('_commerce_front_key');
+			await Cookies.remove('_commerce_front_key')
 			goto('/');
 		}
 	}

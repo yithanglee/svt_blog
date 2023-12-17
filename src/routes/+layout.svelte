@@ -17,7 +17,7 @@
 	} from 'flowbite-svelte';
 
 	import { onDestroy, onMount } from 'svelte';
-	import jsCookie from 'js-cookie';
+	import Cookies from 'js-cookie';
 	import { MENUS } from '$lib/constants';
 	/** @type {import('./$types').LayoutData} */
 	export let data;
@@ -31,8 +31,8 @@
 	function logOut() {
 		session.logout();
 		loggedIn = 'false';
-		jsCookie.remove('user');
-		jsCookie.remove('_commerce_front_key');
+		Cookies.remove('user');
+		Cookies.remove('_commerce_front_key');
 		goto('/');
 	}
 	function appendClass(existing_class) {

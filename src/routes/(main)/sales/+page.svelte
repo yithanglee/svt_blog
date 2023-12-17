@@ -9,7 +9,13 @@
 	let inputs = data.inputs;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
-
+	function showCondition(data) {
+		var bool = false;
+		if (data.payment.billplz_code != null) {
+			bool = true;
+		}
+		return bool;
+	}
 	function downloadCO(data, checkPage, confirmModal) {
 		window.open( url + "/pdf?id=" + data.id, '_blank').focus();
 
@@ -42,7 +48,7 @@
 		search_queries: ['a.id|b.username|b.fullname'],
 		model: 'Sale',
 		preloads: ['user', 'sales_person', 'payment'],
-		buttons: [{ name: 'Download CO (PDF)', onclickFn: downloadCO } , { name: 'Manual Approve', onclickFn: approveTransfer }],
+		buttons: [{ name: 'Download CO (PDF)', onclickFn: downloadCO } , { name: 'Manual Approve', onclickFn: approveTransfer, showCondition: showCondition }],
 		customCols: [
 			{
 				title: 'Order',

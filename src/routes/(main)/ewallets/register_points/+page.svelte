@@ -11,21 +11,35 @@
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
+	function showCondition(data) {
+		var bool = true;
+		if (data.is_approved) {
+			bool = false;
+		}
+
+		return bool;
+	}
+
 	function approveTransfer(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
 
-		confirmModal(true, 'Are you sure to approve this topup?', () => {
-			postData(
-				{ scope: 'approve_topup', id: data.id },
-				{
-					endpoint: url + '/svt_api/webhook',
-					successCallback: () => {
-						checkPage();
+		confirmModal(
+			true,
+			'Are you sure to approve this topup?',
+			() => {
+				postData(
+					{ scope: 'approve_topup', id: data.id },
+					{
+						endpoint: url + '/svt_api/webhook',
+						successCallback: () => {
+							checkPage();
+						}
 					}
-				}
-			);
-		}, {img_url: data.img_url});
+				);
+			},
+			{ img_url: data.img_url }
+		);
 	}
 </script>
 
@@ -55,7 +69,7 @@
 				]
 			}
 		],
-		buttons: [{ name: 'Approve', onclickFn: approveTransfer }],
+		buttons: [{ name: 'Approve', onclickFn: approveTransfer, showCondition: showCondition }],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{

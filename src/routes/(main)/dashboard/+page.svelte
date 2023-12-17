@@ -1,6 +1,6 @@
 <script>
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
-	import jsCookie from 'js-cookie';
+	import Cookies from 'js-cookie';
 	import { isToastOpen } from '$lib/stores/toast';
 	import { onMount } from 'svelte';
 	import {
@@ -29,7 +29,7 @@
 	}
 
 	async function postDat() {
-		jsCookie.remove('token');
+		Cookies.remove('token');
 		var res = await postData(
 			{
 				scope: 'sign_in',
@@ -40,7 +40,7 @@
 			}
 		);
 		console.log(res);
-		jsCookie.set('token', JSON.stringify(res.res));
+		Cookies.set('token', JSON.stringify(res.res));
 	}
 	async function fetchData() {
 		title = module;
