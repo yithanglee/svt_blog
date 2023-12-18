@@ -3,6 +3,17 @@
 	import { onMount } from 'svelte';
 	/** @type {import('./$types').PageData} */
 	export let data;
+
+	import { goto } from '$app/navigation';
+	import { buildQueryString, postData } from '$lib/index.js';
+	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
+	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+	function viewTransfer(data) {
+		console.log(data);
+		console.log('transfer approved!');
+		goto('/products/' + data.id + '/countries');
+	}
+
 	onMount(async () => {});
 
 	let module = data.module,
@@ -16,19 +27,15 @@
 		inputs: inputs,
 		search_queries: null,
 		model: module,
-		preloads: ['country'],
+		preloads: [],
 		customCols: [
 			{
 				title: 'General',
-				list: ['id', 'name' ,{
-						label: 'country_id',
-						selection: 'Country',
-                        module: 'Country',
-						customCols: null,
-						search_queries: ['a.name'],
-						newData: 'name',
-						title_key: 'name'
-					}]
+				list: [
+					'id',
+					'name',
+				
+				]
 			},
 			{
 				title: 'Price',
@@ -41,12 +48,14 @@
 				]
 			}
 		],
+		buttons: [		{ name: 'View', onclickFn: viewTransfer }],
+		
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Name', data: 'name' },
 			{ label: 'Retail Price (RP)', data: 'retail_price' },
 			{ label: 'Point Value', data: 'point_value' },
-			{ label: 'Country', data: 'name', through: ['country'] }
+			// { label: 'Country', data: 'name', through: ['country'] }
 		]
 	}}
 />
