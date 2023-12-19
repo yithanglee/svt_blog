@@ -90,6 +90,7 @@
 			},
 			{ label: 'Method', data: 'payment_method' },
 			{ label: 'From', data: 'username', through: ['user'] },
+			{ label: 'IC Name', data: 'fullname', through: ['user'] },
 			{ label: 'Amount', data: 'amount' },
 			{ label: 'Remarks', data: 'remarks' }
 		]
