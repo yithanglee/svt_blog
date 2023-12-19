@@ -107,7 +107,7 @@
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
-
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
 			{ label: 'Sale Date', data: 'sale_date' },
 			{ label: 'Ref', data: 'shipping_ref' },
 			{

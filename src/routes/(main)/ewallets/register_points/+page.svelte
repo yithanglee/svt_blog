@@ -72,6 +72,7 @@
 		buttons: [{ name: 'Approve', onclickFn: approveTransfer, showCondition: showCondition }],
 		columns: [
 			{ label: 'ID', data: 'id' },
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
 			{
 				label: 'Approved?',
 				data: 'is_approved',

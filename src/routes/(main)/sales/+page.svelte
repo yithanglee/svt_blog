@@ -66,6 +66,7 @@
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
 			// {
 			// 	label: 'Delivery Ref',
 			// 	data: 'delivery_ref',

@@ -28,6 +28,23 @@
 			return '';
 		}
 	}
+	function formatDateTime(data, key, offset) {
+		console.log(item);
+		console.log(data);
+		console.log(offset);
+		offset = offset == null ? 0 : offset;
+
+		var str = data[key];
+		str = Date.parse(str);
+		var dt = new Date(str);
+		dt.setTime(dt.getTime() + offset * 60 * 60 * 1000);
+		var edate = dt.toGMTString().split(',')[1].split(' ').splice(0, 4).join(' ');
+		var etime = dt.toLocaleTimeString();
+		console.log(edate);
+		console.log(etime);
+
+		return edate + " " + etime;
+	}
 </script>
 
 {#if col.subtitle != null}
@@ -36,14 +53,15 @@
 	<small class="font-extralight dark:text-white">
 		{item[col.subtitle.data]}
 	</small>
+{:else if col.formatDateTime}
+	{formatDateTime(item, col.data, col.offset)}
 {:else if col.through != null}
 	{checkAssoc(item, col.data, col.through)}
 {:else if col.color != null}
 	<Badge class="capitalize" color={badgeColor(item[col.data], col.color)}>{item[col.data]}</Badge>
 {:else if col.showImg != null}
-	<div style="width: 80px;" >
-		<Img   class="rounded-lg" src="{url}{item[col.data]}" />
-
+	<div style="width: 80px;">
+		<Img class="rounded-lg" src="{url}{item[col.data]}" />
 	</div>
 {:else if col.isBadge}
 	<Badge class="capitalize" color="pink"
