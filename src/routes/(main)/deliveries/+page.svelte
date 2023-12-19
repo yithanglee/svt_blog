@@ -13,18 +13,18 @@
 		window.open(url + '/pdf?type=do&id=' + data.id, '_blank').focus();
 	}
 	function viewDO(data, checkPage, confirmModal) {
-        goto("/deliveries/" + data.id)
+		goto('/deliveries/' + data.id);
 	}
 	function showCondition(data) {
 		var bool = false;
-		if (data.status == "processing") {
+		if (data.status == 'processing') {
 			bool = true;
 		}
 		return bool;
 	}
 	function showCondition2(data) {
 		var bool = false;
-		if (data.status == "pending_delivery") {
+		if (data.status == 'pending_delivery') {
 			bool = true;
 		}
 		return bool;
@@ -49,17 +49,27 @@
 		console.log(data);
 		console.log('transfer approved!');
 
-		confirmModal(true, 'Are you sure to mark this order as sent?', () => {
-			postData(
-				{ scope: 'mark_do', id: data.id, status: 'sent' },
-				{
-					endpoint: url + '/svt_api/webhook',
-					successCallback: () => {
-						checkPage();
+		confirmModal(
+			true,
+			`
+			<label class="my-4 text-sm font-medium block 
+			text-gray-900 dark:text-gray-300 space-y-2">
+			<span>Shipping Ref</span>  <input name="shipping_ref" 
+			placeholder="" type="text" class="block w-75 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-500 text-sm rounded-lg"> </label>
+			<span class="">Are you sure to mark this order as sent?</span>`,
+			() => {
+				var dom = document.querySelector("input[name='shipping_ref']");
+				postData(
+					{ scope: 'mark_do', shipping_ref: dom.value, id: data.id, status: 'sent' },
+					{
+						endpoint: url + '/svt_api/webhook',
+						successCallback: () => {
+							checkPage();
+						}
 					}
-				}
-			);
-		});
+				);
+			}
+		);
 	}
 </script>
 
@@ -74,28 +84,32 @@
 		model: 'Sale',
 		preloads: ['user', 'sales_person', 'payment'],
 		buttons: [
-            
-            { name: 'Preview', onclickFn: viewDO },
+			{ name: 'Preview', onclickFn: viewDO },
 			{ name: 'Download DO (PDF)', onclickFn: downloadDO },
-			{ name: 'Mark Pending Delivery', onclickFn: doMarkPendingDelivery, showCondition: showCondition },
-			{ name: 'Mark Sent', onclickFn: doMarkSent , showCondition: showCondition2}
+			{
+				name: 'Mark Pending Delivery',
+				onclickFn: doMarkPendingDelivery,
+				showCondition: showCondition
+			},
+			{ name: 'Mark Sent', onclickFn: doMarkSent, showCondition: showCondition2 }
 		],
 		customCols: [
 			{
 				title: 'Order',
 				list: [
 					'id',
-					
-                    { label: 'remarks', editor2: true },
+					'shipping_method',
+					'shipping_company',
+					'shipping_ref',
+					{ label: 'remarks', editor2: true }
 				]
-			},
-			
+			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
 
 			{ label: 'Sale Date', data: 'sale_date' },
-	
+			{ label: 'Ref', data: 'shipping_ref' },
 			{
 				label: 'Status',
 				data: 'status',

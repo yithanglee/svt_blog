@@ -296,7 +296,7 @@
 
 	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
 		{#if modalMessage != null}
-			{modalMessage}
+			{@html modalMessage}
 		{:else}
 			Are you sure you want to delete?
 		{/if}
