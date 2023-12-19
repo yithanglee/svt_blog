@@ -6,7 +6,17 @@
 	/** @type {import('./$types').PageData} */
 	import { Icon } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
-	export let data, input, newData, name, module, parent, parent_id, search_queries, title_key, selection;
+	export let data,
+		input,
+		newData,
+		dataList,
+		name,
+		module,
+		parent,
+		parent_id,
+		search_queries,
+		title_key,
+		selection;
 
 	let dropdownOpen = false,
 		group1 = 0,
@@ -77,6 +87,7 @@
 		title = name;
 	}
 	onMount(() => {
+		console.log(dataList);
 		try {
 			console.log(typeof selection == 'string');
 			console.log(title_key);
@@ -100,16 +111,28 @@
 </script>
 
 <div>
-	<p class="mb-4 font-semibold text-gray-900 dark:text-white"></p>
+	<p class="mb-4 font-semibold text-gray-900 dark:text-white" />
 	<ul
 		class="w-48 bg-white rounded-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-600 divide-y divide-gray-200 dark:divide-gray-600"
 	>
 		{#each items as item}
-			<li>
-				<Checkbox class="p-3" name={inputName(input.key, item.id)} bind:value={data[input.key]}
-					>{item.name}</Checkbox
-				>
-			</li>
+			{#if dataList != null}
+				{#if dataList != []}
+					{#if dataList
+						.map((v, i) => {
+							return v.id;
+						})
+						.includes(item.id)}
+						<Checkbox class="p-3" checked name={inputName(input.key, item.id)}>{item.name}</Checkbox
+						>
+					{:else}
+						<Checkbox class="p-3" name={inputName(input.key, item.id)}>{item.name}</Checkbox>
+					{/if}
+				{/if}
+			{:else}
+				<Checkbox class="p-3" name={inputName(input.key, item.id)}>{item.name}</Checkbox>
+			{/if}
+			<li />
 		{/each}
 		<!-- <li><Checkbox class="p-3">Vue JS</Checkbox></li> -->
 	</ul>

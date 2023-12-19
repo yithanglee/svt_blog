@@ -2,7 +2,13 @@
 	import Datatable from '$lib/components/Datatable.svelte';
 	/** @type {import('./$types').PageData} */
 	export let data;
-	let inputs = data.inputs;
+	let inputs = data.inputs, app_routes = data.appRoutes;
+
+
+
+
+
+
 </script>
 
 <Datatable
@@ -23,6 +29,7 @@
 						label: 'AppRoute',
 						selection: 'AppRoute',
 						multiSelection: true,
+						dataList: app_routes.app_routes,
 						module: 'AppRoute',
 						parentId: data.role_id,
 						parent_module: 'RoleAppRoute'

@@ -42,6 +42,7 @@
 			<MultiSelection
 				{data}
 				{input}
+				dataList={key.dataList}
 				parent_id={key.parentId}
 				parent={module}
 				parent_module={key.parent_module}

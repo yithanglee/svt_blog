@@ -73,6 +73,7 @@
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
+			{ label: 'Uploaded', data: 'img_url', showPreview: true},
 			{
 				label: 'Approved?',
 				data: 'is_approved',
