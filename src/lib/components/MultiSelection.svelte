@@ -56,7 +56,8 @@
 		};
 		const queryString = buildQueryString(apiData);
 		try {
-			const response = await fetch('/api/datatable/' + module + `?${queryString}`, {
+			let blog_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+			const response = await fetch(blog_url + '/api/' + module + `?${queryString}`, {
 				headers: {
 					'Content-Type': 'application/json'
 				}

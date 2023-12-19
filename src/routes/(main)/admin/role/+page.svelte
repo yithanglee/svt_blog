@@ -10,7 +10,7 @@
 	function viewTransfer(data) {
 		console.log(data);
 		console.log('transfer approved!');
-		goto('/admin/role/' + data.id + '/app_routes');
+		goto('/admin/role/' + data.id + '/app_routes2');
 	}
 </script>
 
