@@ -5,9 +5,9 @@
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import Cookies from 'js-cookie';
-	let username = '', cookieName = '_commerce_front_key',
+	let username = 'summer', cookieName = '_commerce_front_key',
 		email = '',
-		password = '';
+		password = '123';
 
   
 	async function handleLogin() {
@@ -21,7 +21,7 @@
 		if (res.status == 'ok') {
 			// Set user session/token/cookie
 	
-		await Cookies.set('_commerce_front_key', res.res);
+		await Cookies.set('_commerce_front_key', res.res , { sameSite: 'Lax' });
 
 			// Redirect to dashboard
 			console.log('login user');

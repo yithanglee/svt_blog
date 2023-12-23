@@ -26,7 +26,7 @@
 		items = [],
 		cac_url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT,
 		query,
-		itemsPerPage = 20;
+		itemsPerPage = 100;
 	function inputName(key, value) {
 		return parent + '[' + key + '][' + parent_id + '][' + value + ']';
 	}

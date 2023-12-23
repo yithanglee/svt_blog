@@ -13,29 +13,32 @@
 		appendQueries: { product_id: data.product_id },
 		inputs: inputs,
 		search_queries: null,
-		model: 'ProductCountry',
-		preloads: ['product', 'country'],
+		model: 'ProductStock',
+		preloads: ['product', 'stock'],
 		customCols: [
 			{
 				title: 'General',
 				list: [
 					'id',
+				
 					{
-						label: 'Country',
-						selection: 'Country',
+						label: 'Stock',
+						selection: 'Stock',
 						multiSelection: true,
-						dataList: dataList.countries,
-						module: 'Country',
+						dataList: dataList.stocks,
+						module: 'Stock',
 						parentId: data.product_id,
-						parent_module: 'ProductCountry'
-					}
+						parent_module: 'ProductStock'
+					},
+					{label: 'qty', expose: true},
 				]
 			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Product', data: 'name', through: ['product'] },
-			{ label: 'Country', data: 'name', through: ['country'] }
+			{ label: 'Stock', data: 'name', through: ['stock'] },
+			{ label: 'Qty', data: 'qty' }
 			// { label: 'URL', data: 'route', through: ['app_route'] }
 		]
 	}}

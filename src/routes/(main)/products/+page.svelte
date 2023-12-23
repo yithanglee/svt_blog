@@ -8,9 +8,10 @@
 	import { buildQueryString, postData } from '$lib/index.js';
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
-	function viewTransfer(data) {
-		console.log(data);
-		console.log('transfer approved!');
+	function viewStocks(data) {
+		goto('/products/' + data.id + '/stocks');
+	}
+	function viewCountries(data) {
 		goto('/products/' + data.id + '/countries');
 	}
 
@@ -31,11 +32,7 @@
 		customCols: [
 			{
 				title: 'General',
-				list: [
-					'id',
-					'name',
-				
-				]
+				list: ['id', 'name']
 			},
 			{
 				title: 'Price',
@@ -48,13 +45,16 @@
 				]
 			}
 		],
-		buttons: [		{ name: 'View', onclickFn: viewTransfer }],
-		
+		buttons: [
+			{ name: 'Countries', onclickFn: viewCountries },
+			{ name: 'Stocks', onclickFn: viewStocks }
+		],
+
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Name', data: 'name' },
 			{ label: 'Retail Price (RP)', data: 'retail_price' },
-			{ label: 'Point Value', data: 'point_value' },
+			{ label: 'Point Value', data: 'point_value' }
 			// { label: 'Country', data: 'name', through: ['country'] }
 		]
 	}}
