@@ -4,7 +4,7 @@ import { isToastOpen } from '$lib/stores/toast';
 import Cookies from 'js-cookie';
 export async function postData(data, options) {
     let res
-    let cookieToken = Cookies.get('_commerce_front_key');
+    let cookieToken = Cookies.get('_commerce_front_key2');
     let token = cookieToken != null ? cookieToken : 'empty';
     var default_options = {
         method: 'POST',
@@ -29,7 +29,8 @@ export async function postData(data, options) {
         const response = await fetch(options.endpoint != null ? options.endpoint : default_options.endpoint, requestOptions);
         console.log()
         if (response.status == 403) {
-            Cookies.remove('_commerce_front_key');
+        
+            Cookies.remove('_commerce_front_key2');
       
             goto("/")
         }

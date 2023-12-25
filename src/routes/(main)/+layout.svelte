@@ -22,6 +22,7 @@
 	import { goto } from '$app/navigation';
 	let styles = ['sidebar', 'drawer'],
 		style = styles[1],
+		app_routes = [],
 		loggedIn = false,
 		spanClass = 'flex-1 ml-3 whitespace-nowrap',
 		hidden2 = true,
@@ -35,7 +36,7 @@
 	function logout() {
 		session.logout();
 		Cookies.remove('user');
-		Cookies.remove('_commerce_front_key');
+		Cookies.remove('_commerce_front_key2');
 
 		setTimeout(() => {
 			goto('/');
@@ -49,10 +50,12 @@
 	let user = { username: 'Guest' };
 
 	onMount(async () => {
+		console.log(data.app_routes);
 		if (data.needLogin) {
 			relogin();
 		} else {
 			loggedIn = true;
+			app_routes = data.app_routes;
 		}
 	});
 	onDestroy(() => {});
@@ -86,18 +89,22 @@
 								{#each menus as menu}
 									{#if !menu.hidden}
 										{#if menu.children}
-											<SidebarDropdownWrapper label={menu.title}>
-												<svelte:fragment slot="icon">
-													<Icon
-														name="clipboard-solid"
-														class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-													/>
-												</svelte:fragment>
-												{#each menu.children as child}
-													<SidebarDropdownItem label={child.title} href={child.path} />
-												{/each}
-											</SidebarDropdownWrapper>
-										{:else}
+											{#if app_routes.some((app_route) => app_route.name === menu.title)}
+												<SidebarDropdownWrapper label={menu.title}>
+													<svelte:fragment slot="icon">
+														<Icon
+															name="clipboard-solid"
+															class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+														/>
+													</svelte:fragment>
+													{#each menu.children as child}
+														{#if app_routes.some((app_route) => app_route.route === child.path)}
+															<SidebarDropdownItem label={child.title} href={child.path} />
+														{/if}
+													{/each}
+												</SidebarDropdownWrapper>
+											{/if}
+										{:else if app_routes.some((app_route) => app_route.route === menu.path)}
 											<SidebarItem label={menu.title} {spanClass} href={menu.path}>
 												<svelte:fragment slot="icon">
 													<Icon
@@ -162,18 +169,22 @@
 						{#each menus as menu}
 							{#if !menu.hidden}
 								{#if menu.children}
-									<SidebarDropdownWrapper label={menu.title}>
-										<svelte:fragment slot="icon">
-											<Icon
-												name="clipboard-solid"
-												class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-											/>
-										</svelte:fragment>
-										{#each menu.children as child}
-											<SidebarDropdownItem label={child.title} href={child.path} />
-										{/each}
-									</SidebarDropdownWrapper>
-								{:else}
+									{#if app_routes.some((app_route) => app_route.name === menu.title)}
+										<SidebarDropdownWrapper label={menu.title}>
+											<svelte:fragment slot="icon">
+												<Icon
+													name="clipboard-solid"
+													class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+												/>
+											</svelte:fragment>
+											{#each menu.children as child}
+												{#if app_routes.some((app_route) => app_route.route === child.path)}
+													<SidebarDropdownItem label={child.title} href={child.path} />
+												{/if}
+											{/each}
+										</SidebarDropdownWrapper>
+									{/if}
+								{:else if app_routes.some((app_route) => app_route.route === menu.path)}
 									<SidebarItem label={menu.title} {spanClass} href={menu.path}>
 										<svelte:fragment slot="icon">
 											<Icon

@@ -7,7 +7,7 @@ export const load = async ({ fetch, params, parent }) => {
 
     let url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
     let inputs = await genInputs(url, 'ProductCountry')
-    const queryString = buildQueryString({ scope: "get_product_stocks", id: params["product_id"] });
+    const queryString = buildQueryString({ scope: "get_product_countries", id: params["product_id"] });
     const response = await fetch(url + '/svt_api/webhook?' + queryString, {
         headers: {
             'Content-Type': 'application/json'

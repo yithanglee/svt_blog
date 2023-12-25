@@ -5,9 +5,9 @@
 	import { Card, Button, Label, Input, Checkbox } from 'flowbite-svelte';
 	import { session } from '$lib/stores/session';
 	import Cookies from 'js-cookie';
-	let username = 'summer', cookieName = '_commerce_front_key',
+	let username = '', cookieName = '_commerce_front_key',
 		email = '',
-		password = '123';
+		password = '';
 
   
 	async function handleLogin() {
@@ -20,17 +20,18 @@
 	
 		if (res.status == 'ok') {
 			// Set user session/token/cookie
-	
-		await Cookies.set('_commerce_front_key', res.res , { sameSite: 'Lax' });
+			// await Cookies.set('_commerce_front_key', res.res );
+		await Cookies.set('_commerce_front_key2', res.res , { sameSite: 'Lax' });
 
 			// Redirect to dashboard
 			console.log('login user');
 			session.login({
 				username: username,
 				token: JSON.stringify(res.res),
-				role_app_routes: res.role_app_routes
+				role_app_routes: res.role_app_routes,
+				id: res.user_id
 			});
-			let cookieToken = await Cookies.get('_commerce_front_key');
+			let cookieToken = await Cookies.get('_commerce_front_key2');
 			console.log("check cookite js")
 			console.log(cookieToken);
 			goto('/dashboard');
@@ -38,8 +39,8 @@
 			session.logout();
 			// loggedIn = 'false';
 			Cookies.remove('user');
-			Cookies.remove('_commerce_front_key');
-			await Cookies.remove('_commerce_front_key')
+			Cookies.remove('_commerce_front_key2');
+			await Cookies.remove('_commerce_front_key2')
 			goto('/');
 		}
 	}
@@ -60,10 +61,7 @@
 						required
 					/>
 				</Label>
-				<Label class="space-y-2">
-					<span>Email</span>
-					<Input type="email" bind:value={email} name="email" placeholder="name@company.com" />
-				</Label>
+			
 				<Label class="space-y-2">
 					<span>Your password</span>
 					<Input
@@ -74,24 +72,9 @@
 						required
 					/>
 				</Label>
-				<div class="flex items-start">
-					<Checkbox>Remember me</Checkbox>
-					<a
-						href="/"
-						class="ml-auto text-sm text-primary-700 hover:underline dark:text-primary-500"
-					>
-						Lost password?
-					</a>
-				</div>
+				
 				<Button type="submit" class="w-full">Login to your account</Button>
-				<div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-					Not registered? <a
-						href="/"
-						class="text-primary-700 hover:underline dark:text-primary-500"
-					>
-						Create account
-					</a>
-				</div>
+				
 			</div>
 		</Card>
 	</form>

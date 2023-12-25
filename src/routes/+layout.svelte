@@ -32,7 +32,7 @@
 		session.logout();
 		loggedIn = 'false';
 		Cookies.remove('user');
-		Cookies.remove('_commerce_front_key');
+		Cookies.remove('_commerce_front_key2');
 		goto('/');
 	}
 	function appendClass(existing_class) {

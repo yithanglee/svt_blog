@@ -10,22 +10,22 @@ export async function load({ locals }) {
 
     console.log("check if this load 1")
     console.log(locals)
-    let session_user, user = { username: 'Guest' }, needLogin = false;
+    let app_routes = [], session_user, user = { username: 'Guest' }, needLogin = false;
 
 
     function relogin() {
         session.logout();
-		Cookies.remove('user');
-        Cookies.remove('_commerce_front_key');
+        Cookies.remove('user');
+        Cookies.remove('_commerce_front_key2');
         needLogin = true;
     }
 
 
-    let cookieToken = await Cookies.get('_commerce_front_key');
+    let cookieToken = await Cookies.get('_commerce_front_key2');
     console.log("from main layout js")
     console.log(cookieToken);
     console.log(session.user())
- 
+
 
     if (cookieToken != null) {
         const response = await fetch((PHX_HTTP_PROTOCOL + PHX_ENDPOINT) + '/svt_api/webhook?scope=get_cookie_user&cookie=' + cookieToken, {
@@ -33,7 +33,7 @@ export async function load({ locals }) {
                 'Content-Type': 'application/json'
             }
         });
-    
+
         if (response.ok) {
             // use cookie to call the user
             // from the token get the username data
@@ -44,8 +44,12 @@ export async function load({ locals }) {
 
                     username: res.user.username,
                     token: cookieToken,
-                    role_app_routes: res.user.role.app_routes
+                    role_app_routes: res.user.role.app_routes,
+                    id: res.user_id
                 });
+
+                app_routes = res.user.role.app_routes;
+               
             } else {
 
                 relogin();
@@ -72,6 +76,7 @@ export async function load({ locals }) {
 
 
     return {
+        app_routes: app_routes,
         user: user, needLogin: needLogin
 
     };

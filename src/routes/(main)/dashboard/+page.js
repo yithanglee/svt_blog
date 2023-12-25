@@ -1,10 +1,11 @@
 /** @type {import('./$types').PageLoad} */
 import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
-import { buildQueryString, postData } from '$lib/index.js';
+import { buildQueryString, postData, genInputs } from '$lib/index.js';
 	
 export const load = async ({ fetch, params, parent }) => {
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
+    let inputs = await genInputs(url, 'User')
     const apiData = {
         scope: 'yearly_sales_performance'
     };
@@ -16,7 +17,7 @@ export const load = async ({ fetch, params, parent }) => {
     });
     if (response.ok) {
         let res = await response.json();
-        return {
+        return {inputs: inputs,
             chartData: res
         };
     }

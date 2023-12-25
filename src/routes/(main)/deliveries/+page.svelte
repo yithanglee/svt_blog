@@ -4,9 +4,14 @@
 	import Datatable from '$lib/components/Datatable.svelte';
 	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
+	import { Button, Modal, Label, Input, Checkbox } from 'flowbite-svelte';
+	import FormInput from '$lib/components/FormInput.svelte';
+
 	export let data;
 
-	let inputs = data.inputs;
+	let inputs = data.inputs, checkPage, 
+		fdata = { pick_up_point_id: 1 , shipping_ref: null},
+		formModal = false;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
 	function downloadDO(data, checkPage, confirmModal) {
@@ -45,7 +50,14 @@
 			);
 		});
 	}
-	function doMarkSent(data, checkPage, confirmModal) {
+	function doMarkSent(data, zcheckPage) {
+		console.log('do mar');
+		console.log(data);
+		fdata = data;
+		checkPage = zcheckPage;
+		formModal = true;
+	}
+	function _doMarkSent(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
 
@@ -71,8 +83,80 @@
 			}
 		);
 	}
+	function tryPost() {
+		postData(
+			{ scope: 'mark_do', id: fdata.id, shipping_ref: fdata.shipping_ref, location_id: fdata.pick_up_point_id, status: 'sent' },
+			{
+				endpoint: url + '/svt_api/webhook',
+				successCallback: () => {
+					checkPage();
+					formModal = false;
+				}
+			}
+		);
+	}
+	function filteredInput(key) {
+		let res = inputs.filter((v, i) => {
+			return v.key == key;
+		});
+
+		if (res) {
+			return res[0];
+		} else {
+			return null;
+		}
+	}
 </script>
 
+<Modal bind:open={formModal} size="lg" autoclose={false} class="w-full" outsideclose>
+	<form class="flex flex-col space-y-6" id="currentForm" action="#">
+		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Confirmation</h3>
+		<p class="">Are you sure to mark this order as sent?</p>
+		<div
+			class="p-4 bg-gray-50 rounded-lg dark:bg-gray-800 mt-4"
+			role="tabpanel"
+			aria-labelledby="id-tab"
+		>
+			<FormInput
+				module={'Sale'}
+				key={{
+					label: 'shipping_ref',
+					expose: true
+				}}
+				data={fdata}
+				input={filteredInput({
+					label: 'shipping_ref',
+					expose: true
+				})}
+			/>
+			<FormInput
+				module={'Sale'}
+				key={{
+					label: 'pick_up_point_id',
+					selection: 'PickUpPoint',
+					module: 'PickUpPoint',
+					customCols: null,
+					search_queries: ['a.name'],
+					newData: 'name',
+					title_key: 'name'
+				}}
+				data={fdata}
+				input={filteredInput({
+					label: 'pick_up_point_id',
+					selection: 'PickUpPoint',
+					module: 'PickUpPoint',
+					customCols: null,
+					search_queries: ['a.name'],
+					newData: 'name',
+					title_key: 'name'
+				})}
+			/>
+		</div>
+	</form>
+	<svelte:fragment slot="footer">
+		<Button on:click={() => tryPost()}>Submit</Button>
+	</svelte:fragment>
+</Modal>
 <Datatable
 	data={{
 		inputs: inputs,
@@ -82,7 +166,7 @@
 		]),
 		search_queries: ['a.id|b.username|b.fullname'],
 		model: 'Sale',
-		preloads: ['user', 'sales_person', 'payment'],
+		preloads: ['user', 'sales_person', 'payment', 'country'],
 		buttons: [
 			{ name: 'Preview', onclickFn: viewDO },
 			{ name: 'Download DO (PDF)', onclickFn: downloadDO },
@@ -107,7 +191,8 @@
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
-			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
+			{ label: 'Country', data: 'name', through: ['country'] },
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
 			{ label: 'Sale Date', data: 'sale_date' },
 			{ label: 'Ref', data: 'shipping_ref' },
 			{
@@ -141,6 +226,7 @@
 					}
 				]
 			},
+
 			{ label: 'User', data: 'username', through: ['user'] },
 			{ label: 'Sales Person', data: 'username', through: ['sales_person'] }
 		]

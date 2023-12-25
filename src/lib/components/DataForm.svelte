@@ -9,7 +9,7 @@
 	import { Icon } from 'flowbite-svelte-icons';
 	import { postData } from '$lib/index.js';
 
-	export let data, inputs, customCols, module, postFn, showNew;
+	export let data, inputs, customCols, module, postFn, showNew, style;
 
 	console.log('customCols');
 	console.log(customCols);
@@ -122,17 +122,87 @@
 	});
 </script>
 
-{#if showNew}
-	<Button
-		on:click={() => {
-			formModal = true;
-			data = { id: 0 };
-		}}
-		class="">New</Button
-	>
-{/if}
+{#if style == null}
+	{#if showNew}
+		<Button
+			on:click={() => {
+				formModal = true;
+				data = { id: 0 };
+			}}
+			class="">New</Button
+		>
+	{/if}
 
-<Modal bind:open={formModal} size="lg" autoclose={false} class="w-full" outsideclose>
+	<Modal bind:open={formModal} size="lg" autoclose={false} class="w-full" outsideclose>
+		<form class="flex flex-col space-y-6" id="currentForm" action="#">
+			<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">{module} Form</h3>
+
+			<ul class="flex flex-wrap space-x-2 -mb-px">
+				{#if customCols.length > 0}
+					{#each customCols as customCol}
+						{#if customCols[0].title == customCol.title}
+							<li class="group" role="presentation">
+								<button
+									on:click={selectTab(customCol.title)}
+									type="button"
+									role="tab"
+									aria-labelledby={customCol.title}
+									class={tabClass(customCol.title)}
+								>
+									<div class="flex items-center gap-2">
+										<Icon name="grid-solid" size="sm" />
+										{customCol.title}
+									</div></button
+								>
+								<div class="hidden tab_content_placeholder" />
+							</li>
+						{:else}
+							<li class="group" role="presentation">
+								<button
+									on:click={selectTab(customCol.title)}
+									type="button"
+									role="tab"
+									aria-labelledby={customCol.title}
+									class={tabClass(customCol.title)}
+									><div class="flex items-center gap-2">
+										<Icon name="grid-solid" size="sm" />
+										{customCol.title}
+									</div></button
+								>
+							</li>
+						{/if}
+					{/each}
+				{/if}
+			</ul>
+			<div
+				class="p-4 bg-gray-50 rounded-lg dark:bg-gray-800 mt-4"
+				role="tabpanel"
+				aria-labelledby="id-tab"
+			>
+				{#if customCols.length > 0}
+					{#each customCols as customCol}
+						{#if customCols[0].title == customCol.title}
+							<div target={customCol.title} class=" tab-content flex flex-wrap w-full gap-2">
+								{#each customCol.list as key}
+									<FormInput {module} {key} {data} input={filteredInput(key)} />
+								{/each}
+							</div>
+						{:else}
+							<div target={customCol.title} class="hidden tab-content flex flex-wrap w-full gap-2">
+								{#each customCol.list as key}
+									<FormInput {module} {key} {data} input={filteredInput(key)} />
+								{/each}
+							</div>
+						{/if}
+					{/each}
+				{/if}
+			</div>
+		</form>
+		<svelte:fragment slot="footer">
+			<Button on:click={() => tryPost()}>Submit</Button>
+		</svelte:fragment>
+	</Modal>
+{:else}
 	<form class="flex flex-col space-y-6" id="currentForm" action="#">
 		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">{module} Form</h3>
 
@@ -197,7 +267,8 @@
 			{/if}
 		</div>
 	</form>
-	<svelte:fragment slot="footer">
+	<div class="my-4">
+
 		<Button on:click={() => tryPost()}>Submit</Button>
-	</svelte:fragment>
-</Modal>
+	</div>
+{/if}

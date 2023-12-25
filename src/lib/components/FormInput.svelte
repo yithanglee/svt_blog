@@ -34,6 +34,8 @@
 				<Input type="text" name={inputName(input.key)} bind:value={data[input.key]} />
 			</Label>
 		</div>
+	{:else if key.hidden}
+		<Input type="hidden" name={inputName(input.key)} bind:value={key.value} />
 	{:else if key.multiSelection != null}
 		<div class="w-full mx-4 my-2">
 			<Label class="space-y-2 mb-3">
