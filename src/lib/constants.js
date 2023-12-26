@@ -18,7 +18,7 @@ export const MENUS = [
         ]
     },
     { path: '/announcements', title: 'Announcements', icon: 'book-solid' },
-
+    { path: '/slides', title: 'Slides', icon: 'book-solid' },
     {
         path: '#', title: 'Commission', icon: null, children: [
             { path: '/rewards/summary', title: 'Commission Summary', icon: 'camera-foto-solid' },
