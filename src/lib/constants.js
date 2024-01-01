@@ -39,6 +39,7 @@ export const MENUS = [
         ]
     },
     { path: '/deliveries', title: 'Deliveries', icon: 'book-solid' },
+    { path: '/merchants', title: 'Merchants', icon: 'book-solid' },
     { path: '/sales', title: 'Sales', icon: 'book-solid' },
     {
         path: '#', title: 'Stocks', icon: null, children: [

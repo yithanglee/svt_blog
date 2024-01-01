@@ -11,6 +11,9 @@
 
 	function showCondition(data) {
 		var bool = false;
+		if (data.payment == null ) {
+			return bool;
+		}
 		if (data.payment.billplz_code != null) {
 			bool = true;
 		}
