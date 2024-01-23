@@ -42,7 +42,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{appendQueries: {merchant_id: "null"},
 		inputs: inputs,
 		join_statements: JSON.stringify([
 			// { corporate_account: 'corporate_account' },
