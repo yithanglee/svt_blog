@@ -48,7 +48,7 @@
 		model: 'Merchant',
 		preloads: ['user'],
 		buttons: [
-			{ name: 'Products', onclickFn: viewDO },
+			// { name: 'Products', onclickFn: viewDO },
 		
 			{
 				name: 'Approve Merchant',
@@ -58,11 +58,23 @@
 		],
 		customCols: [
 			{
-				title: 'Order',
+				title: 'General',
 				list: [
 					'id',
 					'name',
 					'remarks',
+					{ label: 'is_approved', boolean: true },
+					
+				]
+			},
+			{
+				title: 'CompanyDetails',
+				list: [
+					
+					'company_address',
+					'company_phone',
+					'company_email',
+					'company_reg_no',
 					{ label: 'is_approved', boolean: true },
 					
 				]
@@ -71,6 +83,8 @@
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
+			{ label: 'Logo', data: 'img_url', showImg: true},
+			{ label: 'SSM', data: 'company_ssm_image_url', showPreview: true},
             { label: 'Name', data: 'name' },
             	{ label: 'User', data: 'username', through: ['user'] },
 			{

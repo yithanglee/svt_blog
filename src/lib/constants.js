@@ -60,7 +60,7 @@ export const MENUS = [
     {
         path: '#', title: 'Ewallets', icon: null, children: [
             { path: '/ewallets/withdrawal_batches', title: 'Withdrawal', icon: 'camera-foto-solid' },
-
+            { path: '/ewallets/merchant_withdrawals', title: 'Merchant Withdrawal', icon: 'camera-foto-solid' },
             { path: '/ewallets', title: 'Ewallets', icon: 'book-solid' },
             { path: '/ewallets/transfers', title: 'Transfers', icon: 'camera-foto-solid' },
             { path: '/ewallets/register_points', title: 'Register Points', icon: 'camera-foto-solid' },
