@@ -20,7 +20,31 @@
 		}
 		return bool;
 	}
+	function showCondition2(data) {
+		var bool = false;
+		if (data.is_approved == true) {
+			bool = true;
+		}
+		return bool;
+	}
 	
+	function disableMerchant(data, checkPage, confirmModal) {
+		console.log(data);
+		console.log('transfer approved!');
+
+		confirmModal(true, 'Are you sure to disable this merchant?', () => {
+			postData(
+				{ scope: 'disable_merchant', id: data.id },
+				{
+					endpoint: url + '/svt_api/webhook',
+					successCallback: () => {
+						checkPage();
+					}
+				}
+			);
+		});
+	}
+
 	function approveMerchant(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
@@ -54,7 +78,14 @@
 				name: 'Approve Merchant',
 				onclickFn: approveMerchant,
 				showCondition: showCondition
+			},
+
+			{
+				name: 'Disable Merchant',
+				onclickFn: disableMerchant,
+				showCondition: showCondition2
 			}
+
 		],
 		customCols: [
 			{
