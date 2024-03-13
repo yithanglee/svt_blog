@@ -1,9 +1,10 @@
 <script>
 	/** @type {import('./$types').LayoutData} */
 	export let data;
-
+	import { postData } from '$lib/index.js';
+	import { MENUS, PHX_HTTP_PROTOCOL, PHX_ENDPOINT, PHX_COOKIE } from '$lib/constants';
 	import { session } from '$lib/stores/session';
-	import { MENUS } from '$lib/constants';
+
 	import {
 		CloseButton,
 		Button,
@@ -36,7 +37,7 @@
 	function logout() {
 		session.logout();
 		Cookies.remove('user');
-		Cookies.remove('_commerce_front_key2');
+		Cookies.remove(PHX_COOKIE);
 
 		setTimeout(() => {
 			goto('/');
@@ -45,6 +46,19 @@
 
 	function relogin() {
 		logout();
+	}
+
+	async function syncMenusToServer() {
+	
+		console.info(MENUS);
+		await postData(MENUS, {
+
+			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=sync_menu',
+			successCallback: () => {
+				// isLoading = false;
+				// isTableReloaded.activate();
+			}
+		});
 	}
 
 	let user = { username: 'Guest' };
@@ -78,6 +92,14 @@
 									</svelte:fragment>
 								</SidebarItem>
 								<SidebarItem label="Dashboard" href="/dashboard">
+									<svelte:fragment slot="icon">
+										<Icon
+											name="chart-pie-solid"
+											class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+										/>
+									</svelte:fragment>
+								</SidebarItem>
+								<SidebarItem label="Sync Menus" on:click={syncMenusToServer}>
 									<svelte:fragment slot="icon">
 										<Icon
 											name="chart-pie-solid"
@@ -158,6 +180,14 @@
 							</svelte:fragment>
 						</SidebarItem>
 						<SidebarItem label="Dashboard" href="/dashboard">
+							<svelte:fragment slot="icon">
+								<Icon
+									name="chart-pie-solid"
+									class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+								/>
+							</svelte:fragment>
+						</SidebarItem>
+						<SidebarItem label="Sync Menus" on:click={syncMenusToServer}>
 							<svelte:fragment slot="icon">
 								<Icon
 									name="chart-pie-solid"

@@ -27,94 +27,70 @@
 		title = '';
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
-	var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-	var values = [];
-	onMount(() => {
-		// const labels = Object.keys(chartData[0]).filter((key) => key !== 'year');
-		// const values = labels.map((label) => chartData[0][label]);
-		// console.log(labels);
-		// console.log(values);
-
-		months.forEach((v, i) => {
-			console.log(chartData[0][v]);
-			var vsales = 0;
-
-			if (chartData[0][v] != null) {
-				vsales = chartData[0][v];
-			}
-
-			// values = [vsales,  ...values];
-			values.push(vsales);
-		});
-
-		console.log(values);
-
-		const ctx = document.getElementById('myChart').getContext('2d');
-		chart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				labels: [
-					'jan',
-					'feb',
-					'mar',
-					'apr',
-					'may',
-					'jun',
-					'jul',
-					'aug',
-					'sep',
-					'oct',
-					'nov',
-					'dec'
-				],
-				datasets: [
-					{
-						label: 'Monthly Values',
-						data: values,
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
-						borderColor: 'rgba(75, 192, 192, 1)',
-						borderWidth: 1
-					}
-				]
-			}
-		});
-	});
+	onMount(() => {});
 	function refreshPage() {}
 	let staff;
 	session.subscribe((value) => {
 		console.log('subscribed session!');
 		console.log(value);
 		if (value && value.loggedIn) {
-		
 			staff = value.user;
-
 		}
-		
 	});
 
 	let showNew = false,
 		customCols = [
 			{
 				title: 'General',
-				list: [	
-						
-			
-					'id',
-					{ label: 'username', expose: true },
-					{ label: 'password', expose: true },
-				
-				]
+				list: ['id', { label: 'username', expose: true }, { label: 'password', expose: true }]
 			}
 		],
 		selectedData = staff,
 		inputs = data.inputs,
 		cac_url = url,
 		model = 'Staff';
+
+	let todos = localStorage.getItem('todos') ? JSON.parse(localStorage.getItem('todos')) : [];
+	let newTodo = '';
+
+	$: {
+		if (todos) {
+			localStorage.setItem('todos', JSON.stringify(todos));
+		}
+	}
+
+	function addTodo() {
+		if (newTodo.trim() === '') return;
+		todos = [...todos, { id: Date.now(), text: newTodo, done: false }]; // Updated to trigger reactivity
+		newTodo = ''; // Reset the input field
+	}
+
+	function removeTodo(todoId) {
+		todos = todos.filter((todo) => todo.id !== todoId); // Updated to trigger reactivity
+	}
+
+	function toggleDone(todoId) {
+		todos = todos.map((todo) => (todo.id === todoId ? { ...todo, done: !todo.done } : todo)); // Updated to trigger reactivity
+	}
 </script>
 
 <div class="flex sm:grid grid-cols-12 flex-col-reverse">
 	<div class="col-span-8 mx-4">
 		<canvas id="myChart" />
+
+		<h1>Todo List</h1>
+		<input type="text" bind:value={newTodo} placeholder="Add new todo" />
+		<button on:click={addTodo}>Add</button>
+
+		<ul>
+			{#each todos as todo}
+				<li class:done={todo.done}>
+					<input type="checkbox" checked={todo.done} on:change={() => toggleDone(todo.id)} />
+					{todo.text}
+					<button on:click={() => removeTodo(todo.id)}>Remove</button>
+				</li>
+			{/each}
+		</ul>
 	</div>
 	<div class="col-span-4 p-4 mx-4">
 		<DataForm

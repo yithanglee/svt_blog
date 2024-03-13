@@ -1,6 +1,7 @@
 /** @type {import('./$types').LayoutLoad} */
 import { session } from '$lib/stores/session';
 import Cookies from 'js-cookie';
+import {  PHX_COOKIE} from '$lib/constants';
 import { redirect } from "@sveltejs/kit";
 import { onDestroy } from 'svelte';
 import { isToastOpen } from '$lib/stores/toast';
@@ -16,12 +17,12 @@ export async function load({ locals }) {
     function relogin() {
         session.logout();
         Cookies.remove('user');
-        Cookies.remove('_commerce_front_key2');
+        Cookies.remove(PHX_COOKIE);
         needLogin = true;
     }
 
 
-    let cookieToken = await Cookies.get('_commerce_front_key2');
+    let cookieToken = await Cookies.get(PHX_COOKIE);
     console.log("from main layout js")
     console.log(cookieToken);
     console.log(session.user())

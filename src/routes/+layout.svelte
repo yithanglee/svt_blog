@@ -1,5 +1,6 @@
 <script>
 	import { Toast, DarkMode, Button } from 'flowbite-svelte';
+	import {  PHX_COOKIE} from '$lib/constants';
 	import { session } from '$lib/stores/session';
 	import { isToastOpen } from '$lib/stores/toast';
 	import { Icon } from 'flowbite-svelte-icons';
@@ -32,7 +33,7 @@
 		session.logout();
 		loggedIn = 'false';
 		Cookies.remove('user');
-		Cookies.remove('_commerce_front_key2');
+		Cookies.remove(PHX_COOKIE);
 		goto('/');
 	}
 	function appendClass(existing_class) {
