@@ -14,7 +14,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{showNew: true,
 		inputs: inputs,
 		search_queries: null,
 		model: module,
@@ -42,7 +42,7 @@
 						title_key: 'name'
 					},
 					{ label: 'content', editor: true },
-					{ label: 'stored_medias', gallery: true, child: 's3_url' }
+					{ label: 'stored_medias', gallery: true, child: 'url' }
 				]
 			}
 		],
