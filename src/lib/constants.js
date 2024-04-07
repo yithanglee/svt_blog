@@ -15,10 +15,4 @@ export const MENUS = [
  
     { path: '/blogs', title: 'Blogs', icon: 'book-solid' },
 
-
-
-
-  
-
-
 ];
