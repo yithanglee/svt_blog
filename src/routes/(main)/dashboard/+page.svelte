@@ -132,7 +132,6 @@
 		console.log(matches);
 		if (matches != null) {
 			var matched = matches[0];
-
 			return originalString.replaceAll(matched, '');
 		} else {
 		}
