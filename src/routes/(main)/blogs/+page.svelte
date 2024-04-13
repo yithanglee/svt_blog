@@ -14,7 +14,7 @@
 </script>
 
 <Datatable
-	data={{showNew: true,
+	data={{showNew: true, canDelete: true,
 		inputs: inputs,
 		search_queries: null,
 		model: module,
