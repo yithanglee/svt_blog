@@ -97,7 +97,7 @@
 					item_name: 'Send '+fdata.value+' reps (shorter '+fdata.delay+')',
 					value: parseInt(fdata.value), // reps
 					action: fdata.action,
-					delay: parseInt(fdata.delay)  // delay
+					delay: parseFloat(fdata.delay)  // delay
 				},
 				{
 					endpoint: url + '/svt_api/webhook',
