@@ -34,6 +34,13 @@
 				<Input type="text" name={inputName(input.key)} bind:value={data[input.key]} />
 			</Label>
 		</div>
+	{:else if key.numeric}
+		<div class="w-full sm:w-1/3 mx-4 my-2">
+			<Label class="space-y-2">
+				<span class="capitalize">{input.key.replace('_', ' ')}</span>
+				<Input type="number" step="0.1" name={inputName(input.key)} bind:value={data[input.key]} />
+			</Label>
+		</div>
 	{:else if key.hidden}
 		<Input type="hidden" name={inputName(input.key)} bind:value={key.value} />
 	{:else if key.multiSelection != null}

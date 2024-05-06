@@ -94,10 +94,10 @@
 					scope: 'start_pwm',
 					id: fdata.id,
 					name: device.name,
-					item_name: data.name,
-					value: fdata.value, // reps
+					item_name: 'Send '+fdata.value+' reps (shorter '+fdata.delay+')',
+					value: parseInt(fdata.value), // reps
 					action: fdata.action,
-					delay: fdata.delay // delay
+					delay: parseInt(fdata.delay)  // delay
 				},
 				{
 					endpoint: url + '/svt_api/webhook',
