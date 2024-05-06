@@ -3,6 +3,7 @@
 	import { Badge, Modal, Button } from 'flowbite-svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
 	import SimpleTable from '$lib/components/SimpleTable.svelte';
+	import Datatable from '$lib/components/Datatable.svelte';
 	import { goto } from '$app/navigation';
 	import { Socket } from 'phoenix';
 	import { onMount, onDestroy } from 'svelte';
@@ -88,16 +89,6 @@
 		return null;
 	}
 	function tryPost() {
-		// postData(
-		// 	{ scope: 'mark_do', id: fdata.id, shipping_ref: fdata.shipping_ref, location_id: fdata.pick_up_point_id, status: 'sent' },
-		// 	{
-		// 		endpoint: url + '/svt_api/webhook',
-		// 		successCallback: () => {
-		// 			checkPage();
-		// 			formModal = false;
-		// 		}
-		// 	}
-		// );
 		postData(
 				{
 					scope: 'start_pwm',
@@ -176,5 +167,33 @@
 		],
 		scope: 'get_device_commands',
 		columns: [{ label: 'Name', data: 'name' }]
+	}}
+/>
+
+<Datatable
+	data={{
+		appendQueries: { device_id: device.id },
+		inputs: [],
+		search_queries: ['a.uuid'],
+		model: 'DeviceLog',
+		preloads: [],
+		buttons: [
+
+
+		],
+		customCols: [
+			{
+				title: 'General',
+				list: ['id', 'name', { label: 'is_active', boolean: true }]
+			}
+		],
+		columns: [
+			{ label: 'ID', data: 'id' },
+			{ label: 'Remarks', data: 'remarks' },
+			{ label: 'Ref', data: 'uuid' },
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
+
+		
+		]
 	}}
 />
