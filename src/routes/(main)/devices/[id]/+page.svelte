@@ -105,7 +105,7 @@
 					name: device.name,
 					item_name: data.name,
 					value: fdata.value, // reps
-					action: data.action,
+					action: fdata.action,
 					delay: fdata.delay // delay
 				},
 				{
