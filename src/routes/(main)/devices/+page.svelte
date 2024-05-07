@@ -88,7 +88,7 @@
 		customCols: [
 			{
 				title: 'General',
-				list: ['id', 'name', { label: 'is_active', boolean: true }]
+				list: ['id', 'name', 'default_io_pin', { label: 'is_active', boolean: true }]
 			}
 		],
 		columns: [
