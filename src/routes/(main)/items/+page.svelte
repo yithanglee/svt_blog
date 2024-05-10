@@ -79,7 +79,7 @@
 		//   ]),
 		search_queries: ['a.id'],
 		model: 'Item',
-		preloads: [],
+		preloads: ['outlet'],
 		buttons: [
 			
 			// { name: 'Download DO (PDF)', onclickFn: downloadDO },
@@ -93,13 +93,29 @@
 		customCols: [
 			{
 				title: 'General',
-				list: ['id', 'name', 'price']
+				list: ['id', 'name', 'price',
+				'reps',
+				'delay',
+			
+				{
+						label: 'outlet_id',
+						selection: 'Outlet',
+						customCols: null,
+						search_queries: ['a.name'],
+						newData: 'name',
+						title_key: 'name'
+					},
+			]
 			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Name', data: 'name' },
+
+			{ label: 'Outlet', data: 'name', through: ['outlet'] },
 			{ label: 'Price', data: 'price', showFloat: true },
+			{ label: 'Reps', data: 'reps' },
+			{ label: 'Interval Delay', data: 'delay' },
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 }
 		]
 	}}

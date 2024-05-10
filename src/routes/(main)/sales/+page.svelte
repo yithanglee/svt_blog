@@ -51,7 +51,7 @@
 </script>
 
 <Datatable
-	data={{
+	data={{canDelete: true,
 		// appendQueries: {merchant_id: "null"},
 		inputs: inputs,
 		join_statements: JSON.stringify([
@@ -60,7 +60,7 @@
 		]),
 		search_queries: ['a.id|b.name'],
 		model: 'Sale',
-		preloads: ['device'],
+		preloads: ['device', 'outlet'],
 		buttons: [
 			{ name: 'Manual Approve (R M)', onclickFn: approveTransfer, showCondition: showCondition } , 
 			// { name: 'Manual Approve', onclickFn: approveTransfer2, showCondition: showCondition2 }
@@ -80,14 +80,15 @@
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
+			{ label: 'Outlet', data: 'name', through: ['outlet'] },
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
 			// {
 			// 	label: 'Delivery Ref',
 			// 	data: 'delivery_ref',
 			// 	subtitle: { label: 'Courier', data: 'delivery_method' }
 			// },
-			{ label: 'Sale Date', data: 'sale_date' },
-			{ label: 'Code', data: 'payment_ref' },
+			{ label: 'Sale Date', data: 'sales_date' },
+			{ label: 'Ref', data: 'payment_ref' },
 			{ label: 'Amount', data: 'amount' },
 			{
 				label: 'Status',

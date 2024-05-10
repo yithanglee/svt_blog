@@ -89,7 +89,9 @@
 				list: [
 					'id',
 					'name',
-
+					
+					{ label: 'subdomain', expose: true },
+					{ label: 'uid', expose: true },
 					{ label: 'address', editor2: true },
 					'block_reason',
 					{ label: 'is_blocked', boolean: true }
@@ -99,6 +101,9 @@
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Name', data: 'name', subtitle: {label: 'address', data: 'address'} },
+			{ label: 'Subdomain', data: 'subdomain' },
+			{ label: 'Ref', data: 'uid' },
+		
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
 
 			{
