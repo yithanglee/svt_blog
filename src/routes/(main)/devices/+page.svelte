@@ -80,15 +80,26 @@
 		inputs: inputs,
 		search_queries: ['a.name'],
 		model: 'Device',
-		preloads: [],
-		buttons: [
-			{ name: 'Control', onclickFn: controlDevice }
-
-		],
+		preloads: ['outlet'],
+		buttons: [{ name: 'Control', onclickFn: controlDevice }],
 		customCols: [
 			{
 				title: 'General',
-				list: ['id', 'name', 'default_io_pin', { label: 'is_active', boolean: true }]
+				list: [
+					'id',
+					'name',
+					'default_io_pin',
+
+					{
+						label: 'outlet_id',
+						selection: 'Outlet',
+						customCols: null,
+						search_queries: ['a.name'],
+						newData: 'name',
+						title_key: 'name'
+					},
+					{ label: 'is_active', boolean: true }
+				]
 			}
 		],
 		columns: [
@@ -111,9 +122,9 @@
 						value: 'green'
 					}
 				]
-			}
+			},
 			// { label: 'User', data: 'username', through: ['user'] },
-			// { label: 'Sales Person', data: 'username', through: ['sales_person'] }
+			{ label: 'Outlet', data: 'name', through: ['outlet'] }
 		]
 	}}
 />
