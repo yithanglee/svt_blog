@@ -71,7 +71,8 @@
 </script>
 
 <Datatable
-	data={{showNew: true,
+	data={{
+		showNew: true,
 		inputs: inputs,
 		//   join_statements: JSON.stringify([
 
@@ -81,7 +82,6 @@
 		model: 'Item',
 		preloads: ['outlet'],
 		buttons: [
-			
 			// { name: 'Download DO (PDF)', onclickFn: downloadDO },
 			// {
 			//   name: 'Mark Pending Delivery',
@@ -93,24 +93,30 @@
 		customCols: [
 			{
 				title: 'General',
-				list: ['id', 'name', 'price',
-				'reps',
-				'delay',
-			
-				{
+				list: [
+					'id',
+					'name',
+					'short_name1',
+					'short_name2',
+					'price',
+					'reps',
+					'delay',
+
+					{
 						label: 'outlet_id',
 						selection: 'Outlet',
 						customCols: null,
 						search_queries: ['a.name'],
 						newData: 'name',
 						title_key: 'name'
-					},
-			]
+					}
+				]
 			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Name', data: 'name' },
+			{ label: 'Short Name', data: 'short_name1' ,subtitle: {label: 'address', data: 'short_name2'}  },
 
 			{ label: 'Outlet', data: 'name', through: ['outlet'] },
 			{ label: 'Price', data: 'price', showFloat: true },

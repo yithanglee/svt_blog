@@ -88,6 +88,7 @@
 				list: [
 					'id',
 					'name',
+	
 					'default_io_pin',
 
 					{
