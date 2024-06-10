@@ -33,9 +33,11 @@
 	function formatDateTime(data, key, offset) {
 		offset = offset == null ? 0 : offset;
 		var str = data[key];
+		console.log(str)
 		str = Date.parse(str);
 		var dt = new Date(str);
 		dt.setTime(dt.getTime() + offset * 60 * 60 * 1000);
+		console.log(dt)
 		var edate = dt.toGMTString().split(',')[1].split(' ').splice(0, 4).join(' ');
 		var etime = dt.toLocaleTimeString();
 		return edate + ' ' + etime;

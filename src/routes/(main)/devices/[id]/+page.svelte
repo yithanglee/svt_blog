@@ -24,7 +24,19 @@
 	const toggleOnlineStatus = (status) => {
 		isOnline = status;
 	};
+	function formatData(data) {
+		return data.map((d) => {
+			const date = new Date(d[0]);
+			// Offset the date by +8 hours (28800000 milliseconds)
+			date.setTime(date.getTime() + 8 * 60 * 60 * 1000);
 
+			return {
+				x: date,
+				y: 1, // Use a constant y-value if you want a simple time series heatmap.
+				z: d[1] // Assuming z value is the same as the call count for heatmap intensity
+			};
+		});
+	}
 	onMount(() => {
 		const socket = new Socket(PHX_WS_PROTOCOL + PHX_ENDPOINT + '/socket');
 		console.info(socket);
@@ -50,6 +62,32 @@
 			console.log('set offline');
 			isOnline = false;
 		}, 11000);
+
+		const formattedData = formatData(data.wifi_time_logs);
+
+		const chart = new JSC.Chart('chartContainer', {
+			type: 'heatmap',
+			series: [
+				{
+					points: formattedData
+				}
+			],
+			xAxis: {
+				label_text: 'Time',
+				defaultTick_label_text: (val) => {
+					const date = new Date(val);
+					return date.toLocaleString('en-US', {
+						hour: 'numeric',
+						minute: 'numeric',
+						hour12: false
+					});
+				}
+			},
+			yAxis: {
+				label_text: 'Wifi Online/5 sec Count'
+			},
+			title_label_text: 'Wifi Online Heatmap'
+		});
 	});
 	onDestroy(() => {
 		channel.leave();
@@ -90,23 +128,23 @@
 	}
 	function tryPost() {
 		postData(
-				{
-					scope: 'start_pwm',
-					id: fdata.id,
-					name: device.name,
-					item_name: 'Send '+fdata.value+' reps (shorter '+fdata.delay+')',
-					value: parseInt(fdata.value), // reps
-					action: fdata.action,
-					delay: parseFloat(fdata.delay)  // delay
-				},
-				{
-					endpoint: url + '/svt_api/webhook',
-					successCallback: () => {
-						checkPage();
-						formModal = false;
-					}
+			{
+				scope: 'start_pwm',
+				id: fdata.id,
+				name: device.name,
+				item_name: 'Send ' + fdata.value + ' reps (shorter ' + fdata.delay + ')',
+				value: parseInt(fdata.value), // reps
+				action: fdata.action,
+				delay: parseFloat(fdata.delay) // delay
+			},
+			{
+				endpoint: url + '/svt_api/webhook',
+				successCallback: () => {
+					checkPage();
+					formModal = false;
 				}
-			);
+			}
+		);
 	}
 </script>
 
@@ -169,7 +207,7 @@
 		columns: [{ label: 'Name', data: 'name' }]
 	}}
 />
-
+<div id="chartContainer" style="width: 80vw; height: 50vh;" class="p-4" />
 <Datatable
 	data={{
 		appendQueries: { device_id: device.id },
@@ -177,10 +215,7 @@
 		search_queries: ['a.uuid'],
 		model: 'DeviceLog',
 		preloads: [],
-		buttons: [
-
-
-		],
+		buttons: [],
 		customCols: [
 			{
 				title: 'General',
@@ -191,9 +226,14 @@
 			{ label: 'ID', data: 'id' },
 			{ label: 'Remarks', data: 'remarks' },
 			{ label: 'Ref', data: 'uuid' },
-			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
-
-		
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 }
 		]
 	}}
 />
+
+<style>
+	#chartContainer {
+		width: 100%;
+		height: 100%;
+	}
+</style>

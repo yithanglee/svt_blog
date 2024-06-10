@@ -90,8 +90,12 @@
 					'id',
 					'name',
 					
+					{ label: 'price_per_minutes', alt_name: "Price/Minute", expose: true },
 					{ label: 'subdomain', expose: true },
 					{ label: 'uid', expose: true },
+					{ label: 'mcode', expose: true },
+					{ label: 'mkey', expose: true },
+					{ label: 'payment_gateway', selection: ['RM', 'ipay88', 'billplz'] },
 					{ label: 'address', editor2: true },
 					'block_reason',
 					{ label: 'is_blocked', boolean: true }

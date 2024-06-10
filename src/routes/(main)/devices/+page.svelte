@@ -80,7 +80,7 @@
 		inputs: inputs,
 		search_queries: ['a.name'],
 		model: 'Device',
-		preloads: ['outlet'],
+		preloads: ['outlet', 'executor_board'],
 		buttons: [{ name: 'Control', onclickFn: controlDevice }],
 		customCols: [
 			{
@@ -92,6 +92,14 @@
 					'default_io_pin',
 
 					{
+						label: 'executor_board_id',
+						selection: 'Device',
+						customCols: null,
+						search_queries: ['a.name'],
+						newData: 'name',
+						title_key: 'name'
+					},
+					{
 						label: 'outlet_id',
 						selection: 'Outlet',
 						customCols: null,
@@ -99,6 +107,8 @@
 						newData: 'name',
 						title_key: 'name'
 					},
+					
+					{ label: 'record_wifi_time', boolean: true },
 					{ label: 'is_active', boolean: true }
 				]
 			}
