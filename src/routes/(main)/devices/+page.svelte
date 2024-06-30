@@ -109,6 +109,7 @@
 					},
 					
 					{ label: 'record_wifi_time', boolean: true },
+					{ label: 'skip_first', boolean: true },
 					{ label: 'is_active', boolean: true }
 				]
 			}
