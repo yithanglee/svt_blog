@@ -30,9 +30,11 @@
 					'id',
                     'order',
 					'remarks',
+					{ label: 'content', editor2: true },
                     { label: 'mobile_img_url', upload: true },
 					{ label: 'img_url', upload: true },
-					{ label: 'is_show', boolean: true }
+					{ label: 'is_show', boolean: true },
+					{ label: 'is_banner', boolean: true }
 				]
 			}
 		],

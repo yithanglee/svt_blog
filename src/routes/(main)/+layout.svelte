@@ -2,10 +2,15 @@
 	/** @type {import('./$types').LayoutData} */
 	export let data;
 	import { postData } from '$lib/index.js';
-	import { MENUS, PHX_HTTP_PROTOCOL, PHX_ENDPOINT, PHX_COOKIE } from '$lib/constants';
 	import { session } from '$lib/stores/session';
+	import { page } from '$app/stores';
+	import { pageTitle, pageHref } from '$lib/stores/pageTitle'; // Import the shared store
+
+	import { MENUS, PHX_HTTP_PROTOCOL, PHX_ENDPOINT, PHX_COOKIE } from '$lib/constants';
 
 	import {
+		Breadcrumb,
+		BreadcrumbItem,
 		CloseButton,
 		Button,
 		Drawer,
@@ -22,6 +27,8 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	let styles = ['sidebar', 'drawer'],
+		display_title = 'Commodities',
+		display_href = '/dashboard',
 		style = styles[1],
 		app_routes = [],
 		loggedIn = false,
@@ -49,10 +56,8 @@
 	}
 
 	async function syncMenusToServer() {
-	
 		console.info(MENUS);
 		await postData(MENUS, {
-
 			endpoint: PHX_HTTP_PROTOCOL + PHX_ENDPOINT + '/svt_api/webhook?scope=sync_menu',
 			successCallback: () => {
 				// isLoading = false;
@@ -73,6 +78,18 @@
 		}
 	});
 	onDestroy(() => {});
+	$: navData = $page;
+	// Function to update the display title
+	function updateTitle(title) {
+		display_title = title;
+	}
+	// Subscribe to the pageTitle store to update display_title
+	pageTitle.subscribe((value) => {
+		display_title = value;
+	});
+	pageHref.subscribe((value) => {
+		display_href = value;
+	});
 </script>
 
 {#if loggedIn}
@@ -91,7 +108,11 @@
 										/>
 									</svelte:fragment>
 								</SidebarItem>
-								<SidebarItem label="Dashboard" href="/dashboard">
+								<SidebarItem
+									label="Dashboard"
+									href="/dashboard"
+									on:click={() => updateTitle('Dashboard')}
+								>
 									<svelte:fragment slot="icon">
 										<Icon
 											name="chart-pie-solid"
@@ -99,7 +120,13 @@
 										/>
 									</svelte:fragment>
 								</SidebarItem>
-								<SidebarItem label="Sync Menus" on:click={syncMenusToServer}>
+								<SidebarItem
+									label="Sync Menus"
+									on:click={() => {
+										syncMenusToServer();
+										updateTitle('Sync Menus');
+									}}
+								>
 									<svelte:fragment slot="icon">
 										<Icon
 											name="chart-pie-solid"
@@ -121,13 +148,22 @@
 													</svelte:fragment>
 													{#each menu.children as child}
 														{#if app_routes.some((app_route) => app_route.route === child.path)}
-															<SidebarDropdownItem label={child.title} href={child.path} />
+															<SidebarDropdownItem
+																label={child.title}
+																href={child.path}
+																on:click={() => updateTitle(child.title)}
+															/>
 														{/if}
 													{/each}
 												</SidebarDropdownWrapper>
 											{/if}
 										{:else if app_routes.some((app_route) => app_route.route === menu.path)}
-											<SidebarItem label={menu.title} {spanClass} href={menu.path}>
+											<SidebarItem
+												label={menu.title}
+												{spanClass}
+												href={menu.path}
+												on:click={() => updateTitle(menu.title)}
+											>
 												<svelte:fragment slot="icon">
 													<Icon
 														name={menu.icon == null ? 'users-solid' : menu.icon}
@@ -179,7 +215,11 @@
 								/>
 							</svelte:fragment>
 						</SidebarItem>
-						<SidebarItem label="Dashboard" href="/dashboard">
+						<SidebarItem
+							label="Dashboard"
+							href="/dashboard"
+							on:click={() => updateTitle('Dashboard')}
+						>
 							<svelte:fragment slot="icon">
 								<Icon
 									name="chart-pie-solid"
@@ -187,7 +227,13 @@
 								/>
 							</svelte:fragment>
 						</SidebarItem>
-						<SidebarItem label="Sync Menus" on:click={syncMenusToServer}>
+						<SidebarItem
+							label="Sync Menus"
+							on:click={() => {
+								syncMenusToServer();
+								updateTitle('Sync Menus');
+							}}
+						>
 							<svelte:fragment slot="icon">
 								<Icon
 									name="chart-pie-solid"
@@ -209,13 +255,22 @@
 											</svelte:fragment>
 											{#each menu.children as child}
 												{#if app_routes.some((app_route) => app_route.route === child.path)}
-													<SidebarDropdownItem label={child.title} href={child.path} />
+													<SidebarDropdownItem
+														label={child.title}
+														href={child.path}
+														on:click={() => updateTitle(child.title)}
+													/>
 												{/if}
 											{/each}
 										</SidebarDropdownWrapper>
 									{/if}
 								{:else if app_routes.some((app_route) => app_route.route === menu.path)}
-									<SidebarItem label={menu.title} {spanClass} href={menu.path}>
+									<SidebarItem
+										label={menu.title}
+										{spanClass}
+										href={menu.path}
+										on:click={() => updateTitle(menu.title)}
+									>
 										<svelte:fragment slot="icon">
 											<Icon
 												name={menu.icon == null ? 'users-solid' : menu.icon}
@@ -241,9 +296,21 @@
 		</Drawer>
 
 		<div class="mx-auto flex flex-wrap justify-between items-center container">
-			<Button on:click={() => (hidden2 = false)} class="!p-2 mb-4 mt-0">Menu</Button>
-			<div class="w-full grid grid-cols-12">
-				<div class="col-span-12 py-4 sm:py-0">
+			<Button on:click={() => (hidden2 = false)} class="!p-2 mb-4 mt-0 opacity-25">Menu</Button>
+			<div class="w-full grid grid-cols-12 shadow-lg p-4 rounded">
+				<div class="col-span-12 py-4 sm:py-0" style="padding: 0 2vw;">
+					<div class="py-4">
+						<Breadcrumb aria-label="Default breadcrumb example ">
+							<BreadcrumbItem href="/dashboard" home>Home</BreadcrumbItem>
+							<BreadcrumbItem href={display_href}>{display_title}</BreadcrumbItem>
+						</Breadcrumb>
+
+						<h1
+							class=" mt-4 w-full text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl"
+						>
+							{display_title}
+						</h1>
+					</div>
 					<slot />
 				</div>
 			</div>
