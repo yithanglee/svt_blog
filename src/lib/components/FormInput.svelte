@@ -112,7 +112,12 @@
 				<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
 			</Label>
 
-			<Editor html={data[input.key]} on:change={(evt) => (data[input.key] = evt.detail)} />
+			<Editor html={data[input.key]} on:change={(evt) => {
+
+				console.log("cl chg")
+				data[input.key] = evt.detail
+
+			}} />
 		</div>
 	{:else if key.gallery == true}
 		<div class="w-full mx-4 my-2">

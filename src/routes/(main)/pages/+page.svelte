@@ -23,16 +23,17 @@
 				list: [
 					'id',
 					'name',
-					
-					{ label: 'subtitle', editor2: true },
-					{ label: 'content', editor: true },
+					'route_name',
+					'subtitle',
+					{ label: 'content', editor2: true },
 					{ label: 'img_url', upload: true }
 				]
 			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
-			{ label: 'Title', data: 'name' }
+			{ label: 'Title', data: 'name' },
+			{ label: 'Route', data: 'route_name' }
 		]
 	}}
 />

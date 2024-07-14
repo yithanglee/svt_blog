@@ -16,7 +16,7 @@
 
 <Datatable
 	data={{
-		showNew: true,
+		showNew: true, canDelete: true,
 		inputs: inputs,
 
 		search_queries: ['a.remarks'],
