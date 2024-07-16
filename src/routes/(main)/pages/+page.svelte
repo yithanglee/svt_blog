@@ -37,3 +37,16 @@
 		]
 	}}
 />
+
+<style>
+	.cl-content div {
+		border: dashed 0.5px gray;
+		padding: 1px 4px;
+	}
+	.cl-content h2,
+	.cl-content h3 {
+		border: solid 1px blue;
+		font-size: larger;
+		font-weight: 600;
+	}
+</style>
