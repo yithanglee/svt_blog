@@ -30,6 +30,7 @@
 					'id',
                     'order',
 					'remarks',
+					'class_list',
 					{ label: 'content', editor2: true },
                     { label: 'mobile_img_url', upload: true },
 					{ label: 'img_url', upload: true },
@@ -48,17 +49,33 @@
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
 			{ label: 'Remarks', data: 'remarks' },
 			{
+				label: 'Banner Type?',
+				data: 'is_banner',
+				isBadge: true,
+				color: [
+					{
+						key: false,
+						value: 'pink'
+					},
+
+					{
+						key: true,
+						value: 'green'
+					}
+				]
+			},
+			{
 				label: 'Status',
 				data: 'is_show',
 				isBadge: true,
 				color: [
 					{
-						key: 'false',
+						key: false,
 						value: 'pink'
 					},
 
 					{
-						key: 'true',
+						key: true,
 						value: 'green'
 					}
 				]
