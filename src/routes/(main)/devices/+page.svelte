@@ -90,6 +90,7 @@
 					'name',
 	
 					'default_io_pin',
+					'format',
 
 					{
 						label: 'executor_board_id',
