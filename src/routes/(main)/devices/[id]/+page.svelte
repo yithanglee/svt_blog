@@ -16,7 +16,7 @@
 	let device = data.device,
 		channel,
 		checkPage,
-		fdata = { delay: 0.1, value: 1 },
+		fdata = { delay: 0.1, value: 1 , format: 'pwm'},
 		formModal = false;
 	console.info(device);
 	let isOnline = false;
@@ -107,6 +107,7 @@
 			postData(
 				{
 					scope: 'start_pwm',
+					format: data.format,
 					id: data.id,
 					name: device.name,
 					item_name: data.name,
@@ -132,6 +133,7 @@
 				scope: 'start_pwm',
 				id: fdata.id,
 				name: device.name,
+				format: fdata.format,
 				item_name: 'Send ' + fdata.value + ' reps (shorter ' + fdata.delay + ')',
 				value: parseInt(fdata.value), // reps
 				action: fdata.action,
@@ -185,6 +187,17 @@
 				data={fdata}
 				input={filteredInput({
 					label: 'value',
+					expose: true
+				})}
+			/><FormInput
+				module={'DeviceAction'}
+				key={{
+					label: 'format',
+					expose: true
+				}}
+				data={fdata}
+				input={filteredInput({
+					label: 'format',
 					expose: true
 				})}
 			/>
