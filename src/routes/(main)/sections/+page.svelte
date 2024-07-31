@@ -26,20 +26,21 @@
 					'name',
 					'class_list',
 					'content1_class_list',
+					'plain_content1',
 					{ label: 'content1', editor2: true }
 				]
 			},
 			{
 				title: '2nd Column',
-				list: ['content2_class_list', { label: 'content2', editor2: true }]
+				list: ['content2_class_list', 'plain_content2', { label: 'content2', editor2: true }]
 			},
 			{
 				title: '3rd Column',
-				list: ['content3_class_list', { label: 'content3', editor2: true }]
+				list: ['content3_class_list', 'plain_content3', { label: 'content3', editor2: true }]
 			},
 			{
 				title: '4th Column',
-				list: ['content4_class_list', { label: 'content4', editor2: true }]
+				list: ['content4_class_list', 'plain_content4', { label: 'content4', editor2: true }]
 			}
 		],
 		columns: [
