@@ -2,6 +2,9 @@
 	import Datatable from '$lib/components/Datatable.svelte';
 	import { onMount } from 'svelte';
 	/** @type {import('./$types').PageData} */
+
+
+
 	export let data;
 	onMount(async () => {});
 
@@ -25,7 +28,7 @@
 					'name',
 					'route_name',
 					'subtitle',
-					{ label: 'content', editor2: true },
+					{ label: 'content', editor3: true },
 					{ label: 'img_url', upload: true }
 				]
 			}

@@ -5,12 +5,12 @@
 	import Gallery from '$lib/components/Gallery.svelte';
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import MultiSelection from '$lib/components/MultiSelection.svelte';
+
 	import { afterUpdate, onMount } from 'svelte';
 	export let input, key, module;
 	export let data;
 	console.log(key);
 	console.log(input);
-
 	console.log(data);
 
 	let editorData;
@@ -28,6 +28,35 @@
 	function inputName(key) {
 		return module + '[' + key + ']';
 	}
+	let editor3;
+
+	onMount(async () => {
+		let dd = document.getElementById('editor');
+
+		const EditorJS = await import('@editorjs/editorjs');
+		// const ImageTool = await import('@editorjs/image');
+		const Paragraph = await import('@editorjs/paragraph');
+		const SimpleImage = await import('@editorjs/simple-image').default({holder: 'editor'});
+		// import SimpleImage from '@editorjs/simple-image';
+		console.log(editor3);
+		if (editor3 == null && dd.childNodes.length < 1) {
+			editor3 = new EditorJS.default({
+				holder: 'editor',
+				placeholder: 'Type something...',
+				tools: {
+					paragraph: {
+						class: Paragraph.default,
+						inlineToolbar: true
+					},
+					image: SimpleImage
+					
+				},
+				onReady: () => {
+					console.log('Editor.js is ready to work!');
+				}
+			});
+		}
+	});
 </script>
 
 {#if input != null}
@@ -112,12 +141,21 @@
 				<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
 			</Label>
 
-			<Editor html={data[input.key]} on:change={(evt) => {
-
-				console.log("cl chg")
-				data[input.key] = evt.detail
-
-			}} />
+			<Editor
+				html={data[input.key]}
+				on:change={(evt) => {
+					console.log('cl chg');
+					data[input.key] = evt.detail;
+				}}
+			/>
+		</div>
+	{:else if key.editor3 == true}
+		<div class="w-full mx-4 my-2">
+			<Label class="space-y-2">
+				<span class="capitalize">{alt_name}</span>
+				<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
+			</Label>
+			<div id="editor" />
 		</div>
 	{:else if key.gallery == true}
 		<div class="w-full mx-4 my-2">

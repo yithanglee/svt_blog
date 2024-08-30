@@ -119,6 +119,7 @@
 			'inline-block text-sm font-medium text-center disabled:cursor-not-allowed p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 text-gray-500 dark:text-gray-400';
 	onMount(() => {
 		selectedTab = customCols[0].title;
+	
 	});
 </script>
 
@@ -175,7 +176,8 @@
 				{/if}
 			</ul>
 			<div
-				class="p-4 bg-gray-50 rounded-lg dark:bg-gray-800 mt-4"
+				removed="bg-gray-50  dark:bg-gray-800"
+				class="p-4 rounded-lg mt-4"
 				role="tabpanel"
 				aria-labelledby="id-tab"
 			>
@@ -244,7 +246,8 @@
 			{/if}
 		</ul>
 		<div
-			class="p-4 bg-gray-50 rounded-lg dark:bg-gray-800 mt-4"
+			removed="bg-gray-50 dark:bg-gray-800"
+			class="p-4 rounded-lg mt-4"
 			role="tabpanel"
 			aria-labelledby="id-tab"
 		>
@@ -268,7 +271,6 @@
 		</div>
 	</form>
 	<div class="my-4">
-
 		<Button on:click={() => tryPost()}>Submit</Button>
 	</div>
 {/if}

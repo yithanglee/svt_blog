@@ -16,7 +16,7 @@
 	let device = data.device,
 		channel,
 		checkPage,
-		fdata = { delay: 0.1, value: 1 , format: 'pwm'},
+		fdata = { delay: 0.1, value: 1, format: 'pwm' },
 		formModal = false;
 	console.info(device);
 	let isOnline = false;
@@ -64,30 +64,31 @@
 		}, 11000);
 
 		const formattedData = formatData(data.wifi_time_logs);
-
-		const chart = new JSC.Chart('chartContainer', {
-			type: 'heatmap',
-			series: [
-				{
-					points: formattedData
-				}
-			],
-			xAxis: {
-				label_text: 'Time',
-				defaultTick_label_text: (val) => {
-					const date = new Date(val);
-					return date.toLocaleString('en-US', {
-						hour: 'numeric',
-						minute: 'numeric',
-						hour12: false
-					});
-				}
-			},
-			yAxis: {
-				label_text: 'Wifi Online/5 sec Count'
-			},
-			title_label_text: 'Wifi Online Heatmap'
-		});
+		if (device.is_cloridge == false) {
+			const chart = new JSC.Chart('chartContainer', {
+				type: 'heatmap',
+				series: [
+					{
+						points: formattedData
+					}
+				],
+				xAxis: {
+					label_text: 'Time',
+					defaultTick_label_text: (val) => {
+						const date = new Date(val);
+						return date.toLocaleString('en-US', {
+							hour: 'numeric',
+							minute: 'numeric',
+							hour12: false
+						});
+					}
+				},
+				yAxis: {
+					label_text: 'Wifi Online/5 sec Count'
+				},
+				title_label_text: 'Wifi Online Heatmap'
+			});
+		}
 	});
 	onDestroy(() => {
 		channel.leave();
@@ -220,7 +221,10 @@
 		columns: [{ label: 'Name', data: 'name' }]
 	}}
 />
-<div id="chartContainer" style="width: 80vw; height: 50vh;" class="p-4" />
+{#if device.is_cloridge == false}
+	<div id="chartContainer" style="width: 80vw; height: 50vh;" class="p-4" />
+{/if}
+
 <Datatable
 	data={{
 		appendQueries: { device_id: device.id },

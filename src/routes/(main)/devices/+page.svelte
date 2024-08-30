@@ -9,43 +9,10 @@
 	let inputs = data.inputs;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
-	function downloadDO(data, checkPage, confirmModal) {
-		window.open(url + '/pdf?type=do&id=' + data.id, '_blank').focus();
-	}
-
 	function controlDevice(data, checkPage, confirmModal) {
 		goto('/devices/' + data.id);
 	}
-	function showCondition(data) {
-		var bool = false;
-		if (data.status == 'processing') {
-			bool = true;
-		}
-		return bool;
-	}
-	function showCondition2(data) {
-		var bool = false;
-		if (data.status == 'pending_delivery') {
-			bool = true;
-		}
-		return bool;
-	}
-	function doMarkPendingDelivery(data, checkPage, confirmModal) {
-		console.log(data);
-		console.log('transfer approved!');
 
-		confirmModal(true, 'Are you sure to mark this order as pending delivery?', () => {
-			postData(
-				{ scope: 'mark_do', id: data.id, status: 'pending_delivery' },
-				{
-					endpoint: url + '/svt_api/webhook',
-					successCallback: () => {
-						checkPage();
-					}
-				}
-			);
-		});
-	}
 	function doMarkSent(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
@@ -76,6 +43,7 @@
 
 <Datatable
 	data={{
+		showNew: true,
 		canDelete: true,
 		inputs: inputs,
 		search_queries: ['a.name'],
@@ -88,10 +56,10 @@
 				list: [
 					'id',
 					'name',
-	
+
 					'default_io_pin',
 					'format',
-
+					'cloridge_device_uid',
 					{
 						label: 'executor_board_id',
 						selection: 'Device',
@@ -108,10 +76,12 @@
 						newData: 'name',
 						title_key: 'name'
 					},
-					
+					{ label: 'is_cloridge', boolean: true },
 					{ label: 'record_wifi_time', boolean: true },
 					{ label: 'skip_first', boolean: true },
-					{ label: 'is_active', boolean: true }
+					{ label: 'is_active', boolean: true },
+				
+					
 				]
 			}
 		],
