@@ -28,7 +28,7 @@
 					'name',
 					'route_name',
 					'subtitle',
-					{ label: 'content', editor3: true },
+					{ label: 'content', editor2: true },
 					{ label: 'img_url', upload: true }
 				]
 			}
