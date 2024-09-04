@@ -26,6 +26,7 @@
 				list: [
 					'id',
 					'name',
+					'sorting_index',
 					'route_name',
 					'subtitle',
 					{ label: 'content', editor2: true },
