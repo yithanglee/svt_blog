@@ -23,18 +23,26 @@
 		customCols: [
 			{
 				title: 'General',
-				list: [
+				list: [	
 					'id',
 					'name',
 					'sorting_index',
 					'route_name',
 					'subtitle',
 					{ label: 'content', editor2: true },
+					
 					{ label: 'img_url', upload: true }
+				]
+			},
+			{
+				title: 'Others',
+				list: [	
+					
 				]
 			}
 		],
 		columns: [
+		
 			{ label: 'ID', data: 'id' },
 			{ label: 'Title', data: 'name' },
 			{ label: 'Route', data: 'route_name' }

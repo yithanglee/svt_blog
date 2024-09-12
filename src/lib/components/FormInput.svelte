@@ -5,21 +5,22 @@
 	import Gallery from '$lib/components/Gallery.svelte';
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import MultiSelection from '$lib/components/MultiSelection.svelte';
-
+	import prettier from 'prettier/standalone';
+	import htmlParser from 'prettier/parser-html';
 	import { afterUpdate, onMount } from 'svelte';
 	export let input, key, module;
 	export let data;
 	console.log(key);
 	console.log(input);
 	console.log(data);
-
+	let editor;
 	let editorData;
 	if (input == null) {
 		input = { key: key.label, value: 'id' };
 		console.log(input);
 	}
 	let alt_name = input.key.replace('_', ' ');
-	if (key.editor == true) {
+	if (key.editor == true || key.editor2 == true) {
 		editorData = data[input.key] != null ? data[input.key] : '';
 	}
 	if (key.alt_name != null) {
@@ -28,35 +29,33 @@
 	function inputName(key) {
 		return module + '[' + key + ']';
 	}
-	let editor3;
+	let debounceTimeout;
 
-	onMount(async () => {
-		let dd = document.getElementById('editor');
+	function updateEditorContent(code) {
+		console.log(editor);
+		if (editor) {
+			data[input.key] = code;
+			editor.setHtml(data[input.key] != null ? data[input.key] : 'Editor content here');
 
-		const EditorJS = await import('@editorjs/editorjs');
-		// const ImageTool = await import('@editorjs/image');
-		const Paragraph = await import('@editorjs/paragraph');
-		const SimpleImage = await import('@editorjs/simple-image').default({holder: 'editor'});
-		// import SimpleImage from '@editorjs/simple-image';
-		console.log(editor3);
-		if (editor3 == null && dd.childNodes.length < 1) {
-			editor3 = new EditorJS.default({
-				holder: 'editor',
-				placeholder: 'Type something...',
-				tools: {
-					paragraph: {
-						class: Paragraph.default,
-						inlineToolbar: true
-					},
-					image: SimpleImage
-					
-				},
-				onReady: () => {
-					console.log('Editor.js is ready to work!');
-				}
-			});
+			// Clear any existing timeout
+			clearTimeout(debounceTimeout);
+
+			// Set a new timeout for 5 seconds (5000 ms)
+			debounceTimeout = setTimeout(() => {
+				code = prettier.format(code, {
+					parser: 'html',
+					plugins: [htmlParser],
+					printWidth: 80,
+					singleQuote: true
+				});
+
+				data[input.key] = code;
+				editor.setHtml(data[input.key] != null ? data[input.key] : 'Editor content here');
+			}, 5000);
 		}
-	});
+	}
+
+	onMount(async () => {});
 </script>
 
 {#if input != null}
@@ -140,22 +139,29 @@
 				<span class="capitalize">{alt_name}</span>
 				<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
 			</Label>
-
 			<Editor
 				html={data[input.key]}
+				bind:this={editor}
 				on:change={(evt) => {
 					console.log('cl chg');
 					data[input.key] = evt.detail;
 				}}
 			/>
 		</div>
-	{:else if key.editor3 == true}
+
 		<div class="w-full mx-4 my-2">
-			<Label class="space-y-2">
-				<span class="capitalize">{alt_name}</span>
-				<Input type="hidden" name={inputName(input.key)} bind:value={data[input.key]} />
-			</Label>
-			<div id="editor" />
+			<Label class="mb-2 capitalize">{alt_name}</Label>
+			<Textarea
+				on:keyup={(evt) => {
+					console.log('cl chg2');
+					updateEditorContent(data[input.key]);
+				}}
+				placeholder="Content"
+				class="editable"
+				rows="12"
+				name={inputName(input.key)}
+				bind:value={data[input.key]}
+			/>
 		</div>
 	{:else if key.gallery == true}
 		<div class="w-full mx-4 my-2">
@@ -193,7 +199,7 @@
 			<Textarea
 				placeholder="Content"
 				class="editable"
-				rows="4"
+				rows="12"
 				name={inputName(input.key)}
 				bind:value={data[input.key]}
 			/>
