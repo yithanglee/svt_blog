@@ -3,8 +3,6 @@
 	import { onMount } from 'svelte';
 	/** @type {import('./$types').PageData} */
 
-
-
 	export let data;
 	onMount(async () => {});
 
@@ -23,26 +21,24 @@
 		customCols: [
 			{
 				title: 'General',
-				list: [	
+				list: [
 					'id',
 					'name',
+					{ label: 'show_nav', boolean: true },
 					'sorting_index',
 					'route_name',
 					'subtitle',
 					{ label: 'content', editor2: true },
-					
+
 					{ label: 'img_url', upload: true }
 				]
 			},
 			{
 				title: 'Others',
-				list: [	
-					
-				]
+				list: []
 			}
 		],
 		columns: [
-		
 			{ label: 'ID', data: 'id' },
 			{ label: 'Title', data: 'name' },
 			{ label: 'Route', data: 'route_name' }
