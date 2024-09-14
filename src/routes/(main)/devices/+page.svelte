@@ -54,7 +54,7 @@
 				list: [
 					'id',
 					'name',
-
+					'short_name',
 					'default_io_pin',
 					'format',
 					'cloridge_device_uid',
