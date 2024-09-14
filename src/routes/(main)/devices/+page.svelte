@@ -13,25 +13,23 @@
 		goto('/devices/' + data.id);
 	}
 
-	function doMarkSent(data, checkPage, confirmModal) {
+	function regenQr(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
 
 		confirmModal(
 			true,
 			`
-        <label class="my-4 text-sm font-medium block 
-        text-gray-900 dark:text-gray-300 space-y-2">
-        <span>Shipping Ref</span>  <input name="shipping_ref" 
-        placeholder="" type="text" class="block w-75 disabled:cursor-not-allowed disabled:opacity-50 p-2.5 focus:border-primary-500 focus:ring-primary-500 dark:focus:border-primary-500 dark:focus:ring-primary-500 bg-gray-50 text-gray-900 dark:bg-gray-600 dark:text-white dark:placeholder-gray-400 border-gray-300 dark:border-gray-500 text-sm rounded-lg"> </label>
-        <span class="">Are you sure to mark this order as sent?</span>`,
+
+        <span class="">Are you sure to regenerate QR?</span>`,
 			() => {
-				var dom = document.querySelector("input[name='shipping_ref']");
+				
 				postData(
-					{ scope: 'mark_do', shipping_ref: dom.value, id: data.id, status: 'sent' },
+					{ scope: 'gen_static_qr',  id: data.id , name: data.name},
 					{
 						endpoint: url + '/svt_api/webhook',
-						successCallback: () => {
+						successCallback: (e) => {
+							console.log(e)
 							checkPage();
 						}
 					}
@@ -49,7 +47,7 @@
 		search_queries: ['a.name'],
 		model: 'Device',
 		preloads: ['outlet', 'executor_board'],
-		buttons: [{ name: 'Control', onclickFn: controlDevice }],
+		buttons: [{ name: 'Control', onclickFn: controlDevice }, { name: 'Regen QR', onclickFn: regenQr }],
 		customCols: [
 			{
 				title: 'General',

@@ -208,6 +208,7 @@
 		<Button on:click={() => tryPost()}>Submit</Button>
 	</svelte:fragment>
 </Modal>
+
 <SimpleTable
 	title={'Device - ' + device.name}
 	description={'Manual control device with following commands'}
@@ -221,6 +222,21 @@
 		columns: [{ label: 'Name', data: 'name' }]
 	}}
 />
+{#if device.qr_code_data}
+	<div class="p-20 flex justify-center flex-col items-center gap-3">
+		<!-- svelte-ignore a11y-missing-attribute -->
+
+		<div>
+			<h2 class="font-bold">DuitNow Static QR</h2>
+			<p>Print out this QRcode</p>
+		</div>
+		<img
+			src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={device.qr_code_data}"
+			style="display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
+		/>
+	</div>
+{/if}
+
 {#if device.is_cloridge == false}
 	<div id="chartContainer" style="width: 80vw; height: 50vh;" class="p-4" />
 {/if}
