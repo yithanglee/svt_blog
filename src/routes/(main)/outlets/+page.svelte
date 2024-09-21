@@ -95,7 +95,7 @@
 					{ label: 'uid', expose: true },
 					{ label: 'mcode', expose: true },
 					{ label: 'mkey', expose: true },
-					{ label: 'payment_gateway', selection: ['RM', 'ipay88', 'billplz'] },
+					{ label: 'payment_gateway', selection: ['RM', 'ipay88', 'fiuu'] },
 					{ label: 'address', editor2: true },
 					'block_reason',
 					{ label: 'is_blocked', boolean: true }
