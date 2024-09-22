@@ -16,7 +16,7 @@
 	let device = data.device,
 		channel,
 		checkPage,
-		fdata = { delay: 0.1, value: 1, format: 'pwm' },
+		fdata = { delay: 0.1, value: 1, format: 'pwm', hexData: '' },
 		formModal = false;
 	console.info(device);
 	let isOnline = false;
@@ -138,6 +138,7 @@
 				item_name: 'Send ' + fdata.value + ' reps (shorter ' + fdata.delay + ')',
 				value: parseInt(fdata.value), // reps
 				action: fdata.action,
+				hexData: fdata.hexData,
 				delay: parseFloat(fdata.delay) // delay
 			},
 			{
@@ -188,6 +189,17 @@
 				data={fdata}
 				input={filteredInput({
 					label: 'value',
+					expose: true
+				})}
+			/><FormInput
+				module={'DeviceAction'}
+				key={{
+					label: 'hexData',
+					expose: true
+				}}
+				data={fdata}
+				input={filteredInput({
+					label: 'hexData',
 					expose: true
 				})}
 			/><FormInput

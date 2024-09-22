@@ -23,13 +23,12 @@
 
         <span class="">Are you sure to regenerate QR?</span>`,
 			() => {
-				
 				postData(
-					{ scope: 'gen_static_qr',  id: data.id , name: data.name},
+					{ scope: 'gen_static_qr', id: data.id, name: data.name },
 					{
 						endpoint: url + '/svt_api/webhook',
 						successCallback: (e) => {
-							console.log(e)
+							console.log(e);
 							checkPage();
 						}
 					}
@@ -41,13 +40,18 @@
 
 <Datatable
 	data={{
+		appendQueries: { organization_id: data.organization_id },
+
 		showNew: true,
 		canDelete: true,
 		inputs: inputs,
 		search_queries: ['a.name'],
 		model: 'Device',
-		preloads: ['outlet', 'executor_board'],
-		buttons: [{ name: 'Control', onclickFn: controlDevice }, { name: 'Regen QR', onclickFn: regenQr }],
+		preloads: ['outlet', 'executor_board', 'organization'],
+		buttons: [
+			{ name: 'Control', onclickFn: controlDevice },
+			{ name: 'Regen QR', onclickFn: regenQr }
+		],
 		customCols: [
 			{
 				title: 'General',
@@ -58,6 +62,8 @@
 					'default_io_pin',
 					'format',
 					'cloridge_device_uid',
+					{ label: 'organization_id', hidden: true, value: data.organization_id },
+
 					{
 						label: 'executor_board_id',
 						selection: 'Device',
@@ -70,6 +76,15 @@
 						label: 'outlet_id',
 						selection: 'Outlet',
 						customCols: null,
+						search_queries: ['a.name|a.organization_id=' + data.organization_id],
+						newData: 'name',
+						title_key: 'name'
+					},
+
+					{
+						label: 'organization_id',
+						selection: 'Organization',
+						customCols: null,
 						search_queries: ['a.name'],
 						newData: 'name',
 						title_key: 'name'
@@ -77,9 +92,7 @@
 					{ label: 'is_cloridge', boolean: true },
 					{ label: 'record_wifi_time', boolean: true },
 					{ label: 'skip_first', boolean: true },
-					{ label: 'is_active', boolean: true },
-				
-					
+					{ label: 'is_active', boolean: true }
 				]
 			}
 		],

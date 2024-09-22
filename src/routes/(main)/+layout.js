@@ -50,6 +50,7 @@ export async function load({ locals }) {
                 });
 
                 app_routes = res.user.role.app_routes;
+                user = res.user
                
             } else {
 

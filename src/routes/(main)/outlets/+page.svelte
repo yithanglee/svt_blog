@@ -74,14 +74,14 @@
 </script>
 
 <Datatable
-	data={{
+	data={{appendQueries: { organization_id: data.organization_id },
 		showNew: true,
 		canDelete: true,
 		inputs: inputs,
 		// join_statements: JSON.stringify([{ user: 'user' }]),
 		search_queries: ['a.id'],
 		model: 'Outlet',
-		preloads: [],
+		preloads: ['organization'],
 		buttons: [],
 		customCols: [
 			{
@@ -89,14 +89,25 @@
 				list: [
 					'id',
 					'name',
-					
+					{label: 'organization_id', hidden: true, value: data.organization_id},
+
 					{ label: 'price_per_minutes', alt_name: "Price/Minute", expose: true },
 					{ label: 'subdomain', expose: true },
 					{ label: 'uid', expose: true },
 					{ label: 'mcode', expose: true },
 					{ label: 'mkey', expose: true },
 					{ label: 'payment_gateway', selection: ['RM', 'ipay88', 'fiuu'] },
+					// {
+					// 	label: 'organization_id',
+					// 	selection: 'Organization',
+                    //     module: 'Organization',
+					// 	customCols: null,
+					// 	search_queries: ['a.name'],
+					// 	newData: 'name',
+					// 	title_key: 'name'
+					// },
 					{ label: 'address', editor2: true },
+				
 					'block_reason',
 					{ label: 'is_blocked', boolean: true }
 				]

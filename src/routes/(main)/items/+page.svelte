@@ -71,9 +71,10 @@
 </script>
 
 <Datatable
-	data={{
+	data={{canDelete: true,
 		showNew: true,
 		inputs: inputs,
+		appendQueries: { organization_id: data.organization_id },
 		//   join_statements: JSON.stringify([
 
 		//     { user: 'user' }
@@ -82,13 +83,7 @@
 		model: 'Item',
 		preloads: ['outlet'],
 		buttons: [
-			// { name: 'Download DO (PDF)', onclickFn: downloadDO },
-			// {
-			//   name: 'Mark Pending Delivery',
-			//   onclickFn: doMarkPendingDelivery,
-			//   showCondition: showCondition
-			// },
-			// { name: 'Mark Sent', onclickFn: doMarkSent, showCondition: showCondition2 }
+	
 		],
 		customCols: [
 			{
@@ -101,12 +96,13 @@
 					'price',
 					'reps',
 					'delay',
+					{label: 'organization_id', hidden: true, value: data.organization_id},
 
 					{
 						label: 'outlet_id',
 						selection: 'Outlet',
 						customCols: null,
-						search_queries: ['a.name'],
+						search_queries: ['a.name|a.organization_id=' + data.organization_id],
 						newData: 'name',
 						title_key: 'name'
 					}

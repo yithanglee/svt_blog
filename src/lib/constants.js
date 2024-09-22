@@ -12,6 +12,7 @@ export const MENUS = [
             { path: '/admin/app_route', title: 'Route', icon: 'camera-foto-solid' },
         ]
     },
+    { path: '/organizations', title: 'Organizations', icon: 'book-solid' },
     { path: '/brands', title: 'Brands', icon: 'book-solid' },
     { path: '/categories', title: 'Categories', icon: 'book-solid' },
     { path: '/items', title: 'Items', icon: 'book-solid' },

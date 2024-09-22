@@ -10,7 +10,7 @@
 		inputs: inputs,
 		search_queries: null,
 		model: 'Staff',
-		preloads: ['role'],
+		preloads: ['role', 'organization'],
 		customCols: [
 			{
 				title: 'General',
@@ -22,6 +22,15 @@
 						label: 'role_id',
 						selection: 'Role',
                         module: 'Role',
+						customCols: null,
+						search_queries: ['a.name'],
+						newData: 'name',
+						title_key: 'name'
+					},
+					{
+						label: 'organization_id',
+						selection: 'Organization',
+                        module: 'Organization',
 						customCols: null,
 						search_queries: ['a.name'],
 						newData: 'name',

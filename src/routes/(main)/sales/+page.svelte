@@ -10,7 +10,7 @@
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 	function showCondition2(data) {
 		var bool = false;
-		
+
 		if (data.status == 'pending_payment') {
 			bool = true;
 		}
@@ -18,20 +18,19 @@
 	}
 	function showCondition(data) {
 		var bool = false;
-		if (data.payment_webhook == null ) {
+		if (data.payment_webhook == null) {
 			return bool;
 		}
 		if (data.payment_ref != null) {
-			if (data.status != "pending_payment") {
+			if (data.status != 'pending_payment') {
 				return false;
 			}
 			bool = true;
 		}
-		
+
 		return bool;
 	}
-	
-	
+
 	function approveTransfer(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
@@ -51,8 +50,10 @@
 </script>
 
 <Datatable
-	data={{canDelete: true,
-		// appendQueries: {merchant_id: "null"},
+	data={{
+		canDelete: true,
+		appendQueries: { organization_id: data.organization_id },
+
 		inputs: inputs,
 		join_statements: JSON.stringify([
 			// { corporate_account: 'corporate_account' },
@@ -62,26 +63,30 @@
 		model: 'Sale',
 		preloads: ['device', 'outlet'],
 		buttons: [
-			{ name: 'Manual Approve (R M)', onclickFn: approveTransfer, showCondition: showCondition } , 
+			{ name: 'Manual Approve (R M)', onclickFn: approveTransfer, showCondition: showCondition }
 			// { name: 'Manual Approve', onclickFn: approveTransfer2, showCondition: showCondition2 }
 		],
 		customCols: [
 			{
 				title: 'Order',
-				list: ['id', { label: 'status', selection: ['processing', 'sent', 'pending_delivery', 'complete', 'cancelled'] }, 'remarks']
+				list: [
+					'id',
+					{
+						label: 'status',
+						selection: ['processing', 'sent', 'pending_delivery', 'complete', 'cancelled']
+					},
+					'remarks'
+				]
 			},
 			{
 				title: 'Others',
-				list: [
-					'total_point_value',
-					{ label: 'payment_webhook', editor2: true }
-				]
+				list: ['total_point_value', { label: 'payment_webhook', editor2: true }]
 			}
 		],
 		columns: [
 			{ label: 'ID', data: 'id' },
 			{ label: 'Outlet', data: 'name', through: ['outlet'] },
-			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true , offset: 8},
+			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
 			// {
 			// 	label: 'Delivery Ref',
 			// 	data: 'delivery_ref',
@@ -120,7 +125,7 @@
 						value: 'green'
 					}
 				]
-			},
+			}
 			// { label: 'User', data: 'username', through: ['user'] },
 			// { label: 'Sales Person', data: 'username', through: ['sales_person'] }
 			// {
