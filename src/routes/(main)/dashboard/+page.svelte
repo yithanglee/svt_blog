@@ -2,6 +2,7 @@
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import Cookies from 'js-cookie';
 	import { session } from '$lib/stores/session';
+	import SimpleTable from '$lib/components/SimpleTable.svelte';
 	import { isToastOpen } from '$lib/stores/toast';
 	import { onMount } from 'svelte';
 	import {
@@ -118,4 +119,35 @@
 			postFn={refreshPage}
 		/>
 	</div>
+</div>
+<div class="mt-4">
+	<SimpleTable
+		title="Monthly Outlet Transactions (RM)"
+		description={''}
+		data={{
+			apiData: { id: data.id, organization_id: data.organization_id },
+			buttons: [],
+			scope: 'current_month_outlet_trx_only_rp',
+			columns: [
+				{ label: 'Year', data: 'year' },
+				{ label: 'Outlet', data: 'outlet' },
+				{ label: 'Transactions', data: 'transactions' },
+				{ label: 'Device', data: 'device' , subtitle: { label: 'Long', data: 'device_long' }},
+				{ label: 'Jan', data: 'jan' },
+				{ label: 'Feb', data: 'feb' },
+				{ label: 'Mar', data: 'mar' },
+				{ label: 'Apr', data: 'apr' },
+				{ label: 'May', data: 'may' },
+				{ label: 'Jun', data: 'jun' },
+				{ label: 'Jul', data: 'jul' },
+				{ label: 'Aug', data: 'aug' },
+				{ label: 'Sep', data: 'sep' },
+				{ label: 'Oct', data: 'oct' },
+				{ label: 'Nov', data: 'nov' },
+				{ label: 'Dec', data: 'dec' },
+
+				{ label: 'Organization', data: 'organization' },
+			]
+		}}
+	/>
 </div>
