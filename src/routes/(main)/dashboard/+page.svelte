@@ -132,6 +132,7 @@
 				{ label: 'Year', data: 'year' },
 				{ label: 'Outlet', data: 'outlet' },
 				{ label: 'Transactions', data: 'transactions' },
+				{ label: 'Amount (RM)', data: 'amount' },
 				{ label: 'Device', data: 'device' , subtitle: { label: 'Long', data: 'device_long' }},
 				{ label: 'Jan', data: 'jan' },
 				{ label: 'Feb', data: 'feb' },

@@ -49,7 +49,6 @@
 			});
 			if (response.ok) {
 				let dataList = await response.json();
-				console.log(dataList);
 				items = dataList;
 				var totalPages = Math.ceil(dataList.recordsFiltered / itemsPerPage);
 				pages = [];

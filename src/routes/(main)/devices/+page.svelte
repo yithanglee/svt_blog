@@ -2,10 +2,11 @@
 	import { PHX_HTTP_PROTOCOL, PHX_ENDPOINT } from '$lib/constants';
 	import { goto } from '$app/navigation';
 	import Datatable from '$lib/components/Datatable.svelte';
+	import SimpleTable from '$lib/components/SimpleTable.svelte';
 	import { buildQueryString, postData } from '$lib/index.js';
 	/** @type {import('./$types').PageData} */
 	export let data;
-
+	import { onMount } from 'svelte';
 	let inputs = data.inputs;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
 
@@ -36,6 +37,12 @@
 			}
 		);
 	}
+
+	
+	onMount(() => {
+
+		console.log(data.columns)
+	});
 </script>
 
 <Datatable
@@ -122,3 +129,40 @@
 		]
 	}}
 />
+
+<div class="mt-4">
+	<SimpleTable
+		title="Monthly Outlet Transactions (RM)"
+		description={''}
+		data={{
+			apiData: { id: data.id, organization_id: data.organization_id, year_month: data.yearMonth },
+			buttons: [],
+			scope: 'current_month_outlet_trx_only_days',
+			columns: data.columns
+		}}
+	/>
+</div>
+<div class="mt-4">
+	<SimpleTable
+		title="Monthly Outlet Transactions (RM) Prev 1 Month"
+		description={''}
+		data={{
+			apiData: { id: data.id, organization_id: data.organization_id, year_month: data.prevYearMonth },
+			buttons: [],
+			scope: 'current_month_outlet_trx_only_days',
+			columns: data.columns
+		}}
+	/>
+</div>
+<div class="mt-4">
+	<SimpleTable
+		title="Monthly Outlet Transactions (RM) Prev 2 Month"
+		description={''}
+		data={{
+			apiData: { id: data.id, organization_id: data.organization_id, year_month: data.prevYear2Month },
+			buttons: [],
+			scope: 'current_month_outlet_trx_only_days',
+			columns: data.columns
+		}}
+	/>
+</div>
