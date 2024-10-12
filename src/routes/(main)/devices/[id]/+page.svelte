@@ -243,7 +243,7 @@
 			<p>Print out this QRcode</p>
 		</div>
 		<img
-			src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={device.qr_code_data}"
+			src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=ec2f66&data={device.qr_code_data}"
 			style="display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
 		/>
 	</div>
