@@ -255,7 +255,7 @@
 										|
 										<a
 											on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
-											href="#"
+											href="{button.href == null ? '#' : button.href(item) || '#'}"
 											class="font-medium text-primary-600 hover:underline dark:text-primary-500"
 											>{button.name}</a
 										>
@@ -264,7 +264,7 @@
 									|
 									<a
 										on:click|preventDefault={button.onclickFn(item, checkPage, confirmModalFn)}
-										href="#"
+										href="{button.href == null ? '#' : button.href(item) || '#'}"
 										class="font-medium text-primary-600 hover:underline dark:text-primary-500"
 										>{button.name}</a
 									>

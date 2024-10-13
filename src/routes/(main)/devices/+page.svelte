@@ -9,7 +9,36 @@
 	import { onMount } from 'svelte';
 	let inputs = data.inputs;
 	var url = PHX_HTTP_PROTOCOL + PHX_ENDPOINT;
+	function showCondition2(data) {
+		var bool = false;
+		if (data.outlet != null) {
+			if (data.outlet.payment_gateway == 'fiuu') {
+				return true;
+			}
+		}
 
+		return bool;
+	}
+	function showCondition(data) {
+		var bool = false;
+		if (data.outlet != null) {
+			return true;
+		}
+
+		return bool;
+	}
+	function showWebsite(data, checkPage, confirmModal) {
+		goto('https://iot.djtech4u.com?d=' + data.name + '&location=' + data.outlet.subdomain);
+	}
+	function websiteHref(data) {
+		console.log(data);
+		return (
+			'https://iot.djtech4u.com?d=' +
+			data.name +
+			'&location=' +
+			(data.outlet == null ? 'none' : data.outlet.subdomain || 'none')
+		);
+	}
 	function controlDevice(data, checkPage, confirmModal) {
 		goto('/devices/' + data.id);
 	}
@@ -38,10 +67,8 @@
 		);
 	}
 
-	
 	onMount(() => {
-
-		console.log(data.columns)
+		console.log(data.columns);
 	});
 </script>
 
@@ -56,8 +83,9 @@
 		model: 'Device',
 		preloads: ['outlet', 'executor_board', 'organization'],
 		buttons: [
+			{ name: 'Website', onclickFn: showWebsite, href: websiteHref, showCondition: showCondition },
 			{ name: 'Control', onclickFn: controlDevice },
-			{ name: 'Regen QR', onclickFn: regenQr }
+			{ name: 'Regen QR', onclickFn: regenQr, showCondition: showCondition2 }
 		],
 		customCols: [
 			{
@@ -147,7 +175,11 @@
 		title="Monthly Outlet Transactions (RM) Prev 1 Month"
 		description={''}
 		data={{
-			apiData: { id: data.id, organization_id: data.organization_id, year_month: data.prevYearMonth },
+			apiData: {
+				id: data.id,
+				organization_id: data.organization_id,
+				year_month: data.prevYearMonth
+			},
 			buttons: [],
 			scope: 'current_month_outlet_trx_only_days',
 			columns: data.columns
@@ -159,7 +191,11 @@
 		title="Monthly Outlet Transactions (RM) Prev 2 Month"
 		description={''}
 		data={{
-			apiData: { id: data.id, organization_id: data.organization_id, year_month: data.prevYear2Month },
+			apiData: {
+				id: data.id,
+				organization_id: data.organization_id,
+				year_month: data.prevYear2Month
+			},
 			buttons: [],
 			scope: 'current_month_outlet_trx_only_days',
 			columns: data.columns
