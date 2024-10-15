@@ -42,7 +42,29 @@
 	function controlDevice(data, checkPage, confirmModal) {
 		goto('/devices/' + data.id);
 	}
+	function deleteAllDeviceLog(data, checkPage, confirmModal) {
+		console.log(data);
+		console.log('transfer approved!');
 
+		confirmModal(
+			true,
+			`
+
+        <span class="">Are you sure to delete all device log?</span>`,
+			() => {
+				postData(
+					{ scope: 'delete_all_device_log', device_id: data.id },
+					{
+						endpoint: url + '/svt_api/webhook',
+						successCallback: (e) => {
+							console.log(e);
+							checkPage();
+						}
+					}
+				);
+			}
+		);
+	}
 	function regenQr(data, checkPage, confirmModal) {
 		console.log(data);
 		console.log('transfer approved!');
@@ -83,6 +105,8 @@
 		model: 'Device',
 		preloads: ['outlet', 'executor_board', 'organization'],
 		buttons: [
+			
+			{ name: 'Clear Logs', onclickFn: deleteAllDeviceLog },
 			{ name: 'Website', onclickFn: showWebsite, href: websiteHref, showCondition: showCondition },
 			{ name: 'Control', onclickFn: controlDevice },
 			{ name: 'Regen QR', onclickFn: regenQr, showCondition: showCondition2 }
@@ -95,6 +119,7 @@
 					'name',
 					'short_name',
 					'default_io_pin',
+					'default_delay',
 					'format',
 					'cloridge_device_uid',
 					{ label: 'organization_id', hidden: true, value: data.organization_id },

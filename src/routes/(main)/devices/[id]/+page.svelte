@@ -254,7 +254,7 @@
 {/if}
 
 <Datatable
-	data={{
+	data={{canDelete: true,
 		appendQueries: { device_id: device.id },
 		inputs: [],
 		search_queries: ['a.uuid'],
