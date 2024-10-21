@@ -30,20 +30,49 @@
 			return '';
 		}
 	}
-	function formatDateTime(data, key, offset) {
+	function formatDate(data, key, offset) {
 		offset = offset == null ? 0 : offset;
 		var str = data[key];
-		console.log(str)
+		console.log(str);
 		str = Date.parse(str);
 		var dt = new Date(str);
 		dt.setTime(dt.getTime() + offset * 60 * 60 * 1000);
-		console.log(dt)
-		var edate = dt.toGMTString().split(',')[1].split(' ').splice(0, 4).join(' ');
+		console.log(dt);
+		// var edate = dt.toGMTString(8).split(',')[1].split(' ').splice(0, 4).join(' ');
+		var options = {
+			timeZone: 'Asia/Kuala_Lumpur',
+			weekday: 'short',
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
+		};
+		var edate = dt.toLocaleDateString('en-GB', options);
+		console.log(edate);
 		var etime = dt.toLocaleTimeString();
-		return edate + ' ' + etime;
+		return edate;
+	}
+	function formatDateTime(data, key, offset) {
+		offset = offset == null ? 0 : offset;
+		var str = data[key];
+		console.log(str);
+		str = Date.parse(str);
+		var dt = new Date(str);
+		dt.setTime(dt.getTime() + offset * 60 * 60 * 1000);
+		console.log(dt);
+		// var edate = dt.toGMTString(8).split(',')[1].split(' ').splice(0, 4).join(' ');
+		var options = {
+			timeZone: 'Asia/Kuala_Lumpur',
+			weekday: 'short',
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
+		};
+		var edate = dt.toLocaleDateString('en-GB', options);
+		console.log(edate);
+		var etime = dt.toLocaleTimeString();
+		return dt;
 	}
 	function showPreview(data, key) {
-		
 		return data[key];
 	}
 </script>
@@ -55,19 +84,20 @@
 		{item[col.subtitle.data]}
 	</small>
 {:else if col.showPreview}
-{#if item[col.data] != null }
-<Button
-on:click={() => {
-	img_url = item[col.data]
-	previewModal = true;
-}}>Preview</Button
->
-{:else}
-<Button disabled>Preview</Button
-	>
-{/if}
-	
+	{#if item[col.data] != null}
+		<Button
+			on:click={() => {
+				img_url = item[col.data];
+				previewModal = true;
+			}}>Preview</Button
+		>
+	{:else}
+		<Button disabled>Preview</Button>
+	{/if}
+
 	<!-- {showPreview(item, col.data)} -->
+{:else if col.formatDate}
+	{formatDate(item, col.data, col.offset)}
 {:else if col.formatDateTime}
 	{formatDateTime(item, col.data, col.offset)}
 {:else if col.through != null}

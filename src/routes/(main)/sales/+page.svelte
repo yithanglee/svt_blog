@@ -87,12 +87,13 @@
 			{ label: 'ID', data: 'id' },
 			{ label: 'Outlet', data: 'name', through: ['outlet'] },
 			{ label: 'Timestamp', data: 'inserted_at', formatDateTime: true, offset: 8 },
+			{ label: 'Sale Date', data: 'inserted_at', formatDate: true, offset: 8 },
 			// {
 			// 	label: 'Delivery Ref',
 			// 	data: 'delivery_ref',
 			// 	subtitle: { label: 'Courier', data: 'delivery_method' }
 			// },
-			{ label: 'Sale Date', data: 'sales_date' },
+			// { label: 'Sale Date', data: 'sales_date' },
 			{ label: 'Ref', data: 'payment_ref' },
 			{ label: 'Amount', data: 'amount' },
 			{
