@@ -88,6 +88,11 @@
 			}
 		);
 	}
+	var current_search_queries = ['a.name|a.organization_id=' + data.organization_id];
+
+	if (data.organization_id == null){
+		current_search_queries = ['a.name'];
+	}
 
 	onMount(() => {
 		console.log(data.columns);
@@ -136,7 +141,7 @@
 						label: 'outlet_id',
 						selection: 'Outlet',
 						customCols: null,
-						search_queries: ['a.name|a.organization_id=' + data.organization_id],
+						search_queries: current_search_queries,
 						newData: 'name',
 						title_key: 'name'
 					},

@@ -52,12 +52,7 @@
 					'Content-Type': 'application/json'
 				}
 			});
-			// const response = await fetch('/api/datatable/' + module + `?${queryString}`, {
-			// 	headers: {
-			// 		'Content-Type': 'application/json'
-			// 	}
-			// });
-
+	
 			if (response.ok) {
 				let dataList = await response.json();
 				items = dataList.data;
